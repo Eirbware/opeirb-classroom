@@ -1,0 +1,59 @@
+---
+title: Dashboard
+---
+
+<div class="max-w-3xl mx-auto">
+  <if-user>
+    <h2 class="text-5xl text-center">
+      <span class="text-green-500 font-display"
+        ><user-data field="xp-raw"></user-data></span
+      >XP
+    </h2>
+    <div
+      class="mx-auto w-24 h-1 my-12 bg-gradient-to-r from-green-600 to-green-400 rounded-full"
+    ></div>
+
+    <p class="text-xl">
+      ID utilisateur:
+      <span class="text-white font-bold"
+        ><user-data field="uid"></user-data
+      ></span>
+    </p>
+    <p class="text-xl">
+      Email:
+      <span class="text-white font-bold">
+        <user-data field="email"></user-data>
+      </span>
+    </p>
+    <p class="text-xl text-yellow-500">
+      <user-data field="expires"></user-data>
+    </p>
+
+    <user-data field="courses"></user-data>
+
+    <sign-out>
+      <button class="btn">Sign Out</button>
+    </sign-out>
+
+
+    <h2 class="text-5xl text-center">Vos données</h2>
+    <div
+      class="mx-auto w-24 h-1 my-12 bg-gradient-to-r from-red-600 to-red-400 rounded-full"
+    ></div>
+
+    <p>
+      En accord avec le RGPD, vous pouvez utiliser le bouton ci-dessous pour
+      supprimer les données que nous avons collectées sur vous. Évidemment,
+      ceci est irréversible.
+    </p>
+
+    <delete-account></delete-account>
+
+    <div slot="signed-out">
+      <p class="text-xl">Ça ne sert à rien... Sauf si vous vous connectez 🤔!...</p>
+      <modal-action name="signin" type="open">
+        <button class="btn btn-blue">Sign in Now</button>
+      </modal-action>
+    </div>
+  </if-user>
+</div>

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="module" src="/main.ts"></script>
+    <title>Document</title>
+  </head>
+
+  <body class="prose dark:prose-invert">
+    <!-- Initialise all Supabase watchers with this component in the body -->
+    <supabase-app></supabase-app>
+    <global-data></global-data>
+
+    <h1>Component Playground</h1>
+    <p>
+      Declare components in the <code>app/index.html</code> to preview below
+    </p>
+    <dark-mode-toggle></dark-mode-toggle>
+
+    <tab-switch tabSetKey="my-items">
+      <div class="tab-switch-item" title="Item 1">
+        <p>Ipsum</p>
+      </div>
+      <div class="tab-switch-item" title="Item 2">
+        <p>Lorem</p>
+      </div>
+      <div class="tab-switch-item" title="Item 3">
+        <p>Dolor</p>
+      </div>
+    </tab-switch>
+
+
+    <p>Example <code>my-counter</code> component:</p>
+    <modal-action type="open" name="search">
+      <button>Open Search</button>
+    </modal-action>
+    <if-user>
+      <user-avatar></user-avatar>
+      <sign-out><button class="btn">Log out</button></sign-out>
+      <modal-action slot="signed-out" type="open" name="signin">
+        <button>Open Login</button>
+      </modal-action>
+    </if-user>
+    <algolia-search></algolia-search>
+    <app-signin></app-signin>
+
+    <toast-message></toast-message>
+
+    <h2>Video</h2>
+
+    <video-player video="dQw4w9WgXcQ" type="youtube" single="true"></video-player>
+    <autoplay-toggle></autoplay-toggle>
+    <sign-out></sign-out>
+  </body>
+</html>

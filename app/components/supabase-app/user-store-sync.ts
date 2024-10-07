@@ -1,5 +1,5 @@
 import { get } from 'svelte/store';
-import type { User as SupabaseUser, RealtimeChannel } from '@supabase/supabase-js';
+import type { User as SupabaseUser } from '@supabase/supabase-js';
 import { userData, userProgress } from '../../stores/user'
 import * as SupabaseModule from './supabase';
 import { nullablePropertiesToOptional, isNotEmpty } from '../../util/helpers';

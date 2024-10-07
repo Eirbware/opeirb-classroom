@@ -80,7 +80,7 @@
   ></div>
   {{ end }} {{ if .Params.stack }}
   <div class="text-center mb-10">
-    <h2>Tech Stack</h2>
+    <h2>{{ site.Data.locales.tech_stack }}</h2>
     <div class="flex flex-center justify-center">
       {{ range $index, $element := .Params.stack }}
       <scroll-show delay="{{ mul $index 200 }}">

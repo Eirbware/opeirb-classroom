@@ -6,7 +6,7 @@ type = "courses"
 tags = ["git", "github", "linux"]
 
 author = "Eirbware"
-stack = ["git", "linux"]
+stack = ["git", "linux", "thor", "github"]
 draft = true
 +++
 
@@ -34,20 +34,30 @@ ou bien des ***retours en arrière***
 faire évoluer votre projet depuis plusieurs machines, notamment dans le cadre
 d'un **travail collaboratif**
 
-Vous apprendrez donc à utiliser les commandes fondamentales de Git pour
-accomplir tout ça. Un peu de configuration sera aussi abordée pour pouvoir
-utiliser Git en tout confort sur n'importe quelle machine.
-
-> Une digression sur le protocole SSH s'imposera aussi
+Vous apprendrez donc à utiliser les **commandes fondamentales** de Git pour
+accomplir tout ça. Un peu de **configuration** sera aussi abordée pour pouvoir
+utiliser Git en tout confort sur n'importe quelle machine. On envisagera
+d'utiliser le ***protocole SSH*** pour communiquer entre machine.
 
 ## 🤓 Prérequis
 
 On assume que vous êtes sur une machine Linux et que Git y est déjà installé.
-On suppose aussi que vous avec des outils pour établir des connexions SSH et
+On suppose aussi que vous avez des outils pour établir des connexions SSH et
 construire des clés, i.e. que vous êtes en mesure d'exécuter les commandes
 `ssh` et `ssh-keygen`.
 
+Il sera possible de se connecter avec un dépôt distant depuis
+[Thor](https://thor.enseirb-matmeca.fr/) ou [Github](https://github.com/). Si
+vous voulez tenter avec Github, la création d'un compte sera nécessaire.
+
+Pour suivre le cours avec l'exemple utilisé, [Python](https://www.python.org/)
+et un navigateur seront nécessaires sur votre machine.
+
 ## 🚀 Comment on se lance ?
 
-On va se baser sur ce faux projet... TODO
-
+*Il était une école qui avait tout gagné et dans laquelle Alice 👩 et vous
+souhaitez mettre en place une application 📱 pour enregistrer des commandes de
+pizzas 🍕. Pour le moment, vous vous contentez de vous attaquer aux fondations
+🏗️ de votre programme. Mais, rien que dans cette première étape, vous allez
+devoir proprement versionner votre travail si vous ne voulez pas que votre
+collaboration avec Alice ne sombre dans le chaos...*

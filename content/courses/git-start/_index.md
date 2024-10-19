@@ -34,10 +34,11 @@ ou bien des ***retours en arrière***
 faire évoluer votre projet depuis plusieurs machines, notamment dans le cadre
 d'un **travail collaboratif**
 
-Vous apprendrez donc à utiliser les **commandes fondamentales** de Git pour
-accomplir tout ça. Un peu de **configuration** sera aussi abordée pour pouvoir
-utiliser Git en tout confort sur n'importe quelle machine. On envisagera
-d'utiliser le ***protocole SSH*** pour communiquer entre machine.
+Vous apprendrez donc à utiliser les commandes fondamentales de Git pour
+accomplir tout ça. Un peu de configuration sera aussi abordée pour pouvoir
+utiliser Git en tout confort sur n'importe quelle machine.
+
+> Une digression sur le protocole SSH s'imposera aussi
 
 ## 🤓 Prérequis
 

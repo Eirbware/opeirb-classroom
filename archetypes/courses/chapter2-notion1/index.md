@@ -1,7 +1,7 @@
 +++
 title = "Technologies abordées"
 description = """Dans la page d'arrivée du tuto, des icônes d'outils célèbres
-peuvent être affichés."""
+peuvent être affichées."""
 weight = 5
 lastmod = {{ .Date }}
 emoji = "⚙️"

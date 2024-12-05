@@ -50,7 +50,7 @@ user`.
 
 Avec l'auteur configuré, il est enfin possible de créer un commit. *Dans notre
 situation*, la seule information qu'il reste à fournir est en effet le
-**message de description** du commit, puisqu'on nos changements ont déjà été
+**message de description** du commit, puisque nos changements ont déjà été
 indexés dans le chapitre d'avant.
 
 <div class="box">

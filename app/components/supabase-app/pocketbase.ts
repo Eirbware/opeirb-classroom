@@ -12,7 +12,6 @@ import type {
   Chapter,
   ExpandedValidation,
   OCPocketBase,
-  RankedUser,
   User,
   Validation,
 } from "./pocketbase.types";
@@ -42,7 +41,7 @@ export async function signInWithGithub() {
   // TODO: fix for Safari as documented
   const credential = pocketbaseClient
     .collection("users")
-    .authWithOAuth2({ provider: "github", redirectTo: window.location.href });
+    .authWithOAuth2({ provider: "github" });
   return loginHandler(credential);
 }
 
@@ -50,12 +49,13 @@ export async function signInWithEirbConnect() {
   // TODO: fix for Safari as documented
   const credential = pocketbaseClient
     .collection("users")
-    .authWithOAuth2({ provider: "oidc", redirectTo: window.location.href });
+    .authWithOAuth2({ provider: "oidc" });
   return loginHandler(credential);
 }
 
 export async function pocketbaseSignOut() {
   pocketbaseClient.authStore.clear();
+  currentUser.next(null);
   toast.set({
     icon: "👋",
     message: "Thanks for hanging out, see ya around!",
@@ -74,6 +74,7 @@ async function loginHandler(promise: Promise<RecordAuthResponse<User>>) {
     return { res: authData, serverError: null };
   } catch (error) {
     if (error instanceof ClientResponseError) {
+      currentUser.next(null);
       const serverError = error.message;
       console.error(error);
       toast.set({
@@ -112,7 +113,7 @@ export async function fetchUserProgressData(
     const validatedChapters = await pocketbaseClient
       .collection("validate")
       .getFullList<ExpandedValidation>({
-        filter: `user = ${userUid}`,
+        filter: `user="${userUid}"`,
         expand: "chapter",
         fields: "chapter",
       });
@@ -169,7 +170,7 @@ export const onUserProgressDataChange: OnF<
       mapToDelete.set(chapterId, chapterData);
       callback({ isRecordDeleted: d.action === "delete", xp: newRank.total_xp, validatedChapters: mapToDelete });
     },
-    { filter: `user = ${sbUser.id}`, expand: "chapter", fields: "chapter" },
+    { filter: `user="${sbUser.id}"`, expand: "chapter", fields: "chapter" },
   );
 
 export const onUserProfileDataChange: OnF<UserDataType> = (sbUser, callback) =>
@@ -227,7 +228,7 @@ export async function markComplete(route: string, bonus = 0) {
     try {
       chapter = await pocketbaseClient
         .collection("chapters")
-        .getFirstListItem(`uri = ${route}`);
+        .getFirstListItem(`uri="${route}"`);
     } catch (e) {
       if (!(e instanceof ClientResponseError) || e.status !== 404)
         throw new Error("unhandled exception");
@@ -248,10 +249,10 @@ export async function markIncomplete(route: string) {
     try {
       const chapter = await pocketbaseClient
         .collection("chapters")
-        .getFirstListItem(`uri = ${route}`);
+        .getFirstListItem(`uri="${route}"`);
       validation = await pocketbaseClient
         .collection("validate")
-        .getFirstListItem(`chapter = ${chapter.id} && user = ${user.id}`);
+        .getFirstListItem(`chapter="${chapter.id}" && user="${user.id}"`);
     } catch (e) {
       if (e instanceof ClientResponseError && e.status === 404)
         throw new Error("not found ressource:" + e.message);

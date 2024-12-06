@@ -1,49 +1,62 @@
-import { get } from 'svelte/store';
-import { userData, userProgress } from '../../stores/user'
-import type { User as PocketBaseUser } from './pocketbase.types'; 
-import * as PocketBaseModule from './pocketbase';
-import { nullablePropertiesToOptional, isNotEmpty } from '../../util/helpers';
-import { cloneDeep } from 'lodash';
+import { get } from "svelte/store";
+import { userData, userProgress, type UserData } from "../../stores/user";
+import type { User as PocketBaseUser } from "./pocketbase.types";
+import * as PocketBaseModule from "./pocketbase";
+import { nullablePropertiesToOptional, isNotEmpty } from "../../util/helpers";
+import { cloneDeep } from "lodash";
 
 function setUserData(data: PocketBaseModule.UserDataType) {
-  userData.set(nullablePropertiesToOptional(data));
+  const u: UserData = {
+    uid: data.id,
+    email: data.email,
+    displayName: data.name,
+    photoURL: data.avatar,
+  };
+  userData.set(u);
 }
 function setProgressData(
   data: PocketBaseModule.ProgressDataType,
-  mustDelete = false
+  mustDelete = false,
 ) {
   const arrayData = Array.from(data.validatedChapters.keys());
   if (!mustDelete)
-    userProgress.update((userProgressOldVal) => arrayData.reduce(
-      (oldProgressState, chapterId) => {
-        const chapter = data.validatedChapters.get(chapterId);
-        if (chapter === undefined) throw new Error("Wrong encoded progress data");
-        oldProgressState.xpPerRoute[chapter.uri] = chapter.xp;
-        oldProgressState.markIdToRoute[chapterId] = chapter.uri;
-        oldProgressState.xp = data.xp;
-        return oldProgressState;
-      },
-      userProgressOldVal ?? { xp: data.xp, markIdToRoute: {}, xpPerRoute: {} })
+    userProgress.update((userProgressOldVal) =>
+      arrayData.reduce(
+        (oldProgressState, chapterId) => {
+          const chapter = data.validatedChapters.get(chapterId);
+          if (chapter === undefined)
+            throw new Error("Wrong encoded progress data");
+          oldProgressState.xpPerRoute[chapter.uri] = chapter.xp;
+          oldProgressState.markIdToRoute[chapterId] = chapter.uri;
+          oldProgressState.xp = data.xp;
+          return oldProgressState;
+        },
+        userProgressOldVal ?? {
+          xp: data.xp,
+          markIdToRoute: {},
+          xpPerRoute: {},
+        },
+      ),
     );
   else
     userProgress.update((userProgressOldVal) => {
-    if (userProgressOldVal === null) {
-      console.error("A mark has been deleted while the user was not supposed to own any");
-      return userProgressOldVal;
-    }
-    return arrayData.reduce(
-      (oldProgressState, chapterId) => {
+      if (userProgressOldVal === null) {
+        console.error(
+          "A mark has been deleted while the user was not supposed to own any",
+        );
+        return userProgressOldVal;
+      }
+      return arrayData.reduce((oldProgressState, chapterId) => {
         const chapter = data.validatedChapters.get(chapterId);
-        if (chapter === undefined) throw new Error("Wrong encoded progress data");
+        if (chapter === undefined)
+          throw new Error("Wrong encoded progress data");
         const newProgressState = cloneDeep(oldProgressState);
         delete newProgressState.xpPerRoute[chapter.uri];
         delete newProgressState.markIdToRoute[chapterId];
         newProgressState.xp = data.xp;
         return newProgressState;
-      },
-      userProgressOldVal
-    )
-  });
+      }, userProgressOldVal);
+    });
 }
 
 function emptyWritables() {
@@ -53,13 +66,13 @@ function emptyWritables() {
 async function fetchUserDataAndSetWritables(authenticatedUser: PocketBaseUser) {
   try {
     const userUid = authenticatedUser.id;
-    const userProfileData = await PocketBaseModule.
-      fetchUserProfileData(authenticatedUser);
+    const userProfileData =
+      await PocketBaseModule.fetchUserProfileData(authenticatedUser);
     setUserData(userProfileData);
-    const userProgressData = await PocketBaseModule.
-      fetchUserProgressData(userUid);
+    const userProgressData =
+      await PocketBaseModule.fetchUserProgressData(userUid);
     setProgressData(userProgressData);
-  } catch(err) {
+  } catch (err) {
     console.error("Error in initial data fetching:\n\t" + err);
   }
 }
@@ -69,17 +82,21 @@ let unsubProgress: PocketBaseModule.CustomUnsubscriber | null = null;
 
 function startChannels(authenticatedUser: PocketBaseUser) {
   if (unsubData === null)
-  unsubData = PocketBaseModule.onUserProfileDataChange(authenticatedUser, (payload) => {
-    const data = payload;
-    if (isNotEmpty(data)) setUserData(data);
-  });
+    unsubData = PocketBaseModule.onUserProfileDataChange(
+      authenticatedUser,
+      (payload) => {
+        const data = payload;
+        if (isNotEmpty(data)) setUserData(data);
+      },
+    );
   if (unsubProgress === null)
-  unsubProgress = PocketBaseModule.onUserProgressDataChange(authenticatedUser, (payload) => {
-    if (payload.isRecordDeleted)
-      setProgressData(payload, true);
-    else
-      setProgressData(payload);
-  });
+    unsubProgress = PocketBaseModule.onUserProgressDataChange(
+      authenticatedUser,
+      (payload) => {
+        if (payload.isRecordDeleted) setProgressData(payload, true);
+        else setProgressData(payload);
+      },
+    );
 }
 async function stopChannels() {
   unsubData && (await unsubData)();
@@ -98,25 +115,28 @@ async function stopChannels() {
  */
 async function fetchAndWatchUserRemoteData() {
   // Perform a session refreshing, if needed.
-  const authenticatedUser: PocketBaseUser | null = PocketBaseModule.getUserFromSession();
+  const authenticatedUser: PocketBaseUser | null =
+    PocketBaseModule.getUserFromSession();
   if (authenticatedUser) {
     startChannels(authenticatedUser);
   }
-  
-  const subscription = PocketBaseModule.
-  onAuthStateChange(async (authenticatedUser) => {
-    if (authenticatedUser) {
-      startChannels(authenticatedUser);
-      if (
-        get(userData) === null ||  get(userProgress) === null
-      )
-        await fetchUserDataAndSetWritables(authenticatedUser);
-    } else {
-      emptyWritables();
-      stopChannels();
-    }
-  });
-  return () => { subscription.unsubscribe(); stopChannels(); };
-};
+
+  const subscription = PocketBaseModule.onAuthStateChange(
+    async (authenticatedUser) => {
+      if (authenticatedUser) {
+        startChannels(authenticatedUser);
+        if (get(userData) === null || get(userProgress) === null)
+          await fetchUserDataAndSetWritables(authenticatedUser);
+      } else {
+        emptyWritables();
+        stopChannels();
+      }
+    },
+  );
+  return () => {
+    subscription.unsubscribe();
+    stopChannels();
+  };
+}
 
 export { fetchAndWatchUserRemoteData };

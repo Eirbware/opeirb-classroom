@@ -1,8 +1,8 @@
 import { supabaseSide } from "../../stores/supabase-vars";
 import {
   deleteUserData, markComplete, markIncomplete,
-  signInWithEirbConnect, signInWithGithub, supabaseSignOut
-} from "./supabase";
+  signInWithEirbConnect, signInWithGithub, pocketbaseSignOut
+} from "./pocketbase";
 import { toast } from "../../stores/";
 import type { Unsubscriber } from "svelte/store";
 
@@ -13,14 +13,14 @@ export function listenAllSupabaseEvents(): Unsubscriber[] {
     else await signInWithEirbConnect();
   }),
 
-  supabaseSide.onSignOut(async () => { await supabaseSignOut(); }),
+  supabaseSide.onSignOut(async () => { await pocketbaseSignOut(); }),
 
   supabaseSide.onUserDataDelete(async () => {
     const res = await deleteUserData();
-    const deleted = !(!res || res.error);
+    const deleted = !(!res);
 
     if (deleted) {
-      await supabaseSignOut();
+      await pocketbaseSignOut();
       toast.set({
         message: "Account terminated, good luck in your future endeavors",
         type: "success",

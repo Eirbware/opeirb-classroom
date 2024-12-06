@@ -9,21 +9,21 @@ function setUserData(data: PocketBaseModule.UserDataType) {
   userData.set(nullablePropertiesToOptional(data));
 }
 function setProgressData(
-  data: PocketBaseModule.ProgressDataType | PocketBaseModule.ProgressDataType[],
+  data: PocketBaseModule.ProgressDataType,
   mustDelete = false
 ) {
-  const arrayData = Array.isArray(data) ? data : [data];
+  const arrayData = Array.from(data.validatedChapters.keys());
   if (!mustDelete)
     userProgress.update((userProgressOldVal) => arrayData.reduce(
-      (oldProgressState, data) => {
-        const oldXpForPointedRoute = oldProgressState.xpPerRoute[data.course_route];
-        const newXpForPointedRoute = (data.xp ?? 0);
-        oldProgressState.xp += newXpForPointedRoute - (oldXpForPointedRoute ?? 0);
-        oldProgressState.xpPerRoute[data.course_route] = newXpForPointedRoute;
-        oldProgressState.markIdToRoute[data.mark_id] = data.course_route;
+      (oldProgressState, chapterId) => {
+        const chapter = data.validatedChapters.get(chapterId);
+        if (chapter === undefined) throw new Error("Wrong encoded progress data");
+        oldProgressState.xpPerRoute[chapter.uri] = chapter.xp;
+        oldProgressState.markIdToRoute[chapterId] = chapter.uri;
+        oldProgressState.xp = data.xp;
         return oldProgressState;
       },
-      userProgressOldVal ?? { xp: 0, markIdToRoute: {}, xpPerRoute: {} })
+      userProgressOldVal ?? { xp: data.xp, markIdToRoute: {}, xpPerRoute: {} })
     );
   else
     userProgress.update((userProgressOldVal) => {
@@ -32,13 +32,13 @@ function setProgressData(
       return userProgressOldVal;
     }
     return arrayData.reduce(
-      (oldProgressState, { mark_id: markIdToDelete }) => {
-        const routeToDelete = oldProgressState.markIdToRoute[markIdToDelete];
-        const xpToRemove = oldProgressState.xpPerRoute[routeToDelete];
+      (oldProgressState, chapterId) => {
+        const chapter = data.validatedChapters.get(chapterId);
+        if (chapter === undefined) throw new Error("Wrong encoded progress data");
         const newProgressState = cloneDeep(oldProgressState);
-        newProgressState.xp -= xpToRemove;
-        delete newProgressState.xpPerRoute[routeToDelete];
-        delete newProgressState.markIdToRoute[markIdToDelete];
+        delete newProgressState.xpPerRoute[chapter.uri];
+        delete newProgressState.markIdToRoute[chapterId];
+        newProgressState.xp = data.xp;
         return newProgressState;
       },
       userProgressOldVal

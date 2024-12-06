@@ -108,25 +108,25 @@ export async function fetchUserProgressData(
   userUid: string,
 ): Promise<ProgressDataType> {
   try {
-    const u = await pocketbaseClient.collection("ranked").getOne(userUid);
-    const a = await pocketbaseClient
+    const totalXpView = await pocketbaseClient.collection("ranked").getOne(userUid);
+    const validatedChapters = await pocketbaseClient
       .collection("validate")
       .getFullList<ExpandedValidation>({
         filter: `user = ${userUid}`,
         expand: "chapter",
         fields: "chapter",
       });
-    return a.reduce<ProgressDataType>(
-      (p, c) => {
+    return validatedChapters.reduce<ProgressDataType>(
+      (oldProgressData, validatedChapterByUser) => {
         const new_p = {
-          xp: p.xp,
-          validatedChapters: new Map(p.validatedChapters),
+          xp: oldProgressData.xp,
+          validatedChapters: new Map(oldProgressData.validatedChapters),
         };
-        const { id: chapterId, ...chapterData } = c.chapter;
+        const { id: chapterId, ...chapterData } = validatedChapterByUser.chapter;
         new_p.validatedChapters.set(chapterId, chapterData);
         return new_p;
       },
-      { xp: u.total_xp, validatedChapters: new Map() },
+      { xp: totalXpView.total_xp, validatedChapters: new Map() },
     );
   } catch (error) {
     if (error instanceof ClientResponseError && error.status === 404)

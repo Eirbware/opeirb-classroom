@@ -1,15 +1,15 @@
 import { get } from 'svelte/store';
-import type { User as SupabaseUser } from '@supabase/supabase-js';
 import { userData, userProgress } from '../../stores/user'
-import * as SupabaseModule from './supabase';
+import type { User as PocketBaseUser } from './pocketbase.types'; 
+import * as PocketBaseModule from './pocketbase';
 import { nullablePropertiesToOptional, isNotEmpty } from '../../util/helpers';
 import { cloneDeep } from 'lodash';
 
-function setUserData(data: SupabaseModule.UserDataType) {
+function setUserData(data: PocketBaseModule.UserDataType) {
   userData.set(nullablePropertiesToOptional(data));
 }
 function setProgressData(
-  data: SupabaseModule.ProgressDataType | SupabaseModule.ProgressDataType[],
+  data: PocketBaseModule.ProgressDataType | PocketBaseModule.ProgressDataType[],
   mustDelete = false
 ) {
   const arrayData = Array.isArray(data) ? data : [data];
@@ -50,13 +50,13 @@ function emptyWritables() {
   userData.set(null);
   userProgress.set(null);
 }
-async function fetchUserDataAndSetWritables(authenticatedUser: SupabaseUser) {
+async function fetchUserDataAndSetWritables(authenticatedUser: PocketBaseUser) {
   try {
     const userUid = authenticatedUser.id;
-    const userProfileData = await SupabaseModule.
+    const userProfileData = await PocketBaseModule.
       fetchUserProfileData(authenticatedUser);
     setUserData(userProfileData);
-    const userProgressData = await SupabaseModule.
+    const userProgressData = await PocketBaseModule.
       fetchUserProgressData(userUid);
     setProgressData(userProgressData);
   } catch(err) {
@@ -64,26 +64,26 @@ async function fetchUserDataAndSetWritables(authenticatedUser: SupabaseUser) {
   }
 }
 
-let unsubData: SupabaseModule.CustomUnsubscriber | null = null;
-let unsubProgress: SupabaseModule.CustomUnsubscriber | null = null;
+let unsubData: PocketBaseModule.CustomUnsubscriber | null = null;
+let unsubProgress: PocketBaseModule.CustomUnsubscriber | null = null;
 
-function startChannels(authenticatedUser: SupabaseUser) {
+function startChannels(authenticatedUser: PocketBaseUser) {
   if (unsubData === null)
-  unsubData = SupabaseModule.onUserProfileDataChange(authenticatedUser, (payload) => {
-    const data = payload.new;
+  unsubData = PocketBaseModule.onUserProfileDataChange(authenticatedUser, (payload) => {
+    const data = payload;
     if (isNotEmpty(data)) setUserData(data);
   });
   if (unsubProgress === null)
-  unsubProgress = SupabaseModule.onUserProgressDataChange(authenticatedUser, (payload) => {
-    if (payload.eventType == "DELETE")
-      setProgressData(payload.old as SupabaseModule.ProgressDataType, true);
+  unsubProgress = PocketBaseModule.onUserProgressDataChange(authenticatedUser, (payload) => {
+    if (payload.isRecordDeleted)
+      setProgressData(payload, true);
     else
-      setProgressData(payload.new);
+      setProgressData(payload);
   });
 }
-function stopChannels() {
-  unsubData && unsubData();
-  unsubProgress && unsubProgress();
+async function stopChannels() {
+  unsubData && (await unsubData)();
+  unsubProgress && (await unsubProgress)();
   unsubData = null;
   unsubProgress = null;
 }
@@ -98,20 +98,18 @@ function stopChannels() {
  */
 async function fetchAndWatchUserRemoteData() {
   // Perform a session refreshing, if needed.
-  const authenticatedUser: SupabaseUser | null = await SupabaseModule.
-    refreshUserSession();
+  const authenticatedUser: PocketBaseUser | null = PocketBaseModule.getUserFromSession();
   if (authenticatedUser) {
     startChannels(authenticatedUser);
   }
   
-  const { data: { subscription: subscription } } = SupabaseModule.
-  onAuthStateChange(async (_event, session) => {
-    const authenticatedUser = session?.user;
+  const subscription = PocketBaseModule.
+  onAuthStateChange(async (authenticatedUser) => {
     if (authenticatedUser) {
       startChannels(authenticatedUser);
-      if (_event === "INITIAL_SESSION" && (
+      if (
         get(userData) === null ||  get(userProgress) === null
-      ))
+      )
         await fetchUserDataAndSetWritables(authenticatedUser);
     } else {
       emptyWritables();

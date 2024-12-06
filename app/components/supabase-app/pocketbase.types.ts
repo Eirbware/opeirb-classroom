@@ -25,6 +25,10 @@ interface RankedUser {
   total_xp: number;
 }
 
+interface ExpandedValidation extends Omit<Validation, "chapter"> {
+  chapter: Chapter;
+}
+
 interface OCPocketBase extends PocketBase {
   collection(idOrName: string): RecordService;
   collection(idOrName: 'users'): RecordService<User>;
@@ -33,4 +37,4 @@ interface OCPocketBase extends PocketBase {
   collection(idOrName: 'ranked'): RecordService<RankedUser>;
 }
 
-export type { User, Chapter, Validation, RankedUser, OCPocketBase };
+export type { User, Chapter, Validation, RankedUser, OCPocketBase, ExpandedValidation };

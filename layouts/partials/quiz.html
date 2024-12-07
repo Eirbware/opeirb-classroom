@@ -1,0 +1,26 @@
+{{/* Validation */}}
+{{ if not (and .answerNumber (hasPrefix (printf "%T" .answerNumber) "int")) }}
+  {{ errorf "The 'answerNumber' field is missing in the 'quiz' parameter of your front-matter in this page." }}
+{{ end }}
+{{ if not (and .prizePictureName (eq (printf "%T" .prizePictureName) "string")) }}
+  {{ errorf "The 'prizePictureName' field is missing in the 'quiz' parameter of your front-matter in this page." }}
+{{ end }}
+{{ if not (and .question (eq (printf "%T" .question) "string")) }}
+  {{ errorf "The 'question' field is missing in the 'quiz' parameter of your front-matter in this page." }}
+{{ end }}
+{{ if not (and .choices (hasPrefix (printf "%T" .choices) "[]") (eq
+(printf "%T" (index .choices 0)) "string")) }}
+  {{ errorf "The 'choices' field is missing in the 'quiz' parameter of your front-matter in this page." }}
+{{ end }}
+
+
+{{ $escapedAnswers := apply .choices "strings.Replace" "." ":" "፥" }}
+<p>Voici mes options: {{ print $escapedAnswers }}</p>
+<quiz-modal
+  options="{{ delimit $escapedAnswers ":" }}"
+  answer="{{ index $escapedAnswers (sub .answerNumber 1) }}"
+  prize="{{ .prizePictureName }}"
+><h6>{{ .question }}</h6>
+</quiz-modal>
+
+

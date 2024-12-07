@@ -118,7 +118,12 @@
       <p class="text-sm mt-1 text-gray4">{{ .Description }}</p>
     </header>
 
-    <section>{{ .Content }}</section>
+    <section>
+      {{ with .Params.quiz }}
+        {{ partial "quiz" . }}
+      {{ end }}
+      {{ .Content }}
+    </section>
 
     <div
       class="mx-auto w-24 h-1 my-12 bg-gradient-to-r from-purple-400 to-purple-600 rounded-full"

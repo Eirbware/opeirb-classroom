@@ -5,13 +5,14 @@ weight = 9
 lastmod = {{ .Date }}
 emoji = "✏️"
 reading_length = "40s"
-quiz = true
 draft = true
-+++
 
-<quiz-modal options="Reponse1:MonAutreReponse:une autre réponse encore:réponse D" answer="réponse D" prize="1">
-  <h6>Ma question est la suivante: où est la réponse D ?</h6>
-</quiz-modal>
+[quiz]
+question = "Ma question est la suivante: où est la réponse D ?"
+choices = ["Reponse1", "MonAutreReponse", "une autre réponse", "réponse D"]
+answerNumber = 4
+prizePictureName = "1"
++++
 
 Côté utilisateur, la progression s'accomplie en cliquant le bouton de marquage
 d'un chapitre ou bien en complétant le quiz qui lui est attaché, s'il y en a un.

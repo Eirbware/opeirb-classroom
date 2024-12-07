@@ -19,7 +19,7 @@ import type {
 const localAuthStore = new LocalAuthStore("PB_CACHED_USER");
 
 const pocketbaseClient = new PocketBase(
-  "http://127.0.0.1:8090",
+  import.meta.env.VITE_POCKETBASE_URL,
   localAuthStore,
 ) as OCPocketBase;
 pocketbaseClient.autoCancellation(false);

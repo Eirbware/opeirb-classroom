@@ -2,7 +2,6 @@ import { get } from "svelte/store";
 import { userData, userProgress, type UserData } from "../../stores/user";
 import type { User as PocketBaseUser } from "./pocketbase.types";
 import * as PocketBaseModule from "./pocketbase";
-import { nullablePropertiesToOptional, isNotEmpty } from "../../util/helpers";
 import { cloneDeep } from "lodash";
 
 function setUserData(data: PocketBaseModule.UserDataType) {
@@ -80,17 +79,17 @@ async function fetchUserDataAndSetWritables(authenticatedUser: PocketBaseUser) {
 let unsubData: PocketBaseModule.CustomUnsubscriber | null = null;
 let unsubProgress: PocketBaseModule.CustomUnsubscriber | null = null;
 
-function startChannels(authenticatedUser: PocketBaseUser) {
-  if (unsubData === null)
-    unsubData = PocketBaseModule.onUserProfileDataChange(
-      authenticatedUser,
-      (payload) => {
-        const data = payload;
-        if (isNotEmpty(data)) setUserData(data);
-      },
-    );
+async function startChannels(authenticatedUser: PocketBaseUser) {
+  // if (unsubData === null)
+  //   unsubData = await PocketBaseModule.onUserProfileDataChange(
+  //     authenticatedUser,
+  //     (payload) => {
+  //       const data = payload;
+  //       setUserData(data);
+  //     },
+  //   );
   if (unsubProgress === null)
-    unsubProgress = PocketBaseModule.onUserProgressDataChange(
+    unsubProgress = await PocketBaseModule.onUserProgressDataChange(
       authenticatedUser,
       (payload) => {
         if (payload.isRecordDeleted) setProgressData(payload, true);
@@ -99,8 +98,8 @@ function startChannels(authenticatedUser: PocketBaseUser) {
     );
 }
 async function stopChannels() {
-  unsubData && (await unsubData)();
-  unsubProgress && (await unsubProgress)();
+  unsubData && await unsubData();
+  unsubProgress && await unsubProgress();
   unsubData = null;
   unsubProgress = null;
 }
@@ -118,24 +117,24 @@ async function fetchAndWatchUserRemoteData() {
   const authenticatedUser: PocketBaseUser | null =
     PocketBaseModule.getUserFromSession();
   if (authenticatedUser) {
-    startChannels(authenticatedUser);
+    await startChannels(authenticatedUser);
   }
 
   const subscription = PocketBaseModule.onAuthStateChange(
     async (authenticatedUser) => {
       if (authenticatedUser) {
-        startChannels(authenticatedUser);
+        await startChannels(authenticatedUser);
         if (get(userData) === null || get(userProgress) === null)
           await fetchUserDataAndSetWritables(authenticatedUser);
       } else {
         emptyWritables();
-        stopChannels();
+        await stopChannels();
       }
     },
   );
-  return () => {
+  return async () => {
     subscription.unsubscribe();
-    stopChannels();
+    await stopChannels();
   };
 }
 

@@ -25,8 +25,9 @@ interface RankedUser {
   total_xp: number;
 }
 
-interface ExpandedValidation extends Omit<Validation, "chapter"> {
-  chapter: Chapter;
+interface ExpandedValidation extends Validation {
+  expand: { chapter: Chapter };
+
 }
 
 interface OCPocketBase extends PocketBase {

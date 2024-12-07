@@ -19,9 +19,11 @@ import type {
 const localAuthStore = new LocalAuthStore("PB_CACHED_USER");
 
 const pocketbaseClient = new PocketBase(
-  "http://localhost:8090",
+  "http://127.0.0.1:8090",
   localAuthStore,
 ) as OCPocketBase;
+console.log("new pocketbase instance!");
+pocketbaseClient.autoCancellation(false);
 const currentUser = new Subject<User | null>();
 
 /** @return The loaded user from the session
@@ -39,32 +41,34 @@ export function getUserFromSession() {
 
 export async function signInWithGithub() {
   // TODO: fix for Safari as documented
-  const credential = pocketbaseClient
-    .collection("users")
-    .authWithOAuth2({ provider: "github" });
-  return loginHandler(credential);
+  const loginProcess = () =>
+    pocketbaseClient.collection("users").authWithOAuth2({ provider: "github" });
+  return await loginHandler(loginProcess);
 }
 
 export async function signInWithEirbConnect() {
   // TODO: fix for Safari as documented
-  const credential = pocketbaseClient
-    .collection("users")
-    .authWithOAuth2({ provider: "oidc" });
-  return loginHandler(credential);
+  const loginProcess = () =>
+    pocketbaseClient.collection("users").authWithOAuth2({ provider: "oidc" });
+  return await loginHandler(loginProcess);
+}
+
+function signOut() {
+  pocketbaseClient.authStore.clear();
+  currentUser.next(null);
 }
 
 export async function pocketbaseSignOut() {
-  pocketbaseClient.authStore.clear();
-  currentUser.next(null);
+  signOut();
   toast.set({
     icon: "👋",
     message: "Thanks for hanging out, see ya around!",
   });
 }
 
-async function loginHandler(promise: Promise<RecordAuthResponse<User>>) {
+async function loginHandler(promise: () => Promise<RecordAuthResponse<User>>) {
   try {
-    const authData = await promise;
+    const authData = await promise();
     currentUser.next(authData.record);
     modal.set(null);
     toast.set({
@@ -76,7 +80,7 @@ async function loginHandler(promise: Promise<RecordAuthResponse<User>>) {
     if (error instanceof ClientResponseError) {
       currentUser.next(null);
       const serverError = error.message;
-      console.error(error);
+      console.error(JSON.stringify(error.originalError));
       toast.set({
         message: serverError,
         type: "error",
@@ -100,7 +104,10 @@ export async function fetchUserProfileData(user: User): Promise<User> {
     return gotUser;
   } catch (error) {
     if (error instanceof ClientResponseError && error.status === 404)
-      throw new Error("unable to correctly fetch user data: " + error.message);
+      throw new Error(
+        "unable to correctly fetch user data: " +
+          JSON.stringify(error.originalError),
+      );
     throw error;
   }
 }
@@ -109,30 +116,42 @@ export async function fetchUserProgressData(
   userUid: string,
 ): Promise<ProgressDataType> {
   try {
-    const totalXpView = await pocketbaseClient.collection("ranked").getOne(userUid);
+    const totalXpView = await pocketbaseClient
+      .collection("ranked")
+      .getOne(userUid);
     const validatedChapters = await pocketbaseClient
       .collection("validate")
       .getFullList<ExpandedValidation>({
         filter: `user="${userUid}"`,
         expand: "chapter",
-        fields: "chapter",
       });
-    return validatedChapters.reduce<ProgressDataType>(
+    const a = validatedChapters.reduce<ProgressDataType>(
       (oldProgressData, validatedChapterByUser) => {
         const new_p = {
           xp: oldProgressData.xp,
           validatedChapters: new Map(oldProgressData.validatedChapters),
         };
-        const { id: chapterId, ...chapterData } = validatedChapterByUser.chapter;
-        new_p.validatedChapters.set(chapterId, chapterData);
+        const {
+          id: chapterId,
+          xp,
+          uri,
+        } = validatedChapterByUser.expand.chapter;
+        new_p.validatedChapters.set(chapterId, { xp, uri });
+        console.log(new_p.xp);
+        console.log(
+          JSON.stringify(Object.fromEntries(new_p.validatedChapters.entries())),
+        );
         return new_p;
       },
       { xp: totalXpView.total_xp, validatedChapters: new Map() },
     );
+    console.log(a);
+    return a;
   } catch (error) {
     if (error instanceof ClientResponseError && error.status === 404)
       throw new Error(
-        "unable to correctly fetch user progress data: " + error.message,
+        "unable to correctly fetch user progress data: " +
+          JSON.stringify(error.originalError),
       );
     throw error;
   }
@@ -147,36 +166,63 @@ export const onAuthStateChange = (callback: AuthCallback) =>
 
 // Encapsulate the Supabase RealtimeChannel into a function just to leave
 // the channel.
-export type CustomUnsubscriber = Promise<UnsubscribeFunc>;
+export type PocketBaseUnsubscriber = UnsubscribeFunc;
+export type CustomUnsubscriber = () => Promise<void>;
+
+function toCustomUnsubcriber(
+  pbUnsb: PocketBaseUnsubscriber,
+): CustomUnsubscriber {
+  return async () => {
+    await pbUnsb();
+    console.log("successfully unsubscribed!");
+  };
+}
 
 type Callback<T extends { [key: string]: any }> = (payload: T) => void;
 type OnF<T extends { [key: string]: any }> = (
   sbUser: User,
   callback: Callback<T>,
-) => CustomUnsubscriber;
+) => Promise<CustomUnsubscriber>;
 export type UserDataType = User;
 
 export const onUserProgressDataChange: OnF<
   { isRecordDeleted: boolean } & ProgressDataType
-> = (sbUser, callback) =>
-  pocketbaseClient.collection("validate").subscribe<ExpandedValidation>(
-    "*",
-    async (d) => {
-      const newRank = await pocketbaseClient
-        .collection("ranked")
-        .getOne(sbUser.id);
-      const mapToDelete = new Map();
-      const { id: chapterId, ...chapterData } = d.record.chapter;
-      mapToDelete.set(chapterId, chapterData);
-      callback({ isRecordDeleted: d.action === "delete", xp: newRank.total_xp, validatedChapters: mapToDelete });
-    },
-    { filter: `user="${sbUser.id}"`, expand: "chapter", fields: "chapter" },
-  );
+> = async (sbUser, callback) => {
+  const s = await pocketbaseClient
+    .collection("validate")
+    .subscribe<ExpandedValidation>(
+      "*",
+      async (d) => {
+        const newRank = await pocketbaseClient
+          .collection("ranked")
+          .getOne(sbUser.id);
+        const mapToDelete = new Map();
+        const { id: chapterId, xp, uri } = d.record.expand.chapter;
+        mapToDelete.set(chapterId, { xp, uri });
+        callback({
+          isRecordDeleted: d.action === "delete",
+          xp: newRank.total_xp,
+          validatedChapters: mapToDelete,
+        });
+      },
+      { filter: `user="${sbUser.id}"`, expand: "chapter" },
+    );
+  console.log("successfully subscribed");
+  return toCustomUnsubcriber(s);
+};
 
-export const onUserProfileDataChange: OnF<UserDataType> = (sbUser, callback) =>
-  pocketbaseClient
+export const onUserProfileDataChange: OnF<UserDataType> = async (
+  sbUser,
+  callback,
+) => {
+  const s = await pocketbaseClient
     .collection("users")
-    .subscribe(sbUser.id, (d) => callback(d.record));
+    .subscribe(sbUser.id, (d) => {
+      if (d.action === "delete") signOut();
+      else callback(d.record);
+    });
+  return toCustomUnsubcriber(s);
+};
 
 // Callable Functions
 
@@ -214,14 +260,26 @@ function callIfAuthenticated<T>(
 // RGPD
 
 export async function deleteUserData() {
-  return await callIfAuthenticated(
-    async (user: User) =>
-      await pocketbaseClient.collection("users").delete(user.id),
-  )();
+  return await callIfAuthenticated(async (user: User) => {
+    const res = await pocketbaseClient.collection("users").delete(user.id);
+    signOut();
+    const deleted = !!res;
+    if (deleted) {
+      await pocketbaseSignOut();
+      toast.set({
+        message: "Account terminated, good luck in your future endeavors",
+        type: "success",
+      });
+    } else {
+      toast.set({
+        message: "An error has occured with the request.",
+        type: "error",
+      });
+    }
+  })();
 }
 
 // Progress Tracking
-
 export async function markComplete(route: string, bonus = 0) {
   return await callIfAuthenticated(async (user) => {
     let chapter: Chapter;
@@ -255,7 +313,9 @@ export async function markIncomplete(route: string) {
         .getFirstListItem(`chapter="${chapter.id}" && user="${user.id}"`);
     } catch (e) {
       if (e instanceof ClientResponseError && e.status === 404)
-        throw new Error("not found ressource:" + e.message);
+        throw new Error(
+          "not found ressource:" + JSON.stringify(e.originalError),
+        );
       throw new Error("unhandled exception");
     }
     return await pocketbaseClient.collection("validate").delete(validation.id);

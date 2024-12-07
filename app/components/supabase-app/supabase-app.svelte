@@ -1,19 +1,31 @@
 <svelte:options customElement="supabase-app" />
+
 <script lang="ts">
-  import { onDestroy, onMount } from "svelte";
+  import { onMount } from "svelte";
   import { fetchAndWatchUserRemoteData } from "./user-store-sync";
   import { listenAllSupabaseEvents, unsubcribeAll } from "./listen-events";
-  import type { Unsubscriber } from "svelte/store";
 
-  let userDataSubscription: (() => void) | null = null;
-  let supabaseSvelteStoresSubscriptions: Unsubscriber[] = [];
+  onMount(() => {
+    window.addEventListener(
+      "flamethrower:router:end",
+      async () => {
+        console.log("Ending new page loading. Trying subscribing...");
+        const userDataSubscription = await fetchAndWatchUserRemoteData();
+        const supabaseSvelteStoresSubscriptions = listenAllSupabaseEvents();
+        console.log("sub done");
 
-  onMount(async () => {
-    userDataSubscription = await fetchAndWatchUserRemoteData();
-    supabaseSvelteStoresSubscriptions = listenAllSupabaseEvents();
-  });
-  onDestroy(() => {
-    if (userDataSubscription) userDataSubscription();
-    unsubcribeAll(supabaseSvelteStoresSubscriptions);
+        window.addEventListener(
+          "flamethrower:router:fetch",
+          async () => {
+            console.log("Leaving page. Trying unsubscribing...");
+            if (userDataSubscription) await userDataSubscription();
+            unsubcribeAll(supabaseSvelteStoresSubscriptions);
+            console.log("unsub done");
+          },
+          { once: true },
+        );
+      },
+      { once: true },
+    );
   });
 </script>

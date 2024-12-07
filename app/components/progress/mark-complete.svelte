@@ -2,7 +2,7 @@
 
 <script lang="ts">
   import { canAccess, userProgress, modal } from "../../stores";
-  import { componentsSide } from "../../stores/supabase-vars";
+  import { componentsSide } from "../../stores/pocketbase-vars";
 
   export let route = window.location.pathname;
   export let quiz = false;

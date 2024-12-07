@@ -22,7 +22,6 @@ const pocketbaseClient = new PocketBase(
   "http://127.0.0.1:8090",
   localAuthStore,
 ) as OCPocketBase;
-console.log("new pocketbase instance!");
 pocketbaseClient.autoCancellation(false);
 const currentUser = new Subject<User | null>();
 
@@ -137,15 +136,10 @@ export async function fetchUserProgressData(
           uri,
         } = validatedChapterByUser.expand.chapter;
         new_p.validatedChapters.set(chapterId, { xp, uri });
-        console.log(new_p.xp);
-        console.log(
-          JSON.stringify(Object.fromEntries(new_p.validatedChapters.entries())),
-        );
         return new_p;
       },
       { xp: totalXpView.total_xp, validatedChapters: new Map() },
     );
-    console.log(a);
     return a;
   } catch (error) {
     if (error instanceof ClientResponseError && error.status === 404)
@@ -164,7 +158,7 @@ type AuthCallback = (user: User | null) => void;
 export const onAuthStateChange = (callback: AuthCallback) =>
   currentUser.subscribe({ next: (user) => callback(user) });
 
-// Encapsulate the Supabase RealtimeChannel into a function just to leave
+// Encapsulate the PocketBase realtime channel into a function just to leave
 // the channel.
 export type PocketBaseUnsubscriber = UnsubscribeFunc;
 export type CustomUnsubscriber = () => Promise<void>;
@@ -174,7 +168,6 @@ function toCustomUnsubcriber(
 ): CustomUnsubscriber {
   return async () => {
     await pbUnsb();
-    console.log("successfully unsubscribed!");
   };
 }
 
@@ -207,7 +200,6 @@ export const onUserProgressDataChange: OnF<
       },
       { filter: `user="${sbUser.id}"`, expand: "chapter" },
     );
-  console.log("successfully subscribed");
   return toCustomUnsubcriber(s);
 };
 
@@ -239,9 +231,7 @@ function callIfAuthenticated<T>(
       return null;
     }
     try {
-      console.log("starting pocketbase request...");
       const res = await fn(user);
-      console.log("request done!");
       return res;
     } catch (error) {
       console.error(error);

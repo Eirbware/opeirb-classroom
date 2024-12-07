@@ -2,7 +2,7 @@
 
 <script lang="ts">
   import { getCourseIdFromURL } from "../../util/helpers";
-  import { componentsSide } from '../../stores/supabase-vars';
+  import { componentsSide } from '../../stores/pocketbase-vars';
 
   export let answer: string;
   export let options: string; // Format foo:bar:baz

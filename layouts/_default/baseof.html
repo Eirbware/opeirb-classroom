@@ -32,9 +32,9 @@
   <body>
     {{ $vimeoEncode := .Params.vimeo | base64Encode }}
     {{ $ytEncode := .Params.youtube | base64Encode }}
-    <!-- COMPONENT FOR SUPABASE SERVICE -->
-    <supabase-app></supabase-app>
-    <!-- COMPONENT FOR SUPABASE SERVICE -->
+    <!-- COMPONENT FOR POCKETBASE SERVICE -->
+    <pocketbase-app></pocketbase-app>
+    <!-- COMPONENT FOR POCKETBASE SERVICE -->
 
     <!-- COMPONENT FOR STREAMING SERVICE -->
     <global-data 

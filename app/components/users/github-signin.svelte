@@ -1,7 +1,7 @@
 <svelte:options customElement="github-signin" />
 
 <script>
-    import { componentsSide } from "../../stores/supabase-vars";
+    import { componentsSide } from "../../stores/pocketbase-vars";
 </script>
 
 <button on:click={() => componentsSide.signInWith("github")}>

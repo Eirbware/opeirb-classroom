@@ -1,4 +1,4 @@
-import { supabaseSide } from "../../stores/supabase-vars";
+import { pocketbaseSide } from "../../stores/pocketbase-vars";
 import {
   deleteUserData,
   markComplete,
@@ -9,25 +9,25 @@ import {
 } from "./pocketbase";
 import type { Unsubscriber } from "svelte/store";
 
-export function listenAllSupabaseEvents(): Unsubscriber[] {
+export function listenAllPocketbaseEvents(): Unsubscriber[] {
   return [
-    supabaseSide.onSignIn(async (provider) => {
+    pocketbaseSide.onSignIn(async (provider) => {
       if (provider === "github") await signInWithGithub();
       else await signInWithEirbConnect();
     }),
 
-    supabaseSide.onSignOut(async () => {
+    pocketbaseSide.onSignOut(async () => {
       await pocketbaseSignOut();
     }),
 
-    supabaseSide.onUserDataDelete(async () => {
+    pocketbaseSide.onUserDataDelete(async () => {
       await deleteUserData();
     }),
 
-    supabaseSide.onCourseMarked(async (markData) => {
+    pocketbaseSide.onCourseMarked(async (markData) => {
       await markComplete(markData.route, markData.bonus);
     }),
-    supabaseSide.onCourseUnmarked(async (markData) => {
+    pocketbaseSide.onCourseUnmarked(async (markData) => {
       await markIncomplete(markData.route);
     }),
   ];

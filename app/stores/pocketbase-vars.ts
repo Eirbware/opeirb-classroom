@@ -1,5 +1,5 @@
 /** These stores are here just for components to
- * emit events for the supabase-component.
+ * emit events for the pocketbase-component.
  */
 
 import { writable, type Writable, type Unsubscriber } from "svelte/store";
@@ -16,11 +16,11 @@ const _signIn = writable<Provider | false | null>(null);
 const _deleteUserData = writable<boolean | null>(null);
 const _markCourse = writable<MarkData | null>(null);
 
-// For components which want to interact with Supabase
+// For components which want to interact with Pocketbase
 
 type AfterEventCallback = (() => Promise<void>) | (() => void);
 
-/** Executes the callback when the supabase-component has triggered
+/** Executes the callback when the Pocketbase component has triggered
  * the processOver flag, i.e. it has finished to process the current event.
  */
 const whenProcessOver = <T>(w: Writable<T|null>, callback: AfterEventCallback) => {
@@ -52,7 +52,7 @@ function unMarkCourse(route: string, whenDone?: AfterEventCallback) {
   _markCourse.set({ route, isComplete: false });
 }
 
-// For the supabase-app components
+// For the pocketbase-app components
 
 
 /** If the provided condition is checked, trigger the callback and then reset
@@ -82,7 +82,7 @@ const onCourseMarked = (callback: (val: MarkData) => Promise<void>) => fireCallb
 
 const onCourseUnmarked = (callback: (val: MarkData) => Promise<void>) => fireCallback(_markCourse, callback, v => v.isComplete ? null : v);
 
-export const supabaseSide = { 
+export const pocketbaseSide = { 
   onSignIn, onSignOut, onUserDataDelete, onCourseMarked, onCourseUnmarked
 }
 export const componentsSide = {

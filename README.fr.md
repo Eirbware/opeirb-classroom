@@ -75,8 +75,7 @@ En précisant les données qui suivent dans le fichier `app/.env.local`, les
 fonctionnalités applicatives seront disponibles.
 
 ```.env
-VITE_SUPABASE_URL=https://ewgpcyjmrccjopdjtqed.supabase.co
-VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV3Z3BjeWptcmNjam9wZGp0cWVkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAyNjk1NzIsImV4cCI6MjAzNTg0NTU3Mn0._KFUPaMoOUwv-NYtPer1_lmLm_RCKrDdk-csP60hu0U
+VITE_POCKETBASE_URL=http://127.0.0.1:8090
 ```
 
 ### Compilation pour la production

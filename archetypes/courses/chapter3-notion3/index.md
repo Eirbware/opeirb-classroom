@@ -41,3 +41,18 @@ l'utilisateur à compléter le quiz. Ceci se fait en mettant le champ `quiz` à
 quiz = true
 +++
 ```
+## XP Gagné
+
+Par défaut, valider un chapitre fait gagner 150 points d'xp. Un quiz fait
+rapporter en supplément :
+
+- 5 points si la personne a fait strictement plus de 2 essais avant répondre
+correctement
+- 25 points si elle a eu 2 essais
+- 50 si elle a répondu du premier coup
+
+> [!WARNING]
+> Tant qu'un chapitre n'a pas été certifié par un administrateur du serveur
+> d'Opeirb-Classroom, un chapitre ne rapportera qu'**1 point** d'xp.
+> Ceci permet de favoriser l'xp gagné dans des chapitres qui seront réellement
+> publiés par les administrateurs.

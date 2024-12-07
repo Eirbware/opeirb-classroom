@@ -68,14 +68,20 @@ Then, in the cloned repository's root, run the following command:
 npm install
 ```
 
-#### Connect with a playground backend
+#### Connect with a backend
 
 By writing the following credentials in the `app/.env.local` file, the application
-features will be functional :
+features will be functional with the main backend :
 
 ```.env
-VITE_SUPABASE_URL=https://ewgpcyjmrccjopdjtqed.supabase.co
-VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV3Z3BjeWptcmNjam9wZGp0cWVkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAyNjk1NzIsImV4cCI6MjAzNTg0NTU3Mn0._KFUPaMoOUwv-NYtPer1_lmLm_RCKrDdk-csP60hu0U
+VITE_POCKETBASE_URL=https://admin.forma.eirb.fr
+```
+
+But we recommend to setup your own pocketbase server for a playground usage.
+See the [documentation page](./backend/README.md) to initiate a backend.
+
+```.env
+VITE_POCKETBASE_URL=http://127.0.0.1:8090
 ```
 
 ### Build for production

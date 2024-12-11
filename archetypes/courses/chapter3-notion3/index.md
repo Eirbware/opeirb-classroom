@@ -2,7 +2,7 @@
 title = "Progression"
 description = """Comment le système de progression marche."""
 weight = 9
-lastmod = {{ .Date }}
+lastmod = 2024-12-11T14:31:07+01:00
 emoji = "✏️"
 reading_length = "40s"
 draft = true
@@ -11,37 +11,33 @@ draft = true
 question = "Ma question est la suivante: où est la réponse D ?"
 choices = ["Reponse1", "MonAutreReponse", "une autre réponse", "réponse D"]
 answerNumber = 4
-prizePictureName = "1"
+prizePictureName = "gg"
 +++
 
-Côté utilisateur, la progression s'accomplie en cliquant le bouton de marquage
-d'un chapitre ou bien en complétant le quiz qui lui est attaché, s'il y en a un.
+Côté utilisateur, la progression s'accomplit en validant des chapitres, soit en
+le marquant comme complet, soit en complétant son quiz s'il est mentionné.
 
 ## Créer un quiz
 
-Il suffit d'ajouter dans le fichier markdown la balise HTML suivante (qui est
-en réalité un component Svelte):
-
-```md
-<quiz-modal options="Reponse1:MonAutreReponse:une autre réponse encore:réponse D" answer="réponse D" prize="1">
-  <h6>Ma question est la suivante: où est la réponse D ?</h6>
-</quiz-modal>
-```
-
-Le paramètre `prize` est un numéro correspondant à une image `.webp` que vous
-pouvez mettre en asset du cours, dans le fichier
-`./content/<id-du-cours>/img/prizes/<numero>.webp` en partant de la racine du
-repo.
-
-Il faut également mettre le bouton de complétion en mode quiz pour obliger
-l'utilisateur à compléter le quiz. Ceci se fait en mettant le champ `quiz` à
-`true` dans le front-matter du chapitre
+Il suffit d'ajouter dans le *front-matter* de la page markdown le paramètre
+`quiz` avec le prototype comme ci-dessous :
 
 ```toml
-+++
-quiz = true
-+++
+[quiz]
+question = "Ma question est la suivante: où est la réponse D ?"
+choices = ["Reponse1", "MonAutreReponse", "une autre réponse", "réponse D"]
+answerNumber = 4
+prizePictureName = "gg"
 ```
+
+Le paramètre `prizePictureName` est un nom de fichier d'une image `.webp` que
+vous pouvez mettre en asset du cours, dans le fichier
+`./content/<id-du-cours>/img/prizes/<prizePictureName>.webp` en partant de la
+racine du repo.
+
+Le paramètre `answerNumber` doit être un entier entre 1 et le nombre de
+réponses inclus.
+
 ## XP Gagné
 
 Par défaut, valider un chapitre fait gagner 150 points d'xp. Un quiz fait

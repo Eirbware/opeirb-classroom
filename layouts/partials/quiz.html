@@ -1,21 +1,37 @@
 {{/* Validation */}}
-{{ if not (and .answerNumber (hasPrefix (printf "%T" .answerNumber) "int")) }}
-  {{ errorf "The 'answerNumber' field is missing in the 'quiz' parameter of your front-matter in this page." }}
+{{ define "validateQuizField" }}
+  {{ if not .variable }}
+    {{ errorf "Missing field: the '%s' field is missing in the 'quiz' parameter of your front-matter in this page." .variableName }}
+  {{ end }}
+  {{ if not (hasPrefix (printf "%T" .variable) .expectedType) }}
+    {{ errorf "Invalid type: the '%s' field in the 'quiz' parameter of your front-matter in this page is not of type '%s'." .variableName .expectedType }}
+  {{ end }}
 {{ end }}
-{{ if not (and .prizePictureName (eq (printf "%T" .prizePictureName) "string")) }}
-  {{ errorf "The 'prizePictureName' field is missing in the 'quiz' parameter of your front-matter in this page." }}
+
+{{ template "validateQuizField" (dict "variable" .answerNumber "variableName" "answerNumber" "expectedType" "int") }}
+{{ template "validateQuizField" (dict "variable" .prizePictureName "variableName" "prizePictureName" "expectedType" "string") }}
+{{ template "validateQuizField" (dict "variable" .question "variableName" "question" "expectedType" "string") }}
+
+{{ template "validateQuizField" (dict "variable" .choices "variableName" "choices" "expectedType" "[]") }}
+{{ if eq .choices (slice) }}
+  {{ errorf "Invalid 'choices' field in the 'quiz' parameter of your front-matter in this page : the list must not be empty" }}
 {{ end }}
-{{ if not (and .question (eq (printf "%T" .question) "string")) }}
-  {{ errorf "The 'question' field is missing in the 'quiz' parameter of your front-matter in this page." }}
+{{ $choiceNumber := 0 }}
+{{ range .choices }}
+  {{ $type := (printf "%T" .) }}
+  {{ $choiceNumber = (add $choiceNumber 1) }}
+  {{ if not (eq $type "string") }}
+    {{ errorf "Invalid type in the 'choices' list in the 'quiz' parameter of your front-matter in this page : it must be 'string', found '%s'" $type }}
+  {{ end }}
 {{ end }}
-{{ if not (and .choices (hasPrefix (printf "%T" .choices) "[]") (eq
-(printf "%T" (index .choices 0)) "string")) }}
-  {{ errorf "The 'choices' field is missing in the 'quiz' parameter of your front-matter in this page." }}
+
+{{ template "validateQuizField" (dict "variable" .answerNumber "variableName" "answerNumber" "expectedType" "int") }}
+{{ if or (gt .answerNumber $choiceNumber) (lt .answerNumber 1) }}
+  {{ errorf "Invalid 'answerNumber' in the 'quiz' parameter of your front-matter in this page: must be between 1 and your number of choices (%d), found %d." $choiceNumber .answerNumber }}
 {{ end }}
 
 
 {{ $escapedAnswers := apply .choices "strings.Replace" "." ":" "፥" }}
-<p>Voici mes options: {{ print $escapedAnswers }}</p>
 <quiz-modal
   options="{{ delimit $escapedAnswers ":" }}"
   answer="{{ index $escapedAnswers (sub .answerNumber 1) }}"

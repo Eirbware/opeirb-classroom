@@ -1,7 +1,7 @@
 <svelte:options customElement="delete-account" />
 
 <script lang="ts">
-  import { componentsSide } from "../../stores/supabase-vars";
+  import { componentsSide } from "../../stores/pocketbase-vars";
   let loading = false;
   let show = false;
   let firstClick = false;

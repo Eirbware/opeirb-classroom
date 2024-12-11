@@ -13,7 +13,7 @@
     "vbuild": "vite build --watch false",
     "build": "vite build --watch false && hugo",
     "preview": "vite preview",
-    "check": "svelte-check --tsconfig ./tsconfig.json --diagnostic-sources \"js,svelte\"",
+    "check": "svelte-check --tsconfig ./tsconfig.json --diagnostic-sources \"ts,js,svelte\"",
     "algolia": "atomic-algolia",
     "deploy": "firebase deploy --debug --token \"$FIREBASE_TOKEN\" --only hosting",
     "test": "vitest"
@@ -32,7 +32,7 @@
   "author": "Thomas Horrut",
   "license": "ISC",
   "devDependencies": {
-    "@supabase/supabase-js": "^2.44.2",
+    "pocketbase": "^0.22.1",
     "@sveltejs/kit": "^2.5.18",
     "@sveltejs/vite-plugin-svelte": "^3.1.1",
     "@tailwindcss/typography": "^0.5.4",
@@ -69,5 +69,7 @@
     "vite": "^5.3.3",
     "vitest": "^2.0.4",
     "youtube-player": "^5.5.2"
+  },
+  "dependencies": {
   }
 }

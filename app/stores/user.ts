@@ -10,10 +10,6 @@ export interface UserData {
   discordId?: string;
 }
 
-interface D {
-  [key: string]: string;
-};
-
 export interface UserProgress {
   xp: number;
   markIdToRoute: Record<string, keyof UserProgress["xpPerRoute"]>;

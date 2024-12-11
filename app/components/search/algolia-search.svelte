@@ -13,13 +13,20 @@
   const index = client.initIndex("content");
 
   let inputTag: HTMLInputElement;
-  type FoundPageData = { title: string, type: string, relpermalink: string,
-    summary: string};
+  type FoundPageData = {
+    title: string;
+    type: string;
+    relpermalink: string;
+    summary: string;
+  };
   let results: SearchResponse<FoundPageData>;
   let hits: Hit<FoundPageData>[] = [];
   let activeHit = 0;
+
+  function focusInput(el: HTMLInputElement) {
+    el.focus();
+  }
   onMount(() => {
-    inputTag?.focus();
     return () => {
       window.removeEventListener("keydown", handleSpecialKeys);
     };
@@ -66,8 +73,8 @@
 <svelte:window on:keydown={handleSpecialKeys} />
 
 <modal-dialog name="search">
-  <form>
-    {#if $modal === "search"}
+  {#if $modal === "search"}
+    <form>
       <!-- svelte-ignore a11y-autofocus -->
       <input
         class="input"
@@ -75,10 +82,11 @@
         type="text"
         placeholder="Search"
         on:input={search}
+        use:focusInput
         bind:this={inputTag}
       />
-    {/if}
-  </form>
+    </form>
+  {/if}
 
   <div class="results">
     {#if !results?.nbHits}
@@ -103,11 +111,13 @@
 
   <footer>
     <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <kbd role="button" tabindex="-1" on:click={selectHit}>↩</kbd> <span class="kbd-text">select</span>
+    <kbd role="button" tabindex="-1" on:click={selectHit}>↩</kbd>
+    <span class="kbd-text">select</span>
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <kbd role="button" tabindex="-1" on:click={goUp}>↑</kbd>
     <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <kbd role="button" tabindex="-1" on:click={goDown}>↓</kbd> <span class="kbd-text">navigate</span>
+    <kbd role="button" tabindex="-1" on:click={goDown}>↓</kbd>
+    <span class="kbd-text">navigate</span>
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <kbd role="button" tabindex="-1" on:click={() => modal.set(null)}>esc</kbd>
     <span class="kbd-text">leave</span>

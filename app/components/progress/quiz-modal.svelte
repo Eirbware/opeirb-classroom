@@ -2,11 +2,11 @@
 
 <script lang="ts">
   import { getCourseIdFromURL } from "../../util/helpers";
-  import { componentsSide } from '../../stores/supabase-vars';
+  import { componentsSide } from '../../stores/pocketbase-vars';
 
   export let answer: string;
   export let options: string; // Format foo:bar:baz
-  export let prize: number; // /courses/{courseId}/img/prizes/{n}.webp
+  export let prize: string; // /courses/{courseId}/img/prizes/{n}.webp
   const optionsList = options.split(":");
   let selected: string | null;
   let isComplete = false;

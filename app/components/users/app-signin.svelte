@@ -7,6 +7,7 @@
   <h1>Connexion</h1>
   <p>Avec votre compte:</p>
   <github-signin />
+  <roulade-signin />
   <p class="footer">
     En vous connectant, vous consentez aux termes et service du site.
   </p>

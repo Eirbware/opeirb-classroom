@@ -32,7 +32,6 @@
   "author": "Thomas Horrut",
   "license": "ISC",
   "devDependencies": {
-    "pocketbase": "^0.22.1",
     "@sveltejs/kit": "^2.5.18",
     "@sveltejs/vite-plugin-svelte": "^3.1.1",
     "@tailwindcss/typography": "^0.5.4",
@@ -54,6 +53,7 @@
     "flamethrower-router": "^0.0.0-meme.12",
     "js-confetti": "^0.10.2",
     "lodash": "^4.17.21",
+    "pocketbase": "^0.22.1",
     "postcss": "^8.4.38",
     "prettier": "3.3.2",
     "prettier-plugin-go-template": "^0.0.15",
@@ -69,7 +69,5 @@
     "vite": "^5.3.3",
     "vitest": "^2.0.4",
     "youtube-player": "^5.5.2"
-  },
-  "dependencies": {
   }
 }

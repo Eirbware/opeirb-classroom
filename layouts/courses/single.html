@@ -1,7 +1,58 @@
-{{ define "main" }} {{ $activeRelPermalink := .RelPermalink }}
+{{ define "toggleNavBar" }}
+    <nav
+      class="flex items-center py-6 px-4 bg-black bg-opacity-20 shadow-lg mb-6"
+    >
+      {{ if and .videoInCurrentPage .videoInNextPage }}
+      <div class="flex flex-col items-center">
+        <autoplay-toggle></autoplay-toggle>
+        {{/* <span class="text-xs relative bottom-1.5 mr-1">autoplay</span> */}}
+        <span class="text-xs relative bottom-1">autoplay</span>
+      </div>
+      {{end}}
+
+      <div class="ml-auto">
+        {{ if .isNotSingleMemoPage }} {{ with .page.NextInSection }}
+        <a class="btn btn-transparent" href="{{ .RelPermalink }}">👈</a>
+        {{end}} {{end}}
+
+        <a class="btn btn-transparent" href="{{ .page.Parent.RelPermalink}}">🏠</a>
+
+        {{ if .isNotSingleMemoPage }} {{ with .page.PrevInSection }}
+        <a class="btn btn-transparent" href="{{ .RelPermalink }}">👉</a>
+        {{end}} {{end}}
+      </div>
+
+      <div class="ml-auto w-16 px-4 text-center">
+        <mark-complete
+          slot="granted"
+          {{ if .page.Params.quiz }}
+          quiz="true"
+          {{ end }}
+          {{ if (.page.Params.free | default true) }}
+          free="true"
+          {{ end }}
+        ></mark-complete>
+      </div>
+    </nav>
+{{ end }}
+
+{{ define "main" }}
+
+{{ $videoInCurrentPage := or .Params.vimeo .Params.youtube }}
+{{ $videoInNextPage := false }}
+{{ with .PrevInSection }}
+  {{ $videoInNextPage = or .Params.vimeo .Params.youtube }}
+{{end}} 
+{{ $isNotSingleMemoPage := not (hasSuffix .RelPermalink "/memo/") }}
+{{ $activeRelPermalink := .RelPermalink }}
+
+{{ $dataForToolbar := merge (dict 
+    "videoInCurrentPage" $videoInCurrentPage
+    "videoInNextPage" $videoInNextPage
+    "isNotSingleMemoPage" $isNotSingleMemoPage
+    "activeRelPermalink" $activeRelPermalink) (dict "page" .) }}
 
 <main class="container flex flex-col-reverse md:flex-row">
-  {{ $isNotSingleMemoPage := not (hasSuffix .RelPermalink "/memo/") }}
   {{ if $isNotSingleMemoPage }}
   <!-- Progress tracker -->
   <navbar-toggle>
@@ -68,47 +119,11 @@
   <article
     class="prose dark:prose-invert pt-1 mx-auto px-3 md:px-8 min-w-0 max-w-none w-full"
   >
-    {{ $videoInCurrentPage := or .Params.vimeo .Params.youtube }} {{
-    $videoInNextPage := false }}{{ with .PrevInSection }}{{ $videoInNextPage =
-    or .Params.vimeo .Params.youtube }}{{end}} {{ if $videoInCurrentPage }}
+    {{ if $videoInCurrentPage }}
     <video-player free="{{ .Params.free | default "true" }}"></video-player>
     {{ end }}
 
-    <nav
-      class="flex items-center py-6 px-4 bg-black bg-opacity-20 shadow-lg mb-6"
-    >
-      {{ if and $videoInCurrentPage $videoInNextPage }}
-      <div class="flex flex-col items-center">
-        <autoplay-toggle></autoplay-toggle>
-        {{/* <span class="text-xs relative bottom-1.5 mr-1">autoplay</span> */}}
-        <span class="text-xs relative bottom-1">autoplay</span>
-      </div>
-      {{end}}
-
-      <div class="ml-auto">
-        {{ if $isNotSingleMemoPage }} {{with .NextInSection}}
-        <a class="btn btn-transparent" href="{{.RelPermalink}}">👈</a>
-        {{end}} {{end}}
-
-        <a class="btn btn-transparent" href="{{.Parent.RelPermalink}}">🏠</a>
-
-        {{ if $isNotSingleMemoPage }} {{with .PrevInSection}}
-        <a class="btn btn-transparent" href="{{.RelPermalink}}">👉</a>
-        {{end}} {{end}}
-      </div>
-
-      <div class="ml-auto w-16 px-4 text-center">
-        <mark-complete
-          slot="granted"
-          {{ if .Params.quiz }}
-          quiz="true"
-          {{ end }}
-          {{ if (.Params.free | default true) }}
-          free="true"
-          {{ end }}
-        ></mark-complete>
-      </div>
-    </nav>
+    {{ template "toggleNavBar" $dataForToolbar }}
 
     <header class="border-b-2 border-dashed border-gray6 mb-6">
       <h1>
@@ -128,6 +143,9 @@
     <div
       class="mx-auto w-24 h-1 my-12 bg-gradient-to-r from-purple-400 to-purple-600 rounded-full"
     ></div>
+
+    {{ template "toggleNavBar" $dataForToolbar }}
+
   </article>
 </main>
 {{ end }}

@@ -4,15 +4,15 @@ title = "Eirb'Academy"
 enableRobotsTXT = true
 
 [outputs]
-home = ["HTML", "RSS", "Algolia"]
+home = ["HTML", "RSS", "Flexsearch"]
 
-[outputFormats.Algolia]
-baseName = "algolia"
+[outputFormats.Flexsearch]
+baseName = "flexsearch"
 isPlainText = true
 mediaType = "application/json"
 notAlternative = true
 
-[params.algolia]
+[params.flexsearch]
 vars = ["title", "description", "summary", "date", "publishdate", "lastmod", "permalink"]
 params = ["tags"]
 

@@ -1,8 +1,6 @@
-<svelte:options customElement="algolia-search" />
+<svelte:options customElement="flexsearch-search" />
 
 <script lang="ts">
-  import algolia from "algoliasearch/lite";
-  import type { SearchResponse, Hit } from "@algolia/client-search";
   import { modal } from "../../stores/modal";
   import { router } from "../../main";
   import { onMount } from "svelte";
@@ -11,13 +9,9 @@
 
   initFlexSearchIndex();
 
-  const APP_ID = "05VYZFXKNM";
-  const API_KEY = "a0837b31f4379765240c2753fa141aa2";
-  const client = algolia(APP_ID, API_KEY);
-  const index = client.initIndex("content");
-
   let inputTag: HTMLInputElement;
   let results: FoundPageData[];
+  let activeHit = 0;
 
   function focusInput(el: HTMLInputElement) {
     el.focus();
@@ -32,25 +26,18 @@
     const q = (e.target as HTMLInputElement).value;
     const fResults = await flexSearch(q, 7);
     console.log(fResults);
-    results = await index.search(q, {
-      hitsPerPage: 7,
-      attributesToSnippet: ["summary"],
-      highlightPreTag: '<mark class="high">',
-      highlightPostTag: "</mark>",
-    });
-    hits = results.hits;
-    activeHit = 0;
+    results = fResults;
   }
 
   function goUp() {
     activeHit = activeHit <= 0 ? activeHit : activeHit - 1;
   }
   function goDown() {
-    activeHit = activeHit >= hits.length - 1 ? activeHit : activeHit + 1;
+    activeHit = activeHit >= results.length - 1 ? activeHit : activeHit + 1;
   }
   function selectHit() {
-    if (hits[activeHit]) {
-      const url = hits[activeHit].relpermalink;
+    if (results[activeHit]) {
+      const url = results[activeHit].relpermalink;
       router.go(url);
       modal.set(null);
     }
@@ -87,24 +74,25 @@
   {/if}
 
   <div class="results">
-    {#if !results?.nbHits}
+    {#if !results?.length}
       <p class="no-results">No results yet</p>
-    {/if}
-    {#each hits as hit, i}
-      <a
-        class="hit"
-        href={hit.relpermalink}
-        class:active={i === activeHit}
-        on:mouseover={() => (activeHit = i)}
-        on:focus={() => (activeHit = i)}
-      >
-        <span class="hit-title">{hit.title}</span>
-        <span class="hit-type"> in {hit.type}</span>
-        <span class="hit-description"
-          >{@html hit._snippetResult?.summary.value}</span
+    {:else}
+      {#each results as hit, i}
+        <a
+          class="hit"
+          href={hit.relpermalink}
+          class:active={i === activeHit}
+          on:mouseover={() => (activeHit = i)}
+          on:focus={() => (activeHit = i)}
         >
-      </a>
-    {/each}
+          <span class="hit-title">{hit.title}</span>
+          <span class="hit-type"> in {hit.type}</span>
+          <span class="hit-description">{@html hit.summary}</span>
+          <!--TODO: develop a summary with html and term highlighting, as in the
+            previous version with algolia -->
+        </a>
+      {/each}
+    {/if}
   </div>
 
   <footer>

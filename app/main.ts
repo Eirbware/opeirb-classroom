@@ -55,7 +55,7 @@ export * from "./components/ui/dark-mode.svelte";
 export * from "./components/ui/tab-switch";
 
 // Search
-export * from "./components/search/algolia-search.svelte";
+export * from "./components/search/flexsearch-search.svelte";
 
 // Video
 export * from "./components/video/video-player.svelte";

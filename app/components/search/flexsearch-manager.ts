@@ -1,6 +1,8 @@
 import flexsearch from "flexsearch";
 import { OrderedMap } from "immutable";
 
+const FLEXSEARCH_INDEX_PATH = "/flexsearch.json"; 
+
 type PageData = {
   author: string;
   date: number;
@@ -44,7 +46,7 @@ export type Document = flexsearch.Document<PageData, Store>;
 
 const fetchIndexFile = async () => {
   try {
-    const response = await fetch("/algolia.json");
+    const response = await fetch(FLEXSEARCH_INDEX_PATH);
     if (!response.ok) throw new Error(response.statusText);
     return response;
   } catch (error: any) {

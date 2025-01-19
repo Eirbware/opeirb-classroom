@@ -6,6 +6,10 @@
   import { modal } from "../../stores/modal";
   import { router } from "../../main";
   import { onMount } from "svelte";
+  import { flexSearch, initFlexSearchIndex } from "./flexsearch-manager";
+  import type { FoundPageData } from "./flexsearch-manager";
+
+  initFlexSearchIndex();
 
   const APP_ID = "05VYZFXKNM";
   const API_KEY = "a0837b31f4379765240c2753fa141aa2";
@@ -13,15 +17,7 @@
   const index = client.initIndex("content");
 
   let inputTag: HTMLInputElement;
-  type FoundPageData = {
-    title: string;
-    type: string;
-    relpermalink: string;
-    summary: string;
-  };
-  let results: SearchResponse<FoundPageData>;
-  let hits: Hit<FoundPageData>[] = [];
-  let activeHit = 0;
+  let results: FoundPageData[];
 
   function focusInput(el: HTMLInputElement) {
     el.focus();
@@ -34,6 +30,8 @@
 
   async function search(e: Event) {
     const q = (e.target as HTMLInputElement).value;
+    const fResults = await flexSearch(q, 7);
+    console.log(fResults);
     results = await index.search(q, {
       hitsPerPage: 7,
       attributesToSnippet: ["summary"],

@@ -25,7 +25,6 @@
   async function search(e: Event) {
     const q = (e.target as HTMLInputElement).value;
     const fResults = await flexSearch(q, 7);
-    console.log(fResults);
     results = fResults;
   }
 
@@ -33,7 +32,7 @@
     activeHit = activeHit <= 0 ? activeHit : activeHit - 1;
   }
   function goDown() {
-    activeHit = activeHit >= results.length - 1 ? activeHit : activeHit + 1;
+    activeHit = activeHit >= (results?.length || 0) - 1 ? activeHit : activeHit + 1;
   }
   function selectHit() {
     if (results[activeHit]) {
@@ -88,8 +87,6 @@
           <span class="hit-title">{hit.title}</span>
           <span class="hit-type"> in {hit.type}</span>
           <span class="hit-description">{@html hit.summary}</span>
-          <!--TODO: develop a summary with html and term highlighting, as in the
-            previous version with algolia -->
         </a>
       {/each}
     {/if}

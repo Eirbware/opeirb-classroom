@@ -1,7 +1,8 @@
 import flexsearch from "flexsearch";
 import { OrderedMap } from "immutable";
+import { sum } from "lodash";
 
-const FLEXSEARCH_INDEX_PATH = "/flexsearch.json"; 
+const FLEXSEARCH_INDEX_PATH = "/flexsearch.json";
 
 type PageData = {
   author: string;
@@ -84,8 +85,41 @@ const initIndexFile = async () => {
   );
 };
 
+/** Extract snippets from a content
+  */
+function highlightTermsInSummary(summary: string, term: string) {
+  const matchIndices: number[] = [];
+  for (const r of summary.matchAll(new RegExp(term, "gi")))
+    matchIndices.push(r.index);
+  const mergedSnippets: string[] = [];
+  let cursor: number = 0;
+  const PADDING = 30;
+  const MAX_SNIPPET_NUMBER = 5;
+  let snippet_number = 0;
+  for (let i = 0; i < matchIndices.length; ++i) {
+    const matchIndex = matchIndices[i];
+    const nextMatchIndex = i < matchIndices.length - 1 ? matchIndices[i+1] : summary.length;
+    const left_start = Math.max(matchIndex - PADDING, cursor);
+    const left_end = matchIndex;
+    const right_start = matchIndex + term.length;
+    const right_end = Math.min(right_start + PADDING, nextMatchIndex);
+    if (cursor !== left_start) ++snippet_number;
+    mergedSnippets.push(cursor === left_start ? "" : " <i>(...)</i> ", summary.slice(left_start, left_end), `<mark class="high">${term}</mark>`, summary.slice(right_start, right_end));
+    cursor = right_end;
+    if (snippet_number >= MAX_SNIPPET_NUMBER) break;
+  }
+  if (cursor < summary.length) mergedSnippets.push(" <i>(...)</i>");
+  return mergedSnippets.join("");
+}
+
+function transformDoc(doc: FoundPageData, term: string): FoundPageData {
+  const { summary, ...leftData } = doc;
+  return ({ summary: highlightTermsInSummary(summary, term), ...leftData });
+}
+
 function flattenResults(
   r: flexsearch.EnrichedDocumentSearchResultSetUnit<FoundPageData>[],
+  term: string,
 ) {
   return r
     .reduce(
@@ -94,20 +128,20 @@ function flattenResults(
           (resultMap, result) =>
             resultMap.set(
               result.id as unknown as flexsearch.Id, // fix issue from flexsearch's type declaration
-              result.doc,
+              transformDoc(result.doc, term),
             ),
           resultMap,
         ),
       OrderedMap<flexsearch.Id, FoundPageData>(),
     )
     .toOrderedSet()
-    .toArray();
+    .toArray().slice(0, 7);
 }
 
 export async function flexSearch(q: string, limit: number) {
   const index = await getFlexIndex();
   const results = await index.searchAsync<true>(q, { limit, enrich: true });
-  return flattenResults(results);
+  return flattenResults(results, q);
 }
 
 export function initFlexSearchIndex() {

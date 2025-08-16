@@ -20,7 +20,7 @@ Next, add your superuser credentials
 Run, your pocketbase server
 
 ```sh
-./pocketbase serve
+./pocketbase serve --publicDir ../public/
 ```
 
 Finally, go into the admin interface at `http://127.0.0.1:8090/_` and setup into

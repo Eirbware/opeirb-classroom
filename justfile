@@ -5,6 +5,11 @@ default:
   @just --list
 
 [group("install")]
+install-environment:
+  conda env create --prefix ./opeirbclass-env/ -f environment.yml && \
+  conda run -p ./opeirbclass-env/ npm install -g bun
+ 
+[group("install")]
 install:
   npm install
 

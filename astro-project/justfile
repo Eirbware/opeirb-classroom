@@ -1,0 +1,22 @@
+ENV_NAME := "../opeirbclass-env/"
+CONDA_RUN := "conda run -p ../opeirbclass-env/ --no-capture-output"
+
+default:
+  @just --list
+
+[group("install")]
+install-environment:
+  conda env create --prefix {{ENV_NAME}} -f environment.yml && \
+  conda run -p {{ENV_NAME}} npm install -g bun
+ 
+[group("install")]
+install:
+  {{CONDA_RUN}} bun install
+
+[group("dev")]
+dev:
+  {{CONDA_RUN}} bun dev
+
+[group("dev")]
+build:
+  {{CONDA_RUN}} bun build

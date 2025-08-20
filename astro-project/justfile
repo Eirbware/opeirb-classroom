@@ -1,22 +1,50 @@
-ENV_NAME := "../opeirbclass-env/"
-CONDA_RUN := "conda run -p ../opeirbclass-env/ --no-capture-output"
+CONDA_ENV_PREFIX := "./.opeirbclass-env/"
+CONDA_RUN := "conda run -p " + CONDA_ENV_PREFIX + " --no-capture-output"
 
 default:
   @just --list
 
 [group("install")]
-install-environment:
-  conda env create --prefix {{ENV_NAME}} -f environment.yml && \
-  conda run -p {{ENV_NAME}} npm install -g bun
- 
-[group("install")]
 install:
-  {{CONDA_RUN}} bun install
+  bun install
+
+# perform a complete, isolated installation
+[group("install")]
+[group("conda")]
+conda-full-install:
+  conda env create --prefix {{CONDA_ENV_PREFIX}} --file environment.yaml && \
+    {{CONDA_RUN}} just install
+
+# delete the built files
+[group("clean")]
+clean:
+  rm -rf dist/
+
+# delete the build and library files
+[group("clean")]
+[confirm]
+clean-deps: clean
+  rm -rf node_modules
+
+# delete all the build, library and environment files
+[group("conda")]
+[group("clean")]
+conda-full-clean: clean-deps
+  {{CONDA_RUN}} npm remove -g bun && \
+    conda remove --prefix {{CONDA_ENV_PREFIX}} --all
 
 [group("dev")]
 dev:
-  {{CONDA_RUN}} bun dev
+  bun dev
+
+[group("conda")]
+conda-dev:
+  {{CONDA_RUN}} just dev
 
 [group("dev")]
 build:
   {{CONDA_RUN}} bun build
+
+[group("conda")]
+conda-build:
+  {{CONDA_RUN}} just build

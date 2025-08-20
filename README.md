@@ -59,13 +59,30 @@ how to correctly organize markdown files in the `./content` directory.
 
 ### Install dependencies
 
-First, install [Hugo Extended](https://gohugo.io/getting-started/installing/)
-ver `0.129.0` or greater.
+You need the following dependencies:
+
+- [Hugo Extended](https://gohugo.io/getting-started/installing/) >= `0.129.0`
+- NodeJS >= `24.4.1`
 
 Then, in the cloned repository's root, run the following command:
 
 ```bash
 npm install
+```
+
+A quick and isolated installation of this environment can be carried out with
+`conda` and `just`:
+
+```sh
+just conda-full-install
+# then, run $ conda activate ./.opeirbclass-env/
+# before working in your shell
+```
+
+To purely clear this environment
+
+```sh
+just conda-full-clean
 ```
 
 #### Connect with a backend

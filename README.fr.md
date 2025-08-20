@@ -59,14 +59,31 @@ sur la manière d'organiser les fichiers markdown dans le dossier `./content`.
 
 ### Installation des dépendances
 
-D'abord, installez [la version étendue
-d'Hugo](https://gohugo.io/getting-started/installing/), version `0.129.0` ou
-plus.
+Vous avez besoin des dépendances suivantes:
+
+- [Hugo en version Étendue](https://gohugo.io/getting-started/installing/) >= `0.129.0`
+- NodeJS >= `24.4.1`
 
 Ensuite, à la racine de ce dépôt cloné, exécutez la commande suivante :
 
 ```bash
 npm install
+```
+
+Une installation rapide et isolée de tout l'environnement peut être accomplie
+avec `conda` et `just`:
+
+```sh
+just conda-full-install
+# ensuite, exécuter
+# $ conda activate ./.opeirbclass-env/
+# avant de travailler dans votre shell
+```
+
+Pour tout enlever de manière pure
+
+```sh
+just conda-full-clean
 ```
 
 #### Connexion avec un backend de développement

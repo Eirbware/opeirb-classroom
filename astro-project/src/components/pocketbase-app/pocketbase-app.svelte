@@ -1,5 +1,3 @@
-<svelte:options customElement="pocketbase-app" />
-
 <script lang="ts">
   import { onMount } from "svelte";
   import { fetchAndWatchUserRemoteData } from "./user-store-sync";

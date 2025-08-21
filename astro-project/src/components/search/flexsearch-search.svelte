@@ -117,14 +117,14 @@
     @apply overflow-hidden;
   }
   .input {
-    @apply bg-gray7 bg-opacity-50 text-white w-full md:w-[768px] font-sans text-xl rounded-none block p-3 
+    @apply bg-gray7/50 text-white w-full md:w-[768px] font-sans text-xl rounded-none block p-3 
              border-4 border-solid border-t-0 border-r-0 border-l-0 border-b-purple-500 outline-none focus-visible:outline-none mr-2;
   }
   .results {
     @apply max-w-full min-h-[200px];
   }
   .hit {
-    @apply block no-underline font-sans p-4 my-2 border bg-gray7 bg-opacity-50 shadow-md transition-all;
+    @apply block no-underline font-sans p-4 my-2 border bg-gray7/50 shadow-md transition-all;
   }
   .hit-description {
     @apply text-gray3 text-sm block;
@@ -150,7 +150,7 @@
   }
   kbd {
     @apply text-gray3 cursor-pointer text-xs bg-transparent border border-solid rounded-md 
-           border-orange-500 bg-opacity-50 p-1.5 hover:bg-orange-500 hover:text-white transition-all;
+           border-orange-500 p-1.5 hover:bg-orange-500/50 hover:text-white transition-all;
   }
   .kbd-text {
     @apply mr-3;

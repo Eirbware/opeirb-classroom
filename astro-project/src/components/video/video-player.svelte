@@ -115,13 +115,13 @@
 
 <style lang="scss">
   .wrapper {
-    @apply aspect-video w-full relative bg-black bg-opacity-50;
+    @apply aspect-video w-full relative bg-black/50;
   }
   .vid {
     @apply w-full h-full
   }
   .autoplay-cover {
-    @apply absolute inset-0 text-lg bg-black bg-opacity-95 hidden justify-center items-center flex-col;
+    @apply absolute inset-0 text-lg bg-black/95 hidden justify-center items-center flex-col;
   }
   .active {
     @apply flex;

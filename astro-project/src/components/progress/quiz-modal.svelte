@@ -123,7 +123,7 @@
 
 <style>
   .option {
-    @apply p-3 bg-black bg-opacity-50 my-2 hover:bg-orange-500 hover:text-white cursor-pointer;
+    @apply p-3 bg-black/50 my-2 hover:bg-orange-500/50 hover:text-white cursor-pointer;
   }
   .correct {
     @apply bg-green-500 text-white;

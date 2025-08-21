@@ -16,6 +16,6 @@
   }
 
   .xp {
-    @apply absolute top-0 -right-8 text-green-500 text-sm p-1 font-bold min-w-[5ch] text-center cursor-help bg-black bg-opacity-50 rounded-full shadow-xl;
+    @apply absolute top-0 -right-8 text-green-500 text-sm p-1 font-bold min-w-[5ch] text-center cursor-help bg-black/50 rounded-full shadow-xl;
   }
 </style>

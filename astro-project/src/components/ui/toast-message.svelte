@@ -58,10 +58,10 @@
     }
 
     .icon {
-      @apply text-white font-display shadow-xl text-lg w-10 px-2 py-1 grid place-items-center bg-black bg-opacity-80;
+      @apply text-white font-display shadow-xl text-lg w-10 px-2 py-1 grid place-items-center bg-black/80;
     }
     .message {
-      @apply bg-black bg-opacity-50 text-white shadow-xl p-4 hover:line-through;
+      @apply bg-black/50 text-white shadow-xl p-4 hover:line-through;
     }
 
     &.success {

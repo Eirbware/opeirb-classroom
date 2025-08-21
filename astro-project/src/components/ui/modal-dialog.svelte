@@ -26,7 +26,7 @@
 
 <style>
   .backdrop {
-    @apply inset-0 fixed bg-opacity-90 bg-black z-[99] invisible opacity-0 flex flex-col items-center pt-20;
+    @apply inset-0 fixed bg-black/90 z-[99] invisible opacity-0 flex flex-col items-center pt-20;
   }
   .show {
     @apply visible opacity-100;
@@ -41,6 +41,6 @@
     @apply scale-100 opacity-100 transition-all duration-200;
   }
   .esc {
-    @apply cursor-pointer absolute top-6 right-6 text-xs text-gray3  border border-solid drop-shadow-md rounded-md border-orange-500 bg-opacity-50 p-1.5 hover:bg-orange-500 hover:text-white transition-all;
+    @apply cursor-pointer absolute top-6 right-6 text-xs text-gray3  border border-solid drop-shadow-md rounded-md border-orange-500 p-1.5 hover:bg-orange-500/50 hover:text-white transition-all;
   }
 </style>

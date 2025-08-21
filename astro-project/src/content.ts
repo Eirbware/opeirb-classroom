@@ -1,11 +1,19 @@
-import type { MarkdownLayoutProps } from "astro";
+import type { MarkdownLayoutProps, Page } from "astro";
 import pathlib from "path";
 import SortedSet from "collections/sorted-set";
 import type { SortedSet as SortedSetType } from "collections/sorted-set";
 
+interface MenuProps {
+  weight: number;
+  name?: string;
+}
+
 // page with weight in the frontmatter, as in Hugo
 type PageProps = MarkdownLayoutProps<{
+  title: string;
+  description?: string;
   weight?: number;
+  menu?: Record<string, MenuProps>
 }>
 
 const modules = () => import.meta.glob('./pages/**/*.md', { eager: true }) as Record<string, PageProps>;
@@ -13,6 +21,10 @@ const modules = () => import.meta.glob('./pages/**/*.md', { eager: true }) as Re
 interface Section {
   sorted: SortedSetType<PageProps>,
   unsorted: PageProps[],
+}
+
+function sortedSetToArray<T>(sortedSet: SortedSetType<T>) {
+  return sortedSet.toArray() as T[];
 }
 
 const pagesPerSection = () => Object.entries(Object.values(modules()).reduce((acc, mod) => {
@@ -42,7 +54,7 @@ const pagesPerSection = () => Object.entries(Object.values(modules()).reduce((ac
   );
      
   return { ...remaining, [sectionUri]: newSection };
-}, {} as Record<string, Section>)).reduce((acc, [uri, {sorted, unsorted}]) => ({...acc, [uri]: [...(sorted.toArray() as PageProps[]), ...unsorted]}), {} as Record<string, PageProps[]>);
+}, {} as Record<string, Section>)).reduce((acc, [uri, {sorted, unsorted}]) => ({...acc, [uri]: [...sortedSetToArray(sorted), ...unsorted]}), {} as Record<string, PageProps[]>);
 
 export function getPageIndexInSection(pageUri: string) {
   const sectionUri = pathlib.dirname(pageUri);
@@ -82,3 +94,26 @@ export function indexAllPagesForSearch() {
   const gotPagesPerSection = pagesPerSection();
   // TODO:
 }
+
+export const siteMenu = () => Object.entries(
+  Object.values(modules()).reduce((acc, mod): Record<string, SortedSetType<[MenuProps, PageProps]>> => {
+  const menus = mod.frontmatter.menu;
+  if (menus === undefined)
+    return acc;
+  const newAcc = { ...acc };
+  Object.entries(menus).forEach(([part, menuProps]) => {
+    const getWeight = (a: [MenuProps, PageProps]) => a[1].frontmatter.menu![part]!.weight;
+    const currentlySortedMenuPages = newAcc[part] ?? new SortedSet<[MenuProps, PageProps]>(
+      [],
+      (a, b) => getWeight(a) === getWeight(b),
+      (a, b) => getWeight(a) - getWeight(b)
+    );
+    const addAndReturn = (w: SortedSetType<[MenuProps, PageProps]>, page: PageProps, menu: MenuProps) => {
+      w.add([menu, page]);
+      return w;
+    };
+    newAcc[part] = addAndReturn(currentlySortedMenuPages, mod, menuProps);
+  });
+  return newAcc;
+}, {} as Record<string, SortedSetType<[MenuProps, PageProps]>>)
+).reduce((acc, [part, sortedMenuPages]) => ({ ...acc, [part]: sortedSetToArray(sortedMenuPages)}), {} as Record<string, [MenuProps, PageProps][]>);

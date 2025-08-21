@@ -24,7 +24,7 @@ dist-ssr
 *.sw?
 .hugo_build.lock
 static/svelte/
-public
+./public
 resources/
 data/svelte.json
 .opeirbclass-env

@@ -12,6 +12,11 @@ export default {
 @reference '${path.resolve('./src/styles/app.scss')}';
 `
     },
+    css: {
+      prependData: `
+@reference '${path.resolve('./src/styles/app.scss')}';
+`
+    },
     postcss: {
       plugins: [tailwindcss]
     },

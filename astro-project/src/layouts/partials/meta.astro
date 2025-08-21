@@ -1,0 +1,24 @@
+---
+interface Props {
+  title: string;
+  url: string;
+  description ?: string;
+}
+const { title, url, description="no-description" } = Astro.props;
+
+const baseUrl = import.meta.env.SITE;
+const absoluteUrl = baseUrl + url;
+// TODO: replace by the default img url;
+const imgUrl = baseUrl + url + "img/featured.png";
+---
+
+<link rel="canonical" href={absoluteUrl} />
+
+<meta name="description" content={description} />
+<meta name="image" content={imgUrl} />
+
+<meta property="og:title" content={title} />
+<meta property="og:type" content="article" />
+<meta property="og:url" content={absoluteUrl} />
+<meta property="og:image" content={imgUrl} />
+<meta property="og:description" content={description} />

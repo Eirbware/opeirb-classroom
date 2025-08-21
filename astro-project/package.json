@@ -16,6 +16,7 @@
     "@vimeo/player": "^2.29.3",
     "astro": "^5.13.2",
     "autoprefixer": "^10.4.21",
+    "collections": "^5.1.13",
     "flexsearch": "^0.8.205",
     "js-confetti": "^0.12.0",
     "lodash": "^4.17.21",
@@ -29,10 +30,15 @@
     "youtube-player": "^5.6.0"
   },
   "devDependencies": {
+    "@types/collections": "^5.1.5",
     "@types/flexsearch": "^0.7.42",
     "@types/lodash": "^4.17.20",
     "@types/vimeo__player": "^2.18.3",
     "@types/youtube-player": "^5.5.11",
+    "prettier": "^3.6.2",
+    "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-svelte": "^3.4.0",
+    "prettier-plugin-tailwindcss": "^0.6.14",
     "vitest": "^3.2.4"
   }
 }

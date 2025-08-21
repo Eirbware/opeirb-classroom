@@ -1,0 +1,93 @@
+---
+import MetaPartial from "./partials/meta.astro";
+import TopNavPartial from "./partials/topnav.astro";
+import FooterPartial from "./partials/footer.astro"
+
+import GlobalData from "../components/global-data.svelte";
+import AppSignin from "../components/users/app-signin.svelte";
+import PocketBaseApp from "../components/pocketbase-app/pocketbase-app.svelte";
+import FlexSearchSearch from "../components/search/flexsearch-search.svelte";
+import HiMom from "../components/ui/hi-mom.svelte";
+import RouteLoader from "../components/ui/route-loader.svelte";
+import ToastMessage from "../components/ui/toast-message.svelte";
+import ScrollUp from "../components/ui/scroll-up.svelte";
+
+import { nextPageInSection, previousPageInSection } from "../content";
+import type { MarkdownLayoutProps } from 'astro';
+
+type Props = MarkdownLayoutProps<{
+  title: string;
+  description: string;
+  vimeo?: string;
+  youtube?: string;
+}>;
+
+const props = Astro.props;
+const { frontmatter, url="" } = props;
+const toBase64 = (opUrl: string | undefined) => opUrl ? atob(opUrl) : opUrl;
+const vimeoEncode = toBase64(frontmatter.vimeo);
+const ytEncode = toBase64(frontmatter.youtube);
+const permalink = import.meta.env.SITE + url;
+---
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>{frontmatter.title}</title>
+
+    <!-- pwa -->
+    <link rel="shortcut icon" href="/img/favicon.png" type="image/x-icon"/>
+    <link rel="apple-touch-icon" type="image/x-icon" href="/img/favicon.png" />
+    <meta name="theme-color" content="#454e56"/>
+    <meta name="viewport" content="width=device-width,minimum-scale=1"/>
+    <link rel="manifest" href="/manifest.json"/>
+    <MetaPartial title={frontmatter.title} url={url} description={frontmatter.description}/>
+    
+    <!--
+    <script>
+      // TODO: review the usefullness of that 
+      if ('serviceWorker' in navigator) {
+          window.addEventListener('load', () => {
+              navigator.serviceWorker.register('/sw.js');
+          });
+      }
+    </script>
+    -->
+
+  </head>
+  <body>
+    <!-- COMPONENT FOR POCKETBASE SERVICE -->
+    <PocketBaseApp></PocketBaseApp>
+    <!-- COMPONENT FOR POCKETBASE SERVICE -->
+
+    <!-- COMPONENT FOR STREAMING SERVICE -->
+    <GlobalData
+      permalink={permalink}
+      vimeo={vimeoEncode}
+      youtube={ytEncode}
+      free={true}
+      next={nextPageInSection(props)?.url}
+      prev={previousPageInSection(props)?.url}>
+    </GlobalData>
+    <!-- COMPONENT FOR STREAMING SERVICE -->
+
+    <TopNavPartial />
+    <!-- Page content body -->
+    <slot />
+    <!-- Page content body -->
+    <FooterPartial />
+
+    <AppSignin></AppSignin>
+    <FlexSearchSearch></FlexSearchSearch>
+    <HiMom></HiMom>
+
+    <RouteLoader>
+      <div class="fixed w-full top-0 left-0 h-1 gradient-loader"></div>
+    </RouteLoader>
+
+    <ToastMessage></ToastMessage>
+    <ScrollUp></ScrollUp>
+
+  </body>
+</html>

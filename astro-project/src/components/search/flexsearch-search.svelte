@@ -1,10 +1,11 @@
 <script lang="ts">
   import { modal } from "../../app/stores/modal";
   import { onMount } from "svelte";
-  import { flexSearch, initFlexSearchIndex } from "./flexsearch-manager";
+  // TODO: make this component work when the pages will be ready
+  // import { flexSearch, initFlexSearchIndex } from "./flexsearch-manager";
   import type { FoundPageData } from "./flexsearch-manager";
 
-  initFlexSearchIndex();
+  // initFlexSearchIndex();
 
   let inputTag: HTMLInputElement;
   let results: FoundPageData[];
@@ -21,7 +22,7 @@
 
   async function search(e: Event) {
     const q = (e.target as HTMLInputElement).value;
-    const fResults = await flexSearch(q, 7);
+    const fResults: FoundPageData[] = []; // await flexSearch(q, 7);
     results = fResults;
   }
 

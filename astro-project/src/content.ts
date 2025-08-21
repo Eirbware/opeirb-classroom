@@ -8,14 +8,14 @@ type PageProps = MarkdownLayoutProps<{
   weight?: number;
 }>
 
-const modules = import.meta.glob('./pages/**/*.md', { eager: true }) as Record<string, PageProps>;
+const modules = () => import.meta.glob('./pages/**/*.md', { eager: true }) as Record<string, PageProps>;
 
 interface Section {
   sorted: SortedSetType<PageProps>,
   unsorted: PageProps[],
 }
 
-const pagesPerSection = Object.entries(Object.values(modules).reduce((acc, mod) => {
+const pagesPerSection = () => Object.entries(Object.values(modules()).reduce((acc, mod) => {
   const uri = mod.url;
   if (uri === undefined) return acc;
   const sectionUri = pathlib.dirname(uri);
@@ -46,7 +46,8 @@ const pagesPerSection = Object.entries(Object.values(modules).reduce((acc, mod) 
 
 export function getPageIndexInSection(pageUri: string) {
   const sectionUri = pathlib.dirname(pageUri);
-  const section = pagesPerSection[sectionUri]
+  const gotPagesPerSection = pagesPerSection();
+  const section = gotPagesPerSection[sectionUri]
   const index = section.findIndex((page => page.url === pageUri));
   if (index < 0)
     throw new Error(`Page with uri ${pageUri} is not found in section: ${sectionUri}`);
@@ -71,4 +72,13 @@ export function previousPageInSection<P extends MarkdownLayoutProps<any>>(page: 
   if (index === 0)
     return null;
   return section[index - 1] as P;
+}
+
+/** Create a json file with metadata for each content page.
+ *
+ *  Call it for generating the json for fullsearch
+ */
+export function indexAllPagesForSearch() {
+  const gotPagesPerSection = pagesPerSection();
+  // TODO:
 }

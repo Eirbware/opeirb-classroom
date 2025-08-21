@@ -34,12 +34,12 @@ conda-full-clean: clean-deps
     conda remove --prefix {{CONDA_ENV_PREFIX}} --all
 
 [group("dev")]
-dev:
-  bun dev
+dev VERBOSE="false":
+  bun dev {{if VERBOSE == "--verbose" { "--verbose" } else { "" } }}
 
 [group("conda")]
-conda-dev:
-  {{CONDA_RUN}} just dev
+conda-dev VERBOSE="false":
+  {{CONDA_RUN}} just dev {{VERBOSE}}
 
 [group("dev")]
 build:

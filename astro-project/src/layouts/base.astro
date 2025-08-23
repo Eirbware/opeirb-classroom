@@ -26,6 +26,7 @@ type Props = MarkdownLayoutProps<{
 
 const props = Astro.props;
 const { frontmatter, url="", file } = props;
+const relativeFile = url + file.endsWith("index.md") ? "index.md" : ".md";
 const toBase64 = (opUrl: string | undefined) => opUrl ? atob(opUrl) : opUrl;
 const vimeoEncode = toBase64(frontmatter.vimeo);
 const ytEncode = toBase64(frontmatter.youtube);
@@ -78,7 +79,7 @@ const permalink = import.meta.env.SITE + url;
     <!-- Page content body -->
     <slot />
     <!-- Page content body -->
-    <FooterPartial fileRelPath={file} />
+    <FooterPartial fileRelPath={relativeFile} />
 
     <AppSignin></AppSignin>
     <FlexSearchSearch></FlexSearchSearch>

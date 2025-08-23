@@ -1,4 +1,4 @@
-import type { MarkdownLayoutProps, Page } from "astro";
+import type { MarkdownLayoutProps } from "astro";
 import pathlib from "path";
 import SortedSet from "collections/sorted-set";
 import type { SortedSet as SortedSetType } from "collections/sorted-set";
@@ -117,3 +117,7 @@ export const siteMenu = () => Object.entries(
   return newAcc;
 }, {} as Record<string, SortedSetType<[MenuProps, PageProps]>>)
 ).reduce((acc, [part, sortedMenuPages]) => ({ ...acc, [part]: sortedSetToArray(sortedMenuPages)}), {} as Record<string, [MenuProps, PageProps][]>);
+
+export async function getPageProps(url: string): Promise<PageProps> {
+  return await import(`./pages/${url}.md`) as PageProps;
+}

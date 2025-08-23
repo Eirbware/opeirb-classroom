@@ -1,17 +1,22 @@
 ---
-import { siteConfig } from "../../config";
-import { siteMenu } from "../../content.ts";
+import { siteConfig, siteMenu } from "../../config";
+import { getPageProps } from "../../content";
 import pathlib from "path";
-
-const svgModules = import.meta.glob("../../icons/*.svg", { eager: true, import: "default" });
+import SvgPartial from "./svg.astro";
 
 interface Props {
   fileRelPath?: string
 }
 const { fileRelPath } = Astro.props;
 const footer_params = siteConfig.footer;
-const footerMenu = siteMenu()["footer"];
+const footerMenu = await Promise.all(
+  siteMenu.footer.map(async ({name,  url}) => ({
+    name: name ?? (await getPageProps(url)).frontmatter.title,
+    url
+  }))
+);
 ---
+
 <footer class="container text-center my-6 p-8 dark:text-gray3">
   <div
     class="mx-auto w-24 h-1 my-12 bg-gradient-to-r from-gray5 to-gray4 rounded-full"
@@ -33,24 +38,26 @@ const footerMenu = siteMenu()["footer"];
       { footer_params.contact_email }
     </strong>
   </div>
+
   <div class="flex justify-center items-center my-2">
-    { Object.entries(siteConfig.links.helpful).map(([k, v]) => 
-      (<a href={v}
-        ><i class="w-6 inline-block mx-2">
-        {svgModules[`../../icons/${k}.svg`]}
-      </i></a
-      >
-    )) }
+  { Object.entries(siteConfig.links.helpful).map(([k, v]) =>
+    <a href={v}>
+      <i class="w-6 inline-block mx-2">
+        <SvgPartial filestem={k} />
+      </i>
+    </a>
+    )
+  }
   </div>
 
   <h6>{ footer_params.links_title }</h6>
 
   {footerMenu && (
   <div class="py-3">
-    {footerMenu.map(([menuProps, pageProps], i) => (
+    {footerMenu.map(({ name, url }, i) => (
     <>
-      <a href={pageProps.url}>
-        {menuProps.name ?? pageProps.frontmatter.title}
+      <a href={url}>
+        {name}
       </a>
       {i < footerMenu.length - 1 && " | "}
     </>

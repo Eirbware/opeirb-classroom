@@ -11,7 +11,7 @@ export const siteConfig = {
     links_title: "Sections du site"
   },
   links: {
-    github_content: "https://github.com/Eirbware/opeirb-classroom/tree/master/content/",
+    github_content: "https://github.com/Eirbware/opeirb-classroom/tree/master/src/pages/",
     helpful: {
       github: "https://github.com/Eirbware",
       telegram: "https://t.me/eirbware",
@@ -19,4 +19,12 @@ export const siteConfig = {
       linkedin: "https://www.linkedin.com/company/eirbware/",
     }
   }
+}
+
+// TODO:
+export const siteMenu: Record<"footer", {name?: string, url: string}[]> = {
+  footer: [
+    { name: 'Cours', url: '/courses/' },
+    { name: 'Tips', url: '/tips/' }
+  ]
 }

@@ -1,0 +1,10 @@
+---
+interface Props {
+  filestem: string
+};
+const svgContents = import.meta.glob(`../../icons/*.svg`, { eager: true, query: "?raw", import: "default" });
+
+const { filestem } = Astro.props;
+const svgContent = svgContents[`../../icons/${filestem}.svg`];
+---
+<Fragment set:html={svgContent}></>

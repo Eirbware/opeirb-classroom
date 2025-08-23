@@ -1,9 +1,10 @@
 <script lang="ts">
 import GithubSignin from "./github-signin.svelte";
 import RouladeSignin from "./roulade-signin.svelte";
+import ModalDialog from "../ui/modal-dialog.svelte";
 </script>
 
-<modal-dialog name="signin" esc="true">
+<ModalDialog name="signin" esc={true}>
   <h1>Connexion</h1>
   <p>Avec votre compte:</p>
   <GithubSignin />
@@ -11,7 +12,7 @@ import RouladeSignin from "./roulade-signin.svelte";
   <p class="footer">
     En vous connectant, vous consentez aux termes et service du site.
   </p>
-</modal-dialog>
+</ModalDialog>
 
 <style>
   .footer {

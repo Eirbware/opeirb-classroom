@@ -1,6 +1,7 @@
 <script lang="ts">
   import { getCourseIdFromURL } from "../../app/util/helpers";
   import { componentsSide } from '../../app/stores/pocketbase-vars';
+  import ModalDialog from "../ui/modal-dialog.svelte";
 
   export let answer: string;
   export let options: string; // Format foo:bar:baz
@@ -75,7 +76,7 @@
   }
 </script>
 
-<modal-dialog esc="true" name="quiz">
+<ModalDialog esc={true} name="quiz">
   <div class="wrap">
     {#if !isComplete}
       <p class="red">
@@ -120,7 +121,7 @@
       </footer>
     {/if}
   </div>
-</modal-dialog>
+</ModalDialog>
 
 <style>
   .option {

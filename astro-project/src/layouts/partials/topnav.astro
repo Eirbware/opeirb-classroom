@@ -33,7 +33,7 @@ import { siteConfig, siteMenu } from "../../config";
         </li>
       )}
       <li class="ml-2">
-        <ModalAction type="open" name="search">
+        <ModalAction client:load type="open" name="search">
           <button
             class="p-2 mr-2 hidden rounded-md md:flex justify-between items-center text-black bg-yellow1 hover:text-gray4 border border-gray4 shadow-xl hover:drop-shadow-[0_0_7px_rgba(252, 228, 28, 1)] transition-all"
           >
@@ -52,13 +52,13 @@ import { siteConfig, siteMenu } from "../../config";
           </button>
         </ModalAction>
       </li>
-      <li class="mx-2"><DarkModeToggle client:only="svelte"></DarkModeToggle></li>
+      <li class="mx-2"><DarkModeToggle client:load></DarkModeToggle></li>
       <li class="ml-2 mr-6 relative">
-        <IfUser client:only="svelte">
+        <IfUser client:load>
           <a href="/dashboard">
-            <UserAvatar client:only="svelte"></UserAvatar>
+            <UserAvatar client:load></UserAvatar>
           </a>
-          <ModalAction slot="signed-out" name="signin" type="open">
+          <ModalAction client:load slot="signed-out" name="signin" type="open">
             <button
               class="relative hidden md:inline-block px-4 py-2 text-xl font-display text-black hover: bg-white hover:bg-yellow1"
             >

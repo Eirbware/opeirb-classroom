@@ -22,21 +22,25 @@
       ? window.matchMedia("(prefers-color-scheme: dark)").matches
       : m === LightMode.DARK;
 
-  const htmlBase = document.documentElement;
-  function changeDarkClass(m: LightMode) {
-    if (isDark(m)) htmlBase.classList.add("dark");
-    else htmlBase.classList.remove("dark");
-  }
   let cachedMode: LightMode = mode($doesPreferDark);
+  let changeDarkClass : ((m: LightMode) => void) | null;
+
   onMount(() => {
+    const htmlBase = document.documentElement;
+    changeDarkClass = (m: LightMode) => {
+      if (isDark(m)) htmlBase.classList.add("dark");
+      else htmlBase.classList.remove("dark");
+    }
     changeDarkClass(cachedMode);
   });
+
   function toggle() {
     const nextMode = (cachedMode + 1) % 3;
     doesPreferDark.set(
       nextMode === LightMode.SYSTEM ? null : nextMode === LightMode.DARK,
     );
-    changeDarkClass(nextMode);
+    if (changeDarkClass !== null)
+      changeDarkClass(nextMode);
     cachedMode = nextMode;
   }
 </script>

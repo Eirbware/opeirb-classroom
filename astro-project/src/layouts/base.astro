@@ -47,6 +47,7 @@ const permalink = import.meta.env.SITE + url;
     <link rel="manifest" href="/manifest.json"/>
     <MetaPartial title={frontmatter.title} url={url} description={frontmatter.description}/>
     
+    <script ></script>
     <!--
     <script>
       // TODO: review the usefullness of that 
@@ -61,11 +62,11 @@ const permalink = import.meta.env.SITE + url;
   </head>
   <body>
     <!-- COMPONENT FOR POCKETBASE SERVICE -->
-    <PocketBaseApp></PocketBaseApp>
+    <PocketBaseApp client:load></PocketBaseApp>
     <!-- COMPONENT FOR POCKETBASE SERVICE -->
 
     <!-- COMPONENT FOR STREAMING SERVICE -->
-    <GlobalData
+    <GlobalData client:load
       permalink={permalink}
       vimeo={vimeoEncode}
       youtube={ytEncode}
@@ -75,22 +76,24 @@ const permalink = import.meta.env.SITE + url;
     </GlobalData>
     <!-- COMPONENT FOR STREAMING SERVICE -->
 
+    <script type="module" src="/src/app/main.ts" is:inline></script>
+
     <TopNavPartial />
     <!-- Page content body -->
     <slot />
     <!-- Page content body -->
     <FooterPartial fileRelPath={relativeFile} />
 
-    <AppSignin></AppSignin>
-    <FlexSearchSearch></FlexSearchSearch>
-    <HiMom></HiMom>
+    <AppSignin client:load></AppSignin>
+    <FlexSearchSearch client:load></FlexSearchSearch>
+    <HiMom client:load></HiMom>
 
-    <RouteLoader>
+    <RouteLoader client:load>
       <div class="fixed w-full top-0 left-0 h-1 gradient-loader"></div>
     </RouteLoader>
 
-    <ToastMessage></ToastMessage>
-    <ScrollUp></ScrollUp>
+    <ToastMessage client:load></ToastMessage>
+    <ScrollUp client:load></ScrollUp>
 
   </body>
 </html>

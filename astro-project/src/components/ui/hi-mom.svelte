@@ -1,10 +1,12 @@
 <script lang="ts">
+import ModalDialog from "./modal-dialog.svelte";
+
 </script>
 
-<modal-dialog name="himom" esc="true">
+<ModalDialog name="himom" esc={true}>
   <h1>Hi Mom!</h1>
   <img src="/img/himom.gif" alt="hi mom" />
-</modal-dialog>
+</ModalDialog>
 
 <style>
   h1 {

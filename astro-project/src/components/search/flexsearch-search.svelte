@@ -4,6 +4,7 @@
   // TODO: make this component work when the pages will be ready
   // import { flexSearch, initFlexSearchIndex } from "./flexsearch-manager";
   import type { FoundPageData } from "./flexsearch-manager";
+  import ModalDialog from "../ui/modal-dialog.svelte";
 
   // initFlexSearchIndex();
 
@@ -55,7 +56,7 @@
 
 <svelte:window on:keydown={handleSpecialKeys} />
 
-<modal-dialog name="search">
+<ModalDialog name="search">
   {#if $modal === "search"}
     <form>
       <!-- svelte-ignore a11y-autofocus -->
@@ -104,7 +105,7 @@
     <kbd role="button" tabindex="-1" on:click={() => modal.set(null)}>esc</kbd>
     <span class="kbd-text">leave</span>
   </footer>
-</modal-dialog>
+</ModalDialog>
 
 <style lang="scss">
   a,

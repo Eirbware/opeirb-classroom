@@ -1,6 +1,7 @@
 <script lang="ts">
   import { canAccess, userProgress, modal } from "../../app/stores";
   import { componentsSide } from "../../app/stores/pocketbase-vars";
+  import ModalAction from "../ui/modal-action.svelte";
 
   export let route = window.location.pathname;
   export let quiz = false;
@@ -46,17 +47,19 @@
       >
     {/if}
   {:else}
-    <modal-action name="signin" type="open" class="purple">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="svg-sm"
-        viewBox="0 0 448 512"
+    <ModalAction name="signin" type="open">
+      <div class="purple">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="svg-sm"
+          viewBox="0 0 448 512"
         ><path
-          fill="currentColor"
-          d="M144 144v48H304V144c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192V144C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z"
-        /></svg
-      >
-    </modal-action>
+            fill="currentColor"
+            d="M144 144v48H304V144c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192V144C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z"
+          /></svg
+        >
+      </div>
+    </ModalAction>
     <span class="msg purple">locked</span>
   {/if}
 </span>

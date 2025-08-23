@@ -61,7 +61,7 @@ const permalink = import.meta.env.SITE + url;
   </head>
   <body>
     <!-- COMPONENT FOR POCKETBASE SERVICE -->
-    <PocketBaseApp client:only></PocketBaseApp>
+    <PocketBaseApp client:only="svelte"></PocketBaseApp>
     <!-- COMPONENT FOR POCKETBASE SERVICE -->
 
     <!-- COMPONENT FOR STREAMING SERVICE -->
@@ -85,11 +85,11 @@ const permalink = import.meta.env.SITE + url;
     <FlexSearchSearch></FlexSearchSearch>
     <HiMom></HiMom>
 
-    <RouteLoader client:only>
+    <RouteLoader client:only="svelte">
       <div class="fixed w-full top-0 left-0 h-1 gradient-loader"></div>
     </RouteLoader>
 
-    <ToastMessage client:only></ToastMessage>
+    <ToastMessage client:only="svelte"></ToastMessage>
     <ScrollUp></ScrollUp>
 
   </body>

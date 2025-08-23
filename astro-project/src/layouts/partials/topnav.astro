@@ -1,3 +1,77 @@
 ---
+import ModalAction from "../../components/ui/modal-action.svelte";
+import UserAvatar from "../../components/users/user-avatar.svelte";
+import IfUser from "../../components/users/if-user.svelte";
+import DarkModeToggle from "../../components/ui/dark-mode.svelte";
+import SvgPartial from "./svg.astro";
+
+import { siteConfig, siteMenu } from "../../config";
 
 ---
+<span class="py-100px">
+  <nav id="topnav" class="flex justify-between container mb-4 md:p-8 rounded-md">
+    <a class="flex text-center w-12 h-12 logo-gif" href="/">
+      <img id="logo" src="/img/logo.svg" alt="logo" />
+      <img
+        class="relative bottom-1 left-1"
+        id="logoBg"
+        src="/img/logo.svg"
+        alt="logo"
+      />
+      <span class="text-white text-2xl">{siteConfig.title}</span>
+    </a>
+
+    <ul class="flex justify-center items-center">
+      { siteMenu.main.map(({name, url}) => 
+
+        <li class="mx-2 md:mx-4 hover:scale-105 transition-transform">
+          <a
+            href={url}
+            class="font-sans text-xl font-bold leading-none text-yellow1 dark:text-white hover:text-yellow2 dark:hover:text-black"
+            >{name}</a
+          >
+        </li>
+      )}
+      <li class="ml-2">
+        <ModalAction client:only="svelte" type="open" name="search">
+          <button
+            class="p-2 mr-2 hidden rounded-md md:flex justify-between items-center text-black bg-yellow1 hover:text-gray4 border border-gray4 shadow-xl hover:drop-shadow-[0_0_7px_rgba(252, 228, 28, 1)] transition-all"
+          >
+            <span class="text-gray2 w-4 mx-2">
+              <SvgPartial filestem = "search" />
+            </span>
+            <span class="mr-12">Search</span>
+            <span class="mx-2 text-xs border border-gray4 rounded-md p-1 px-2"
+              >/</span
+            >
+          </button>
+          <button class="flex md:hidden">
+            <span class="text-gray2 w-6 mx-2">
+              <SvgPartial filestem = "search" />
+            </span>
+          </button>
+        </ModalAction>
+      </li>
+      <li class="mx-2"><DarkModeToggle client:only="svelte"></DarkModeToggle></li>
+      <li class="ml-2 mr-6 relative">
+        <IfUser client:only="svelte">
+          <a href="/dashboard">
+            <UserAvatar client:only="svelte"></UserAvatar>
+          </a>
+          <ModalAction client:only="svelte" slot="signed-out" name="signin" type="open">
+            <button
+              class="relative hidden md:inline-block px-4 py-2 text-xl font-display text-black hover: bg-white hover:bg-yellow1"
+            >
+              login
+            </button>
+            <button class="flex md:hidden">
+              <span class="text-gray2 w-6 mx-2" >
+                <SvgPartial filestem="login"/>
+              </span>
+            </button>
+          </ModalAction>
+        </IfUser>
+      </li>
+    </ul>
+  </nav>
+</span>

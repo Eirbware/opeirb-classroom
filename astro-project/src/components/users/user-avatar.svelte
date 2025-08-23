@@ -1,9 +1,10 @@
 <script lang="ts">
   import { userProgress } from "../../app/stores/user";
+  import UserData from "./user-data.svelte";
 </script>
 
 <div class="wrap">
-  <user-data field="photoURL" />
+  <UserData field="photoURL" />
 </div>
 
 <span class="xp" title="experience points">

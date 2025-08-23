@@ -2,6 +2,7 @@
 
 // TODO: install i18n
 export const siteConfig = {
+  title: "Eirb'Academy",
   footer: {
     issue: "Un problème avec cette page ?",
     issue_url_content: "Corrigez-la sur Github",
@@ -22,7 +23,11 @@ export const siteConfig = {
 }
 
 // TODO:
-export const siteMenu: Record<"footer", {name?: string, url: string}[]> = {
+export const siteMenu: Record<"footer" | "main", {name?: string, url: string}[]> = {
+  main: [
+    { name: 'Cours', url: '/courses/' },
+    { name: 'Tips', url: '/tips/' }
+  ],
   footer: [
     { name: 'Cours', url: '/courses/' },
     { name: 'Tips', url: '/tips/' }

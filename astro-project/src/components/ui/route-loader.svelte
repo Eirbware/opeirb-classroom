@@ -1,5 +1,24 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import { routeLoading } from "../../app/stores/loading";
+
+  onMount(() => {
+      let timeout: NodeJS.Timeout;
+      // TODO: replace this by the ClientRouter API
+      window.addEventListener("flamethrower:router:fetch", (e) => {
+        // delay for loads > 250ms
+        timeout = setTimeout(() => {
+          routeLoading.set(true);
+        }, 0);
+      });
+      window.addEventListener("flamethrower:router:end", (e) => {
+        // show for at least 400ms
+        clearTimeout(timeout);
+        setTimeout(() => {
+          routeLoading.set(false);
+        }, 400);
+});
+  })
 </script>
 
 <div class="gradient-loader" class:show={$routeLoading}></div>

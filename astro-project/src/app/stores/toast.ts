@@ -8,7 +8,3 @@ export interface Toast {
 }
 
 export const toast = writable<Toast|null>(null);
-
-window.addEventListener("flamethrower:router:fetch", () => {
-  toast.set(null);
-});

@@ -1,6 +1,5 @@
-import { derived } from "svelte/store";
+import { derived, writable } from "svelte/store";
 import { siteData } from "./data";
-import { createCachedWritable } from "../util/helpers";
 
 export interface UserData {
   email?: string;
@@ -16,8 +15,8 @@ export interface UserProgress {
   xpPerRoute: Record<string, number>;
 };
 
-const { cachedWritable: userData } = createCachedWritable<UserData>('userData');
-const { cachedWritable: userProgress } = createCachedWritable<UserProgress>('userProgress');
+const userData = writable<UserData | null>(null);
+const userProgress = writable<UserProgress | null>(null);
 
 const canAccess = derived(
   // TODO: remove this if useless or restrict access if needed

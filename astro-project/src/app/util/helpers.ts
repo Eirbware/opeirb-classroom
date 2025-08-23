@@ -1,10 +1,9 @@
 import lodash from "lodash";
-import { writable, type Unsubscriber, type Writable } from "svelte/store";
 
-export function getCourseIdFromURL(url: string = window.location.pathname) {
+export function getCourseIdFromURL(url: string) {
   const paths = url.split("/");
-  const courseId = paths.findIndex((v) => v === "courses") + 1;
-  return paths?.[courseId];
+  const url_slug_idx = paths.findIndex((v) => v === "courses") + 1;
+  return paths[url_slug_idx];
 }
 
 /** Returns whether an object is isEmpty
@@ -25,25 +24,4 @@ export function nullablePropertiesToOptional<T extends { [key: string]: any }>(o
         }
     }
     return result;
-}
-
-interface CachedWritable<T> {
-  cachedWritable: Writable<T|null>;
-  cacheUpdateUnsubscriber: Unsubscriber
-}
-
-/** Create a writable and sync it with the browser localStorage
- * with the provided key
- */
-export function createCachedWritable<T>(store_key: string): CachedWritable<T> {
-  const cachedValue = localStorage.getItem(store_key);
-  const w = writable<T|null>(cachedValue ? JSON.parse(cachedValue) : null);
-  const unsubscriber = w.subscribe((v) => {
-    if (v === null) localStorage.removeItem(store_key);
-    else localStorage.setItem(store_key, JSON.stringify(v));
-  });
-  return {
-    cachedWritable: w,
-    cacheUpdateUnsubscriber: unsubscriber
-  };
 }

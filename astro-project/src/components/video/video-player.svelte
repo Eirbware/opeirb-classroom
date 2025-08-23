@@ -50,7 +50,7 @@
     // Autoplay
     const autoplayReferral = window.location.search.includes("autoplay");
     autoplayUnsub = autoplay.subscribe((v) => {
-      if (v && autoplayReferral) {
+      if (v === true && autoplayReferral) {
         player.play();
       }
     });

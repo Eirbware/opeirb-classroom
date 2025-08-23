@@ -5,12 +5,13 @@
   export let answer: string;
   export let options: string; // Format foo:bar:baz
   export let prize: string; // /courses/{courseId}/img/prizes/{n}.webp
+  export let pageURI: string; // /courses/
   const optionsList = options.split(":");
   let selected: string | null;
   let isComplete = false;
   let tries = 1;
   let xpGained: number;
-  let courseId = getCourseIdFromURL();
+  let courseId = getCourseIdFromURL(pageURI);
 
   let wrongMsg: string;
   let correctMsg: string;

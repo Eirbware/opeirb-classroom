@@ -2,7 +2,8 @@ import { get } from "svelte/store";
 import { userData, userProgress, type UserData } from "../../app/stores/user";
 import type { User as PocketBaseUser } from "./pocketbase.types";
 import * as PocketBaseModule from "./pocketbase";
-import { cloneDeep } from "lodash";
+import lodash from "lodash";
+const { cloneDeep } = lodash;
 
 function setUserData(data: PocketBaseModule.UserDataType) {
   const u: UserData = {

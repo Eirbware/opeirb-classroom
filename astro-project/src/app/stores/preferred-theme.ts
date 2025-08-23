@@ -1,7 +1,7 @@
-import { createCachedWritable } from "../util/helpers";
+import { writable } from "svelte/store";
 
 export type SettableBoolean = boolean | null;
 
-const { cachedWritable: doesPreferDark } = createCachedWritable<boolean>("doesPreferDark");
+const doesPreferDark = writable<boolean | null>(null);
 
 export { doesPreferDark };

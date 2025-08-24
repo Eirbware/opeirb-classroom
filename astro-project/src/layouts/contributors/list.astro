@@ -1,0 +1,35 @@
+---
+import type { BaseMarkdownProps } from "../../content.util";
+import { convertCollection } from "../../content.util";
+import BaseLayout from "../base.astro";
+import { getCollection } from "astro:content";
+
+
+type Props = BaseMarkdownProps<null>;
+
+const pages = convertCollection(await getCollection("contributors"));
+const { ...props } = Astro.props;
+---
+
+<BaseLayout {...props}>
+  <main class="container prose dark:prose-invert">
+    <header class="text-center mb-8 mt-20">
+      <h1 class="text-5xl mb-1">Contributors</h1>
+      <p class="my-0 text-gray3">
+        the wonderful humans who make this website possible
+      </p>
+    </header>
+
+    <div
+      class="mx-auto w-24 h-1 my-12 bg-gradient-to-r from-gray5 to-gray4 rounded-full"
+    ></div>
+    {pages.map(p => (
+    <article>
+      <a class="mb-6 no-underline" href={p.url}>
+        <h2 class="gradient-text-pink inline-block mb-0">{p.frontmatter.title}</h2>
+        <span class="text-gray3">{p.frontmatter.description}</span>
+      </a>
+    </article>
+    ))}
+  </main>
+</BaseLayout>

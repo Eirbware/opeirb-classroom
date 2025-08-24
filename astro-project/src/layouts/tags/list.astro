@@ -1,19 +1,15 @@
 ---
+import { getCollection } from "astro:content";
+import { convertCollection } from "../../content.util";
 import BaseLayout from "../base.astro";
 import type { BaseMarkdownProps } from "../../content.util";
 import pathlib from "path";
-import type { BaseFrontmatterProps } from "../../content";
 
-interface TagsIndexProps extends BaseMarkdownProps<BaseFrontmatterProps> {
-  terms: {
-    relPermalink: string,
-  }[]
-};
-
-type Props = TagsIndexProps;
-const { terms: _terms, ...props } = Astro.props;
-const terms = _terms.map(({relPermalink}) => ({relPermalink,
-  anchorizedSlug: pathlib.basename(relPermalink).toLowerCase()
+const tags = convertCollection(await getCollection("tags", ({ id }) => id !== "index"));
+type Props = BaseMarkdownProps<null>
+const props = Astro.props;
+const terms = tags.map(({ url }) => ({ relPermalink: url,
+  anchorizedSlug: pathlib.basename(url).toLowerCase()
 }));
 ---
 

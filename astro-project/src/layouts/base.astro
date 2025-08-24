@@ -14,10 +14,9 @@ import RouteLoader from "../components/ui/route-loader.svelte";
 import ToastMessage from "../components/ui/toast-message.svelte";
 import ScrollUp from "../components/ui/scroll-up.svelte";
 
-import { type BaseFrontmatterProps } from "../content";
 import type { BaseMarkdownProps } from '../content.util';
 
-type Props = BaseMarkdownProps<BaseFrontmatterProps>;
+type Props = BaseMarkdownProps<null>;
 
 const props = Astro.props;
 const { frontmatter, file, url="" } = props;

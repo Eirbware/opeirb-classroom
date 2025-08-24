@@ -11,9 +11,10 @@ export interface BaseMarkdownProps<FrontmatterProps extends BaseFrontmatterProps
 }
 
 function filePathToRelUrl(filePath: string): string {
-  const pathWithoutExtension = filePath.split(".").slice(0, -1).join(".");
+  const relPath = pathlib.relative("src/content", filePath);
+  const pathWithoutExtension = relPath.split(".").slice(0, -1).join(".");
   if (pathWithoutExtension.endsWith("/index"))
-     return pathlib.dirname(filePath);
+     return pathlib.dirname(relPath);
   return pathWithoutExtension;
 }
 

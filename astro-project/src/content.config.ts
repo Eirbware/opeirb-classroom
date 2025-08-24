@@ -18,7 +18,7 @@ const tags = defineCollection({
   schema: ({ image }) => z.object({
     title: z.string(),
     description: z.string(),
-    logo: image(),
+    logo: z.optional(image()),
     link: z.optional(z.string()),
   })
 });
@@ -28,7 +28,7 @@ const courses = defineCollection({
   schema: ({ image }) => z.object({
     title: z.string(),
     description: z.string(),
-    cover: image().default({ src: '.src/assets/default-cover.png', width: 1920, height: 1080, format: "webp"}),
+    cover: z.optional(image()),
     lastmod: z.date(),
     draft: z.boolean(),
     tags: z.array(z.string()),

@@ -1,0 +1,69 @@
+---
+import type { BaseMarkdownProps } from '../../content.util'
+import NavbarToggle from "../../components/ui/navbar-toggle.svelte";
+import CompleteIcon from "../../components/progress/complete-icon.svelte";
+
+type Props = {
+  activeRelPermalink: string,
+  chapters: BaseMarkdownProps<"courseChapters">[] 
+}
+const { activeRelPermalink, chapters } = Astro.props;
+---
+<!-- Progress tracker -->
+<NavbarToggle>
+  <!-- Lessons -->
+  <ul
+    class="sticky top-0 h-screen overflow-auto scrollbar mr-4 pb-10 pr-4 min-w-[300px]"
+    id="sidebar"
+  >
+{ chapters.map((chapter) =>
+    <!-- Chapter -->
+    {chapter.frontmatter.chapter_start && (
+    <li class="flex py-2 mt-4 px-1 mr-5 border-b-2 border-gray6">
+      <i class="mr-2 not-italic">{ chapter.frontmatter.emoji }</i>
+      <h3 id="chapters" class="text-gray3">{ chapter.frontmatter.chapter_start }</h3>
+    </li>
+    )}
+
+    <!-- Lesson tile -->
+    <li>
+      <a
+class=`text-gray4 hover:text-gray1 ${activeRelPermalink == chapter.url ? "active-chapter": ""}`
+      href={chapter.url}
+      >
+        <div class="p-1 my-1 flex items-center">
+          <CompleteIcon
+            free="true"
+            route={chapter.url}
+          ></CompleteIcon>
+
+          <span class="mr-auto text-lg pr-2"> {chapter.frontmatter.title} </span>
+
+          { activeRelPermalink === chapter.url && (
+          <div id="activeChapter" class="ml-5">🔥</div>
+          ) || (
+            chapter.frontmatter.reading_length && (
+            <span class="text-xs bg-black bg-opacity-10 py-1 px-2"
+              >chapter.frontmatter.reading_length</span>
+            )
+          )}
+        </div>
+      </a>
+    </li>
+  )}
+  </ul>
+
+  <ul slot="collapse" class="cursor-pointer sticky top-0">
+    {
+    chapters.map(chapter => 
+    <!-- Chapter -->
+    { chapter.frontmatter.chapter_start && (
+    <div class="flex py-2 mt-3">
+      <i class="not-italic p-3 bg-black bg-opacity-20 rounded-full"
+        >{chapter.frontmatter.emoji}</i
+      >
+    </div>)})
+  }
+  </ul>
+</NavbarToggle>
+}

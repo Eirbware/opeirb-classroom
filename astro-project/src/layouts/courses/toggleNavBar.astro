@@ -1,0 +1,52 @@
+---
+import type { BaseMarkdownProps } from '../../content.util'
+import AutoplayToggle from "../../components/video/autoplay-toggle.svelte";
+import MarkComplete from "../../components/progress/mark-complete.svelte";
+import pathlib from "path";
+
+type Props = {
+  videoInCurrentPage: boolean,
+  videoInNextPage: boolean,
+  isNotSingleMemoPage: boolean,
+  page: BaseMarkdownProps<"courseChapters">
+}
+const {
+  videoInCurrentPage,
+  videoInNextPage,
+  isNotSingleMemoPage,
+  page
+} = Astro.props
+const { previous, next } = page;
+const parentUrl = pathlib.basename(page.url);
+---
+<nav
+  class="flex items-center py-6 px-4 bg-black bg-opacity-20 shadow-lg mb-6"
+>
+  {videoInCurrentPage && videoInNextPage && (
+  <div class="flex flex-col items-center">
+    <AutoplayToggle></AutoplayToggle>
+    {{/* <span class="text-xs relative bottom-1.5 mr-1">autoplay</span> */}}
+    <span class="text-xs relative bottom-1">autoplay</span>
+  </div>
+  )}
+
+  <div class="ml-auto">
+    { isNotSingleMemoPage && next && (
+      <a class="btn btn-transparent" href={next.url}>👈</a>
+    )}
+
+    <a class="btn btn-transparent" href={parentUrl}>🏠</a>
+
+    { isNotSingleMemoPage && previous && (
+      <a class="btn btn-transparent" href={previous.url}>👉</a>
+    )}
+  </div>
+
+  <div class="ml-auto w-16 px-4 text-center">
+    <MarkComplete
+      slot="granted"
+      quiz={page.frontmatter.quiz !== undefined}
+      free="true"
+    ></MarkComplete>
+  </div>
+</nav>

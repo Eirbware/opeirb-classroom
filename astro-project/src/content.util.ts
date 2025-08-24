@@ -2,7 +2,7 @@ import { getEntry as _getEntry, type CollectionKey, type CollectionEntry } from 
 import type { BaseFrontmatterProps } from "./content";
 import pathlib from "path";
 
-type CollectionFrontmatterOrNot<C extends CollectionKey | null> = C extends CollectionKey ? CollectionEntry<C>["data"] : BaseFrontmatterProps;
+type CollectionFrontmatterOrNot<C extends CollectionKey | null> = (C extends CollectionKey ? CollectionEntry<C>["data"] : BaseFrontmatterProps) & BaseFrontmatterProps;
 
 export interface BaseMarkdownProps<C extends CollectionKey | null> {
   id: string,
@@ -12,6 +12,10 @@ export interface BaseMarkdownProps<C extends CollectionKey | null> {
   previous ?: BaseMarkdownProps<C>,
   next?: BaseMarkdownProps<C>,
 };
+
+export function downcastProps<C extends CollectionKey>(props: BaseMarkdownProps<C>): BaseMarkdownProps<null> {
+  return props as unknown as BaseMarkdownProps<null>;
+}
 
 function filePathToRelUrl(filePath: string): string {
   const relPath = pathlib.relative("src/content", filePath);

@@ -4,10 +4,9 @@
   import ModalDialog from "../ui/modal-dialog.svelte";
 
   export let answer: string;
-  export let options: string; // Format foo:bar:baz
-  export let prize: string; // /courses/{courseId}/img/prizes/{n}.webp
+  export let options: string[]; // Format foo:bar:baz
+  export let prize: string; // the source of the image
   export let pageURI: string; // /courses/
-  const optionsList = options.split(":");
   let selected: string | null;
   let isComplete = false;
   let tries = 1;
@@ -91,7 +90,7 @@
       </div>
 
       <div>
-        {#each optionsList as opt}
+        {#each options as opt}
           <!-- svelte-ignore a11y-click-events-have-key-events -->
           <div
             role="button" tabindex="0"
@@ -109,7 +108,7 @@
     {/if}
 
     <img
-      src={`/courses/${courseId}/img/prizes/${prize}.webp`}
+      src={prize}
       alt="programming meme"
       class:show={isComplete}
     />

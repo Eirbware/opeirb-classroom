@@ -1,0 +1,61 @@
+---
+import ToggleNavBar from "../toggleNavBar.astro";
+import { type BaseMarkdownProps, downcastProps } from '../../../content.util'
+import BaseLayout from "../../base.astro";
+import TocPartial from "../../partials/toc.astro";
+import VideoPlayer from "../../../components/video/video-player.svelte";
+import QuizModal from "../../../components/progress/quiz-modal.svelte";
+
+type Props = BaseMarkdownProps<"courseChapters">;
+const props = Astro.props;
+
+const videoInPage = (p: Props) => (p.frontmatter.vimeo || p.frontmatter.youtube) !== undefined
+const videoInCurrentPage = videoInPage(props);
+const videoInNextPage = props.next !== undefined && videoInPage(props.next);
+const activeRelPermalink = props.url;
+const isNotSingleMemoPage = activeRelPermalink.endsWith("memo");
+const dataForToolbar = {
+  videoInCurrentPage, videoInNextPage, isNotSingleMemoPage, activeRelPermalink,
+  page: props
+};
+---
+
+<BaseLayout {...(downcastProps(props))}>
+<main class="container flex flex-col-reverse md:flex-row">
+<!-- TODO: set the chapter list-->
+{ isNotSingleMemoPage && <TocPartial activeRelPermalink={props.url} chapters={[]}/>  }
+
+  <!-- Video player -->
+  <article
+    class="prose dark:prose-invert pt-1 mx-auto px-3 md:px-8 min-w-0 max-w-none w-full"
+  >
+    { videoInCurrentPage && 
+      <VideoPlayer free="true"></VideoPlayer>
+    }
+
+    <ToggleNavBar {...dataForToolbar}/>
+
+    <header class="border-b-2 border-dashed border-gray6 mb-6">
+      <h1>
+        {props.frontmatter.emoji}
+        <span class="gradient-text inline-block mb-0">{props.frontmatter.title}</span>
+      </h1>
+      <p class="text-sm mt-1 text-gray4">{props.frontmatter.description}</p>
+    </header>
+
+    <section>
+        {props.frontmatter.quiz && (
+        <QuizModal options={props.frontmatter.quiz.choices} answer={props.frontmatter.quiz.choices[props.frontmatter.quiz.answerNumber]} prize={props.frontmatter.quiz.prizePicture.src}></QuizModal>
+        )}
+        <slot />
+    </section>
+
+    <div
+      class="mx-auto w-24 h-1 my-12 bg-gradient-to-r from-purple-400 to-purple-600 rounded-full"
+    ></div>
+
+    <ToggleNavBar {...dataForToolbar}/>
+
+  </article>
+</main>
+</BaseLayout>

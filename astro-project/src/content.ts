@@ -121,3 +121,10 @@ export const siteMenu = () => Object.entries(
 export async function getPageProps(url: string): Promise<PageProps> {
   return await import(`./pages/${url}.md`) as PageProps;
 }
+
+export interface BaseFrontmatterProps {
+  title: string;
+  description: string;
+  vimeo?: string;
+  youtube?: string;
+};

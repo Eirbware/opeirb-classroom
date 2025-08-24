@@ -1,0 +1,15 @@
+---
+import { getCollection, getEntry } from "astro:content";
+import { convertCollection, convertEntry } from "../../content.util";
+import TagIndexLayout from "../../layouts/tags/list.astro";
+
+const tags = convertCollection(await getCollection("tags", ({ id }) => id !== "index"));
+const indexMarkdownPage = await getEntry("tags", "index");
+if (!indexMarkdownPage)
+  throw new Error("An index file must exist for the Tags page.");
+const terms = tags.map(tag => ({
+  relPermalink: tag.url,
+}));
+---
+
+<TagIndexLayout {...convertEntry<"tags">(indexMarkdownPage)} {terms}></TagIndexLayout>

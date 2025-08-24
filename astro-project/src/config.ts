@@ -12,7 +12,7 @@ export const siteConfig = {
     links_title: "Sections du site"
   },
   links: {
-    github_content: "https://github.com/Eirbware/opeirb-classroom/tree/master/src/pages/",
+    github_content: "https://github.com/Eirbware/opeirb-classroom/tree/master/",
     helpful: {
       github: "https://github.com/Eirbware",
       telegram: "https://t.me/eirbware",

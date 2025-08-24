@@ -14,19 +14,13 @@ import RouteLoader from "../components/ui/route-loader.svelte";
 import ToastMessage from "../components/ui/toast-message.svelte";
 import ScrollUp from "../components/ui/scroll-up.svelte";
 
-import { nextPageInSection, previousPageInSection } from "../content";
-import type { MarkdownLayoutProps } from 'astro';
+import { type BaseFrontmatterProps } from "../content";
+import type { BaseMarkdownProps } from '../content.util';
 
-type Props = MarkdownLayoutProps<{
-  title: string;
-  description: string;
-  vimeo?: string;
-  youtube?: string;
-}>;
+type Props = BaseMarkdownProps<BaseFrontmatterProps>;
 
 const props = Astro.props;
-const { frontmatter, url="", file } = props;
-const relativeFile = url + file.endsWith("index.md") ? "index.md" : ".md";
+const { frontmatter, file, url="" } = props;
 const toBase64 = (opUrl: string | undefined) => opUrl ? atob(opUrl) : opUrl;
 const vimeoEncode = toBase64(frontmatter.vimeo);
 const ytEncode = toBase64(frontmatter.youtube);
@@ -71,8 +65,8 @@ const permalink = import.meta.env.SITE + url;
       vimeo={vimeoEncode}
       youtube={ytEncode}
       free={true}
-      next={nextPageInSection(props)?.url}
-      prev={previousPageInSection(props)?.url}>
+      next={props.next?.url}
+      prev={props.previous?.url}>
     </GlobalData>
     <!-- COMPONENT FOR STREAMING SERVICE -->
 
@@ -82,7 +76,7 @@ const permalink = import.meta.env.SITE + url;
     <!-- Page content body -->
     <slot />
     <!-- Page content body -->
-    <FooterPartial fileRelPath={relativeFile} />
+    <FooterPartial fileRelPath={file} />
 
     <AppSignin client:load></AppSignin>
     <FlexSearchSearch client:load></FlexSearchSearch>

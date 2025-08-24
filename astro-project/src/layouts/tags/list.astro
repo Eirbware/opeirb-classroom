@@ -1,0 +1,42 @@
+---
+import BaseLayout from "../base.astro";
+import type { BaseMarkdownProps } from "../../content.util";
+import pathlib from "path";
+import type { BaseFrontmatterProps } from "../../content";
+
+interface TagsIndexProps extends BaseMarkdownProps<BaseFrontmatterProps> {
+  terms: {
+    relPermalink: string,
+  }[]
+};
+
+type Props = TagsIndexProps;
+const { terms: _terms, ...props } = Astro.props;
+const terms = _terms.map(({relPermalink}) => ({relPermalink,
+  anchorizedSlug: pathlib.basename(relPermalink).toLowerCase()
+}));
+---
+
+<BaseLayout {...props}>
+  <main class="prose dark:prose-invert container">
+    <header class="text-center mb-8 mt-20">
+      <h1 class="text-5xl mb-1">Tags</h1>
+      <p class="my-0 text-gray3">{props.frontmatter.description}</p>
+    </header>
+
+    <div
+      class="mx-auto w-24 h-1 my-12 bg-gradient-to-r from-gray5 to-gray4 rounded-full"
+    ></div>
+
+    {terms.map(({relPermalink, anchorizedSlug}) =>
+    <span class="inline-block p-2">
+      <a href={relPermalink}
+      ><span class={`tag tag-${anchorizedSlug} tag-lg`}
+        >#{anchorizedSlug}</span
+        ></a
+      >
+    </span>
+
+    )}
+  </main>
+</BaseLayout>

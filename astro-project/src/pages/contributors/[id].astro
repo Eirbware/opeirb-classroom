@@ -1,0 +1,21 @@
+---
+import { getCollection, render } from 'astro:content';
+import { convertCollection, type BaseMarkdownProps } from '../../content.util';
+import ContributorLayout from "../../layouts/contributors/single.astro";
+
+// 1. Generate a new path for every collection entry
+export async function getStaticPaths() {
+  const contributorsPages = await getCollection("contributors");
+  const converted = convertCollection<"contributors">(contributorsPages);
+  return contributorsPages.map((page, i) => ({
+    params: { id: page.id },
+    props: { page, converted: converted[i] },
+  }));
+}
+// 2. For your template, you can get the entry directly from the prop
+const { page, converted: convertedProps } = Astro.props;
+const { Content } = await render(page);
+---
+<ContributorLayout {...convertedProps}>
+  <Content />
+</ContributorLayout>

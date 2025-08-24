@@ -1,0 +1,37 @@
+---
+import type { BaseMarkdownProps } from "../../content.util";
+import { Image } from "astro:assets";
+import BaseLayout from "../base.astro";
+ 
+type Props = BaseMarkdownProps<"contributors">;
+const props = Astro.props;
+const authorLinks = props.frontmatter.links;
+---
+<BaseLayout {...props}>
+<main class="container prose dark:prose-invert">
+  <section class="text-center">
+      <h1 class="gradient-text">{props.frontmatter.authorname ?? props.frontmatter.title}</h1>
+
+      <Image
+        src={props.frontmatter.logo}
+        alt="author image"
+        class="mx-auto rounded-full max-w-xs"
+      />
+
+      {authorLinks && Object.entries(authorLinks).map(([name, link]) => (
+
+      <a class="btn btn-sm" href={link}>{name[0].toUpperCase() + name.slice(1)}</a>
+      ))}
+  </section>
+  <section>
+    <h2 class="text-left">Lessons</h2>
+    <div class="grid-list">
+      <!-- TODO:
+      {{ range first 4 (where .Site.Pages "Params.author" .Title) }} {{ $img :=
+      (print .RelPermalink "img/featured.webp") }} {{ partial "card" (dict
+      "context" . "img" $img) }} {{ end }}
+      -->
+    </div>
+  </section>
+</main>
+</BaseLayout>

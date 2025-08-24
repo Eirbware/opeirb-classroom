@@ -5,6 +5,7 @@ import pathlib from "path";
 type CollectionFrontmatterOrNot<C extends CollectionKey | null> = C extends CollectionKey ? CollectionEntry<C>["data"] : BaseFrontmatterProps;
 
 export interface BaseMarkdownProps<C extends CollectionKey | null> {
+  id: string,
   frontmatter: CollectionFrontmatterOrNot<C>,
   file: string,
   url: string
@@ -25,7 +26,7 @@ export function convertEntry<C extends CollectionKey>(collectionEntry: Collectio
   if (!filePath)
     throw new Error("The filePath not figured out.")
   const relUrl = filePathToRelUrl(filePath);
-  return { frontmatter: collectionEntry.data as CollectionFrontmatterOrNot<C>, file: filePath, url: relUrl };
+  return { id: collectionEntry.id, frontmatter: collectionEntry.data as CollectionFrontmatterOrNot<C>, file: filePath, url: relUrl };
 }
 
 export function convertCollection<C extends CollectionKey>(collection: CollectionEntry<C>[]): BaseMarkdownProps<C>[] {

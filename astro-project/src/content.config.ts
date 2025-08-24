@@ -5,7 +5,7 @@ const contributors = defineCollection({
   loader: glob({ pattern: "*.md", base: './src/content/contributors' }),
   schema: ({ image }) => z.object({
     title: z.string(),
-    authorname: z.string(),
+    authorname: z.optional(z.string()),
     description: z.string(),
     date: z.date(),
     logo: image(),

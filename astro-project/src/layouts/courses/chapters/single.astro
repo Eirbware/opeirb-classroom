@@ -6,10 +6,12 @@ import TocPartial from "../../partials/toc.astro";
 import VideoPlayer from "../../../components/video/video-player.svelte";
 import QuizModal from "../../../components/progress/quiz-modal.svelte";
 
-type Props = BaseMarkdownProps<"courseChapters">;
-const props = Astro.props;
+type Props = BaseMarkdownProps<"courseChapters"> & {
+  chapters: BaseMarkdownProps<"courseChapters">[]
+};
+const { chapters: chapterList, ...props } = Astro.props;
 
-const videoInPage = (p: Props) => (p.frontmatter.vimeo || p.frontmatter.youtube) !== undefined
+const videoInPage = (p: BaseMarkdownProps<"courseChapters">) => (p.frontmatter.vimeo || p.frontmatter.youtube) !== undefined
 const videoInCurrentPage = videoInPage(props);
 const videoInNextPage = props.next !== undefined && videoInPage(props.next);
 const activeRelPermalink = props.url;
@@ -23,7 +25,7 @@ const dataForToolbar = {
 <BaseLayout {...(downcastProps(props))}>
 <main class="container flex flex-col-reverse md:flex-row">
 <!-- TODO: set the chapter list-->
-{ isNotSingleMemoPage && <TocPartial activeRelPermalink={props.url} chapters={[]}/>  }
+{ isNotSingleMemoPage && <TocPartial activeRelPermalink={props.url} chapters={chapterList}/>  }
 
   <!-- Video player -->
   <article

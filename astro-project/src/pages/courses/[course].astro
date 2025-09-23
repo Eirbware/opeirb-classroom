@@ -1,0 +1,36 @@
+---
+import { getCollection, render } from 'astro:content';
+import { convertCollection, type BaseMarkdownProps } from '../../content.util';
+import CourseHomeLayout from "../../layouts/courses/single.astro"
+import { getEntry } from 'astro:content';
+import pathlib from "path";
+
+export async function getStaticPaths() {
+  const courses = await getCollection("courses");
+  const coursesConverted = convertCollection<"courses">(courses);
+
+  const chapters = convertCollection<"courseChapters">(await getCollection("courseChapters")).reduce((acc, chapterPage) => {
+    const courseId = pathlib.dirname(chapterPage.url);
+    const newChapterList = [...(acc.get(courseId) ?? []), chapterPage];
+    return (new Map(acc)).set(courseId, newChapterList);
+  }, new Map<string, BaseMarkdownProps<"courseChapters">[]>());
+
+  return await Promise.all(courses.map(async (page, i) => ({
+      params: { course: page.id },
+      props: {
+        page,
+        converted: coursesConverted[i],
+        contributor: (await getEntry(page.data.author))!.data,
+        chapters: chapters.get(page.id) ?? []
+      }
+    })));
+}
+
+const { page, converted: props, contributor, chapters } = Astro.props;
+const layoutProps = { ...props, contributor, chapters };
+const { Content } = await render(page);
+---
+
+<CourseHomeLayout {...layoutProps}>
+  <Content />
+</CourseHomeLayout>

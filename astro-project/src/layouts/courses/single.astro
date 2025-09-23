@@ -1,0 +1,35 @@
+---
+import BaseLayout from "../base.astro";
+import { downcastProps } from "../../content.util";
+import type { BaseMarkdownProps } from "../../content.util";
+import VideoPlayer from "../../components/video/video-player.svelte";
+import type { CollectionEntry, InferEntrySchema } from "astro:content";
+
+
+type AdditionalProps = {
+  contributor: InferEntrySchema<"contributors">,
+  chapters: BaseMarkdownProps<"courseChapters">[]
+}
+type Props = BaseMarkdownProps<"courses"> & AdditionalProps;
+const props = Astro.props;
+---
+<BaseLayout {...(downcastProps(props))}>
+<main class="prose dark:prose-invert container">
+    <header class="text-center my-12">
+      <h1 class="text-6xl mb-0 inline-block mx-auto">
+        {props.frontmatter.title}
+      </h1>
+      <p class="text-gray3 my-1">
+        {props.frontmatter.description}
+      </p>
+    </header>
+    { (props.frontmatter.vimeo) ??
+    <div class="max-w-3xl mx-auto">
+      <VideoPlayer free="true" single="true"></VideoPlayer>
+    </div>
+    }
+    <p>
+      <b>{props.contributor.authorname}</b>
+    </p>
+</main>
+</BaseLayout>

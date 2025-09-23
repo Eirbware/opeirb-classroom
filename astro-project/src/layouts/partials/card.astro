@@ -1,0 +1,24 @@
+---
+import type { BaseMarkdownProps } from '../../content.util'
+import defaultCover from "../../assets/default-cover.png";
+
+type Props = BaseMarkdownProps<"courses">;
+const props = Astro.props;
+---
+
+<article
+  class="max-w-sm overflow-hidden shadow-xl bg-gray6 y-6 hover:scale-105 rounded-xl transition-transform ease-in-out duration-500"
+>
+  <a href={props.url} class="no-underline">
+    { /* TODO: use the Astro's Image component */ }
+    <img class="w-full m-0 mb-1 rounded-t-xl" src={props.frontmatter.cover?.src ?? defaultCover.src} alt={`Cover for ${props.frontmatter.title} course`}/>
+
+    <section class="p-5">
+      <h5 class="text-white">{props.frontmatter.title}</h5>
+      <p class="text-gray3 min-h-[100px]">{props.frontmatter.description}</p>
+      {props.frontmatter.tags.map(t => (
+      <span class={`tag tag-${t}`}> #{t} </span>
+      ))}
+    </section>
+  </a>
+</article>

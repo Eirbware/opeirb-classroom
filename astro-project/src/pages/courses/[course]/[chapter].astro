@@ -1,0 +1,23 @@
+---
+import { getCollection, render } from 'astro:content';
+import { convertCollection } from '../../../content.util';
+import ChapterLayout from "../../../layouts/courses/chapters/single.astro"
+
+import pathlib from "path";
+
+export async function getStaticPaths() {
+  const chapters = await getCollection("courseChapters");
+  const converted = convertCollection<"courseChapters">(chapters);
+  return chapters.map((page, i) => ({
+    params: { course: pathlib.dirname(converted[i].url), chapter: page.id },
+    props: { page, converted: converted[i], chapters: converted },
+  }));
+}
+
+const props = Astro.props;
+const { Content } = await render(props.page);
+---
+
+<ChapterLayout {...({...props.converted, chapters: props.chapters})}>
+  <Content />
+</ChapterLayout>

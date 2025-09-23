@@ -11,7 +11,7 @@ const baseObject = {
 };
 
 const contributors = defineCollection({
-  loader: glob({ pattern: "*.md", base: './src/content/contributors' }),
+  loader: glob({ pattern: "[^_]*.md", base: './src/content/contributors' }),
   schema: ({ image }) => z.object({
     ...baseObject,
     authorname: z.optional(z.string()),
@@ -31,7 +31,7 @@ const tags = defineCollection({
 });
 
 const courses = defineCollection({
-  loader: glob({ pattern: "*/_index.md", base: './src/content/courses' }),
+  loader: glob({ pattern: "*/index.md", base: './src/content/courses' }),
   schema: ({ image }) => z.object({
     ...baseObject,
     cover: z.optional(image()),
@@ -45,18 +45,18 @@ const courses = defineCollection({
 });
 
 const courseChapters = defineCollection({
-  loader: glob({ pattern: "*/(*|*/index).md", base: './src/content/courses' }),
+  loader: glob({ pattern: ["*/(*|*/index).md", "!*/index.md"], base: './src/content/courses' }),
   schema: ({image}) => z.object({
     lastmod: z.date(),
     emoji: z.string(),
     chapter_start: z.optional(z.string()),
     reading_length: z.optional(z.string()),
-    quiz: z.object({
+    quiz: z.optional(z.object({
       question: z.string(),
       choices: z.array(z.string()),
       answerNumber: z.number(),
       prizePicture: image()
-    })
+    }))
   })
 });
 

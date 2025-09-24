@@ -5,7 +5,7 @@ description = "Ceci est une courte description du cours."
 type = "courses"
 tags = ["git", "github", "linux"]
 
-author = "Eirbware"
+author = "eirbware"
 stack = ["git", "linux", "svelte", "hugo"]
 draft = true
 +++

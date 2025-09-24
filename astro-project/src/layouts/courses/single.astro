@@ -3,12 +3,13 @@ import BaseLayout from "../base.astro";
 import { downcastProps } from "../../content.util";
 import type { BaseMarkdownProps } from "../../content.util";
 import VideoPlayer from "../../components/video/video-player.svelte";
-import type { CollectionEntry, InferEntrySchema } from "astro:content";
-
+import ScrollShow from "../../components/ui/scroll-show.svelte";
+import type { CollectionEntry } from "astro:content";
 
 type AdditionalProps = {
-  contributor: InferEntrySchema<"contributors">,
-  chapters: BaseMarkdownProps<"courseChapters">[]
+  contributor: CollectionEntry<"contributors">,
+  chapters: BaseMarkdownProps<"courseChapters">[],
+  stack: CollectionEntry<"tags">[]
 }
 type Props = BaseMarkdownProps<"courses"> & AdditionalProps;
 const props = Astro.props;
@@ -23,13 +24,95 @@ const props = Astro.props;
         {props.frontmatter.description}
       </p>
     </header>
-    { (props.frontmatter.vimeo) ??
+    { (props.frontmatter.vimeo) ?
     <div class="max-w-3xl mx-auto">
       <VideoPlayer free="true" single="true"></VideoPlayer>
     </div>
+    : null }
+  
+  <div
+    class="flex items-center no-underline justify-center"
+    itemprop="author"
+  >
+    <img
+      class="w-12 h-12 rounded-full block"
+      src={props.contributor.data.logo.src}
+      alt={`${props.contributor.data.authorname ?? props.contributor.data.title} avatar`}
+    />
+    <span class="flex flex-col ml-2">
+      <span class="text-lg"
+        >Publié par
+        { /* TODO: check the id */ }
+          <a class="no-underline text-orange-500"
+            href={props.contributor.id} >{props.contributor.data.authorname ?? props.contributor.data.title}
+          </a>
+      </span>
+      <span class="text-sm text-gray4">
+          {props.contributor.data.description}
+      </span>
+    </span>
+  </div>
+
+  <div
+    class="mx-auto w-24 h-1 my-24 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full"
+  ></div>
+    { props.stack ?
+  <div class="text-center mb-10">
+    { /* TODO: internationalize that */ }
+    <h2>Tech stack</h2>
+    <div class="flex flex-center justify-center">
+        { props.stack.map((tag, idx) => 
+      <ScrollShow delay={ 200*idx }>
+        <div
+          class="flex rounded-lg bg-black bg-opacity-30 shadow-3xl aspect-square p-6 w-36 h-36 mx-2 border-b-4 border-gray6"
+        >
+          <img class="m-0" src={tag.data.logo!.src} />
+        </div>
+      </ScrollShow>
+        )}
+    </div>
+  </div>
+
+  <div
+    class="mx-auto w-24 h-1 my-24 bg-gradient-to-r from-blue-600 to-blue-400 rounded-full"
+  ></div>
+    : null
     }
-    <p>
-      <b>{props.contributor.authorname}</b>
-    </p>
+
+    <article class="max-w-3xl mx-auto"><slot></slot></article>
+
+  <div class="text-center">
+    { /* TODO: internationalize that */ }
+    <h2 class="text-5xl border-gray6 pb-2 inline-block mt-24">Chapters</h2>
+    <div
+      class="mx-auto w-24 h-1 mb-16 mt-0 bg-gradient-to-r from-gray5 to-gray4 rounded-full"
+    ></div>
+  </div>
+  <div class="flex justify-center">
+    <ul class="grid-list pl-0">
+        { props.chapters.map((chapter, idx) => 
+      <a
+        class="no-underline relative hover:scale-105 transition-transform"
+        href={chapter.url}
+      >
+        <li class="max-w-sm overflow-hidden shadow-3xl bg-gray6 p-6 rounded-xl">
+          <span
+            class="absolute -top-2 -left-5 font-display leading-6 text-center text-3xl w-10 h-10 rounded-full p-2"
+          >
+            { chapter.frontmatter.emoji }
+          </span>
+          <h5>
+            { /* TODO: pad this to 2 digit */ }
+            <span class="gradient-text mb-0"
+              >{(idx+1).toString()}</span
+            >
+            { chapter.frontmatter.title }
+          </h5>
+          <p class="text-gray3">{ chapter.frontmatter.description }</p>
+        </li>
+      </a>
+        )}
+    </ul>
+  </div>
 </main>
 </BaseLayout>

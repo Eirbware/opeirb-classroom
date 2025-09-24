@@ -4,6 +4,7 @@ import { convertCollection, type BaseMarkdownProps } from '../../content.util';
 import CourseHomeLayout from "../../layouts/courses/single.astro"
 import { getEntry } from 'astro:content';
 import pathlib from "path";
+import { getEntries } from 'astro:content';
 
 export async function getStaticPaths() {
   const courses = await getCollection("courses");
@@ -20,14 +21,15 @@ export async function getStaticPaths() {
       props: {
         page,
         converted: coursesConverted[i],
-        contributor: (await getEntry(page.data.author))!.data,
-        chapters: chapters.get(page.id) ?? []
+        contributor: (await getEntry(page.data.author))!,
+        chapters: chapters.get(page.id) ?? [],
+        stack: (await getEntries(page.data.stack))!
       }
     })));
 }
 
-const { page, converted: props, contributor, chapters } = Astro.props;
-const layoutProps = { ...props, contributor, chapters };
+const { page, converted: props, contributor, chapters, stack } = Astro.props;
+const layoutProps = { ...props, contributor, chapters, stack };
 const { Content } = await render(page);
 ---
 

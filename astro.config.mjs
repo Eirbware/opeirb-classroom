@@ -48,31 +48,11 @@ export default defineConfig({
         },
         fr: { label: "Français", lang: "fr" },
       },
+      // Automatically-generated sidebar
+      // customization with the routeMiddleware
       // https://starlight.astro.build/guides/sidebar/
-      sidebar: [
-        {
-          label: "Quick Start Guides",
-          translations: {
-            fr: "Guides de Démarrage Rapide",
-          },
-          autogenerate: { directory: "guides" },
-        },
-        {
-          label: "Tools & Equipment",
-          items: [
-            { label: "Tool Guides", link: "tools/tool-guides/" },
-            { label: "Equipment Care", link: "tools/equipment-care/" },
-          ],
-        },
-        {
-          label: "Construction Services",
-          autogenerate: { directory: "construction" },
-        },
-        {
-          label: "Advanced Topics",
-          autogenerate: { directory: "advanced" },
-        },
-      ],
+      // sidebar: [],
+      routeMiddleware: './src/routeData.ts',
       social: [
         {
           icon: "github",
@@ -90,7 +70,6 @@ export default defineConfig({
           "./src/components/ui/starlight/MobileMenuFooter.astro",
         ThemeSelect: "./src/components/ui/starlight/ThemeSelect.astro",
       },
-      routeMiddleware: './src/routeData.ts',
       head: [
         {
           tag: "meta",

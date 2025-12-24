@@ -8,7 +8,7 @@
     "build": "astro check && astro build && node process-html.mjs",
     "preview": "astro preview",
     "astro": "astro",
-    "monitor": "lighthouse http://localhost:4321"
+    "monitor": "cd reports && lighthouse http://localhost:4321"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.6",

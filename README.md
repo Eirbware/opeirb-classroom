@@ -48,6 +48,12 @@ package).
    ```
 
 Once lighthouse had ended, you can stop the preview in the other process. The
-result is in an html file at the root of the repository (`localhost*.html`).
+result is in an html file at the root of the repository
+(`localhost_*.report.html`).
 
-> TODO: for now it is misplaced and untracked but not ignored by git.
+> Do not trust the performance score if your serving environment and chromium
+> browser have limited performances (e.g. it will be lower in a small personal
+> laptop than in production)  
+> The starter template has a score greater than `96%` in production (see
+> [https://screwfast.uk](https://screwfast.uk) on [Page Speed
+> Insights](https://pagespeed.web.dev/))

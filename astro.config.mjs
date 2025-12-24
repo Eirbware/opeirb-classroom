@@ -90,6 +90,7 @@ export default defineConfig({
           "./src/components/ui/starlight/MobileMenuFooter.astro",
         ThemeSelect: "./src/components/ui/starlight/ThemeSelect.astro",
       },
+      routeMiddleware: './src/routeData.ts',
       head: [
         {
           tag: "meta",

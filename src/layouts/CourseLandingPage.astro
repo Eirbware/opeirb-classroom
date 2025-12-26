@@ -21,9 +21,7 @@ const { post } = Astro.props;
 const lang = Astro.currentLocale;
 
 const { id: courseId } = Astro.params;
-console.log(`Sidebar for course "${courseId}"`);
 const courseChapters = getFirstDepthChapters(courseId!, lang);
-console.log(courseChapters);
 const otherCourses: CollectionEntry<"courses">[] = await getCollection(
   "courses",
   filterPerLanguage(lang)

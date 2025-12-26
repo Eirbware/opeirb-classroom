@@ -1,0 +1,14 @@
+---
+import CourseIndex from "@/layouts/CourseIndex.astro";
+import { getSupportedLanguages } from "@/utils/ui";
+
+export async function getStaticPaths() {
+  const locales = getSupportedLanguages();
+
+  return locales.map(lang => ({
+    params: { lang },
+  }))
+}
+---
+
+<CourseIndex/>

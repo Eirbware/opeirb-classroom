@@ -8,7 +8,7 @@ import PrimaryCTA from "@components/ui/buttons/PrimaryCTA.astro";
 const { blogEntry, recentBlogLocale = "" } = Astro.props;
 
 interface Props {
-  blogEntry: CollectionEntry<"blog">;
+  blogEntry: CollectionEntry<"blog" | "courses">;
   recentBlogLocale?: string;
 }
 ---

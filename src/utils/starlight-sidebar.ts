@@ -1,7 +1,7 @@
 /** Hacky external handlings of starlight's sitemap
  */
 import { getSidebar } from 'node_modules/@astrojs/starlight/utils/navigation';
-import type { SidebarEntry, SidebarLink } from 'node_modules/@astrojs/starlight/utils/routing/types';
+import type { PaginationLinks, SidebarEntry, SidebarLink } from 'node_modules/@astrojs/starlight/utils/routing/types';
 import { parseHref } from './filter_language';
 
 /** Return the first page related to the entry.
@@ -52,4 +52,27 @@ export function getFirstDepthChapters(courseSectionName: string, courseId: strin
   if (group === null || group.type === "link")
     return [];
   return group.entries;
+}
+
+/** Remove prev or next page if the related post is not the same
+  */
+export function cropPagination(pagination: PaginationLinks, currentSectionName: string, currentPostId: string, astroCollectionId: string): PaginationLinks {
+  const { prev, next } = pagination
+  const isHrefOnTheSamePost = (href: string) => {
+    const { sectionId, postId } = parseHref(href);
+    return sectionId === currentSectionName && postId === currentPostId;
+  };
+  function sidebarLinkForHome(): SidebarLink {
+    return {
+      label: "Home Page", // TODO: internationalize that
+      href: "/" + astroCollectionId.split("/").slice(0, -1).join("/"),
+      type: "link",
+      isCurrent: false,
+      badge: undefined,
+    } as SidebarLink
+  }
+  return {
+    prev: (prev && isHrefOnTheSamePost(prev.href)) ? prev : sidebarLinkForHome(),
+    next: (next && isHrefOnTheSamePost(next.href)) ? next : undefined
+  }
 }

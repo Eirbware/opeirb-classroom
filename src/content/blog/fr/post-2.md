@@ -1,7 +1,7 @@
 ---
 title: "Améliorer la Sécurité et l'Artisanat avec les Services de Construction de ScrewFast"
 description: "Services de construction de qualité pour des résultats durables"
-mainAuthor: "Brad"
+mainAuthor: "brad"
 pubDate: 2024-02-10
 cardImage: "@/images/blog/post-2.avif"
 cardImageAlt: "Man in black sweatpants using DEWALT circular saw and cutting a wood plank"

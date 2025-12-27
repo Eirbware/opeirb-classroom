@@ -1,10 +1,10 @@
 import { defineRouteMiddleware } from '@astrojs/starlight/route-data';
 import { getPostSidebarEntry } from './utils/starlight-sidebar';
-import { parseId } from './utils/filter_language';
+import { parseAstroCollectionPageId } from './utils/filter_language';
 
 export const onRequest = defineRouteMiddleware((context) => {
   const { sidebar, id } = context.locals.starlightRoute;
-  const { sectionId, postId }  = parseId(id);
+  const { sectionId, postId }  = parseAstroCollectionPageId(id);
   const currentFirstDepthSidebarEntry = getPostSidebarEntry(
     sidebar, sectionId, postId
   );

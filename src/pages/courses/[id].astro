@@ -1,15 +1,15 @@
 ---
 import { getCollection } from 'astro:content';
-import { parseAstroCollectionPageId } from "@/utils/filter_language";
+import { parseAstroCollectionPageId, filterPerLanguage } from "@/utils/filter_language";
 
 import CourseLandingPage from '@/layouts/CourseLandingPage.astro';
 
 export async function getStaticPaths() {
-  const blogPosts = await getCollection("courses");
+  const blogPosts = await getCollection("courses", filterPerLanguage());
   return blogPosts.map((post) => {
-    const { lang, postId } = parseAstroCollectionPageId(post.id);
+    const { postId } = parseAstroCollectionPageId(post.id);
     return {
-      params: { lang, id: postId },
+      params: { id: postId },
       props: { post },
     };
   });

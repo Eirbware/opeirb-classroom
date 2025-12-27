@@ -3,6 +3,7 @@
 import { z, defineCollection, reference } from 'astro:content';
 import { docsSchema } from '@astrojs/starlight/schema';
 import { glob } from 'astro/loaders';
+import type { ImageFunction } from 'astro/content/config';
 
 const productsCollection = defineCollection({
   loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: "./src/content/products" }),
@@ -100,54 +101,37 @@ const contributors = defineCollection({
   })
 });
 
-const courseLangingPageCollection = defineCollection({
-  loader: glob({ pattern: '**/_course-landing.{md,mdx}', base: "./src/content/docs" }),
-  schema: ({ image }) => z.object ({
-  title: z.string(),
-  description: z.string(),
-  contents: z.array(z.string()),
-  role: z.string().optional(),
-  mainAuthor: reference("contributors"),
-  pubDate: z.date(),
-  cardImage: image(),
-  cardImageAlt: z.string(),
-  readTime: z.number(),
-  tags: z.array(z.string()).optional(),
-  }),
-});
 
-const tipsCollection = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: "./src/content/tips" }),
-  schema: docsSchema({ extend: z.object({
-    editUrl: z.union([z.string(), z.literal(false)]).optional(),
-    mainAuthor: reference("contributors"),
-    role: z.string().optional(),
-    tags: z.array(z.string()).optional(),
-    pubDate: z.date(),
-    readTime: z.number(),
-  }) })
-});
-
-const makeOptional = <T extends z.ZodRawShape>(zObject: z.ZodObject<T> | z.ZodNumber, optional: boolean) => (
-   optional ? zObject.optional() : zObject
-);
-
-const optionalPostObjectSchema = () => z.object({
+const optionalPostObjectSchema = (image: ImageFunction) => z.object({
   readTime: z.number().optional(),  // in minutes
   mainAuthor: reference("contributors").optional(),
   pubDate: z.date().optional(),
   tags: z.array(z.string()).optional(),
+  cardImage: image().optional(),
+  cardImageAlt: z.string().optional(),
 });
-const postObjectSchema = () => z.object({
+
+const postObjectSchema = (image: ImageFunction) => z.object({
   readTime: z.number(),  // in minutes
   mainAuthor: reference("contributors"),
   pubDate: z.date(),
-  tags: z.array(z.string()),
+  tags: z.array(z.string()).optional(),
+  cardImage: image(),
+  cardImageAlt: z.string(),
 });
 
+const courseLangingPageCollection = defineCollection({
+  loader: glob({ pattern: '**/courses/*/index.{md,mdx}', base: "./src/content/docs" }),
+  schema: docsSchema({ extend: ({image}) => postObjectSchema(image) }),
+});
+
+const tipsCollection = defineCollection({
+  loader: glob({ pattern: '{*/,}tips/[^_]*.{md,mdx}', base: "./src/content/docs/" }),
+  schema: docsSchema({ extend: ({image}) => postObjectSchema(image) }),
+});
 export const collections = {
   docs: defineCollection({ schema: docsSchema({
-    extend: optionalPostObjectSchema()
+    extend: ({image}) => optionalPostObjectSchema(image)
   }) }),
   'contributors': contributors,
   'courses': courseLangingPageCollection,

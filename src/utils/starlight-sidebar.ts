@@ -72,12 +72,6 @@ export function returnToIndex(sectionName: string, lang: string | undefined): Pa
   };
 }
 
-/** Add home page at start
- */
-export function addHomeToSidebar(courseSectionName: string, lang: string | undefined, courseId: string, sidebar: SidebarEntry[]): SidebarEntry[] {
-  return [generateHomeSidebarLink(courseSectionName, lang, courseId), ...sidebar];
-}
-
 /** Remove prev or next page if the related post is not the same
   */
 export function cropPagination(pagination: PaginationLinks, currentSectionName: string, lang: string | undefined, currentPostId: string): PaginationLinks {
@@ -87,7 +81,7 @@ export function cropPagination(pagination: PaginationLinks, currentSectionName: 
     return sectionId === currentSectionName && postId === currentPostId;
   };
   return {
-    prev: (prev && isHrefOnTheSamePost(prev.href)) ? prev : generateHomeSidebarLink(currentSectionName, lang, currentPostId),
+    prev: (prev && isHrefOnTheSamePost(prev.href)) ? prev : generateHomeSidebarLink(currentSectionName, lang, ""),
     next: (next && isHrefOnTheSamePost(next.href)) ? next : undefined
   }
 }

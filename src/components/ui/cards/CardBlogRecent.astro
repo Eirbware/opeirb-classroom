@@ -9,7 +9,7 @@ import { getEntry } from "astro:content";
 const { blogEntry, recentBlogLocale = "" } = Astro.props;
 
 interface Props {
-  blogEntry: CollectionEntry<"blog" | "courses">;
+  blogEntry: CollectionEntry<"blog" | "courses" | "tips">;
   recentBlogLocale?: string;
 }
 const authorData = await getEntry(blogEntry.data.mainAuthor);
@@ -45,7 +45,7 @@ const authorData = await getEntry(blogEntry.data.mainAuthor);
     </h2>
     <!-- Container for the author's avatar and metadata -->
     <div class="mt-6 flex items-center sm:mt-10">
-      <AvatarBlogLarge blogEntry={blogEntry} />
+      <AvatarBlogLarge author={authorData} />
 
       <div class="ms-3 sm:ms-4">
         <p class="font-bold text-neutral-800 dark:text-neutral-200 sm:mb-1">

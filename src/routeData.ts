@@ -1,5 +1,5 @@
 import { defineRouteMiddleware } from '@astrojs/starlight/route-data';
-import { addHomeToSidebar, cropPagination, getPostSidebarEntry, returnToIndex } from './utils/starlight-sidebar';
+import { cropPagination, getPostSidebarEntry, returnToIndex } from './utils/starlight-sidebar';
 import { parseAstroCollectionPageId } from './utils/filter_language';
 import { defaultLanguage } from './utils/ui';
 
@@ -13,9 +13,7 @@ export const onRequest = defineRouteMiddleware((context) => {
     if (currentFirstDepthSidebarEntry !== null && currentFirstDepthSidebarEntry.type==="group") {
       // change the sidebar
       const newSidebar = currentFirstDepthSidebarEntry.entries;
-      context.locals.starlightRoute.sidebar = addHomeToSidebar(
-        sectionId, lang === defaultLanguage ? undefined : lang, postId, newSidebar
-      );
+      context.locals.starlightRoute.sidebar = newSidebar;
       // change the pagination (remove unliked prev / next pages)
       context.locals.starlightRoute.pagination = cropPagination(
         context.locals.starlightRoute.pagination, sectionId, lang === defaultLanguage ? undefined : lang, postId

@@ -1,0 +1,16 @@
+---
+import Default from "@astrojs/starlight/components/PageTitle.astro";
+import PostMetadata from "../blocks/PostMetadata.astro";
+import { getEntry } from "astro:content";
+
+const post = Astro.locals.starlightRoute.entry;
+const postData = (post.data.mainAuthor && post.data.pubDate) ? {
+  authorData: await getEntry(post.data.mainAuthor), 
+  readTime: post.data.readTime,
+  pubDate: post.data.pubDate
+} : null ;
+---
+
+<Default></Default>
+{ postData !== null ? <PostMetadata {...postData} /> : null }
+

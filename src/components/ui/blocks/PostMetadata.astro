@@ -1,0 +1,37 @@
+---
+import { formatDate } from "@/utils/utils";
+import AvatarBlogLarge from "../avatars/AvatarBlogLarge.astro";
+import type { CollectionEntry } from "astro:content";
+
+type Props = { pubDate: Date, readTime: number | undefined, authorData: CollectionEntry<"contributors">};
+const { authorData, pubDate, readTime } = Astro.props;
+---
+<div class="mb-6 flex items-center justify-between">
+  <div class="flex w-full gap-x-5 sm:items-center sm:gap-x-3">
+    <AvatarBlogLarge author={authorData} />
+    <div class="grow">
+      <div class="flex items-center justify-between gap-x-2">
+        <div>
+          {/* Post metadata and author info */}
+          <span class="font-bold text-neutral-700 dark:text-neutral-300">
+            {authorData.data.authorname}
+          </span>
+          <ul class="text-xs text-neutral-500">
+            <li
+              class="relative inline-block pe-6 before:absolute before:end-2 before:top-1/2 before:size-1 before:-translate-y-1/2 before:rounded-full before:bg-neutral-300 last:pe-0 last-of-type:before:hidden dark:text-neutral-400 dark:before:bg-neutral-600"
+            >
+              {formatDate(pubDate)}
+            </li>
+            { readTime ? (
+            <li
+              class="relative inline-block pe-6 before:absolute before:end-2 before:top-1/2 before:size-1 before:-translate-y-1/2 before:rounded-full before:bg-neutral-300 last:pe-0 last-of-type:before:hidden dark:text-neutral-400 dark:before:bg-neutral-600"
+            >
+              {readTime} min read
+            </li>
+            ): null}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

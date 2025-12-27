@@ -17,11 +17,12 @@ export async function getStaticPaths() {
   });
 }
 const { post } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
 const { mainAuthor, role, tags, ...starlightFrontmatter } = post.data;
 const starlightProps: StarlightPageProps = {
   sidebar: undefined,
   hasSidebar: false,
+  headings,
   frontmatter: { ...starlightFrontmatter,
     // TODO: error with the expected hero type
     hero: undefined }

@@ -69,6 +69,8 @@ export default defineConfig({
         MobileMenuFooter:
           "./src/components/ui/starlight/MobileMenuFooter.astro",
         ThemeSelect: "./src/components/ui/starlight/ThemeSelect.astro",
+        PageTitle: "./src/components/ui/starlight/PageTitle.astro",
+        Hero: "./src/components/ui/starlight/Hero.astro",
       },
       head: [
         {

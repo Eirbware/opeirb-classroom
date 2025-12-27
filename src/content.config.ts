@@ -126,10 +126,29 @@ const tipsCollection = defineCollection({
     pubDate: z.date(),
     readTime: z.number(),
   }) })
-})
+});
+
+const makeOptional = <T extends z.ZodRawShape>(zObject: z.ZodObject<T> | z.ZodNumber, optional: boolean) => (
+   optional ? zObject.optional() : zObject
+);
+
+const optionalPostObjectSchema = () => z.object({
+  readTime: z.number().optional(),  // in minutes
+  mainAuthor: reference("contributors").optional(),
+  pubDate: z.date().optional(),
+  tags: z.array(z.string()).optional(),
+});
+const postObjectSchema = () => z.object({
+  readTime: z.number(),  // in minutes
+  mainAuthor: reference("contributors"),
+  pubDate: z.date(),
+  tags: z.array(z.string()),
+});
 
 export const collections = {
-  docs: defineCollection({ schema: docsSchema() }),
+  docs: defineCollection({ schema: docsSchema({
+    extend: optionalPostObjectSchema()
+  }) }),
   'contributors': contributors,
   'courses': courseLangingPageCollection,
   'tips': tipsCollection,

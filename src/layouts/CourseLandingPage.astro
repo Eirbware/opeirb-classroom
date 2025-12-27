@@ -17,11 +17,11 @@ import { SITE } from "@data/constants";
 import { filterPerLanguage } from "@/utils/filter_language";
 
 // Get the current post's data
-const { post } = Astro.props;
+const { post, sectionName } = Astro.props;
 const lang = Astro.currentLocale;
 
 const { id: courseId } = Astro.params;
-const courseChapters = getFirstDepthChapters(courseId!, lang);
+const courseChapters = getFirstDepthChapters(sectionName, courseId!, lang);
 const otherCourses: CollectionEntry<"courses">[] = await getCollection(
   "courses",
   filterPerLanguage(lang)

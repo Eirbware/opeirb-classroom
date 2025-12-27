@@ -4,13 +4,12 @@ import { parseId } from "@/utils/filter_language";
 
 import CourseLandingPage from '@/layouts/CourseLandingPage.astro';
 
-// Update getStaticPaths for English posts
 export async function getStaticPaths() {
   const blogPosts = await getCollection("courses");
   return blogPosts.map((post) => {
-    const { lang, firstSection } = parseId(post.id);
+    const { lang, postId } = parseId(post.id);
     return {
-      params: { lang, id: firstSection },
+      params: { lang, id: postId },
       props: { post },
     };
   });
@@ -18,4 +17,4 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 ---
 
-<CourseLandingPage {post}/>
+<CourseLandingPage {post} sectionName="courses" />

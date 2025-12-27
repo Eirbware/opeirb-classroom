@@ -11,6 +11,7 @@ import { capitalize, formatDate } from "@utils/utils";
 import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import { SITE } from "@data/constants";
+import { getEntry } from "astro:content";
 
 // Update getStaticPaths for French posts
 export async function getStaticPaths() {
@@ -42,6 +43,7 @@ const pageTitle: string = `${post.data.title} | ${SITE.title}`;
 const metaDescription =
   post.data.contents[0] || `Lisez ${post.data.title} sur le blog de ScrewFast`;
 const ogTitle = `${post.data.title} | Blog | ${SITE.title}`;
+const authorData = await getEntry(post.data.mainAuthor);
 ---
 
 <MainLayout
@@ -57,7 +59,7 @@ const ogTitle = `${post.data.title} | Blog | ${SITE.title}`;
     datePublished: post.data.pubDate.toISOString(),
     author: {
       "@type": "Person",
-      name: post.data.author,
+      name: authorData.data.authorname ?? authorData.data.title,
     },
     publisher: {
       "@type": "Organization",
@@ -89,7 +91,7 @@ const ogTitle = `${post.data.title} | Blog | ${SITE.title}`;
                   <span
                     class="font-bold text-neutral-700 dark:text-neutral-300"
                   >
-                    {post.data.author}
+                    {authorData.data.authorname ?? authorData.data.title}
                   </span>
                 </div>
                 <ul class="text-xs text-neutral-500">

@@ -3,19 +3,21 @@
 import { Image } from "astro:assets";
 
 import type { CollectionEntry } from "astro:content";
+import { getEntry } from "astro:content";
 
 const { blogEntry } = Astro.props;
 
 interface Props {
-  blogEntry: CollectionEntry<"blog" | "courses">;
+  blogEntry: CollectionEntry<"blog" | "courses" | "tips">;
 }
+const author = await getEntry(blogEntry.data.mainAuthor);
 ---
 
 <div class="shrink-0">
   <Image
     class="size-10 rounded-full sm:h-14 sm:w-14"
-    src={blogEntry.data.authorImage}
-    alt={blogEntry.data.authorImageAlt}
+    src={author.data.authorImage}
+    alt={author.data.authorImageAlt}
     draggable={"false"}
     format={"avif"}
   />

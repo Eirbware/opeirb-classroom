@@ -4,6 +4,7 @@ import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 import AvatarBlogLarge from "@components/ui/avatars/AvatarBlogLarge.astro";
 import PrimaryCTA from "@components/ui/buttons/PrimaryCTA.astro";
+import { getEntry } from "astro:content";
 
 const { blogEntry, recentBlogLocale = "" } = Astro.props;
 
@@ -11,6 +12,7 @@ interface Props {
   blogEntry: CollectionEntry<"blog" | "courses">;
   recentBlogLocale?: string;
 }
+const authorData = await getEntry(blogEntry.data.mainAuthor);
 ---
 
 <!-- Root container, which is divided into 2 grid column layout for larger screens -->
@@ -47,10 +49,10 @@ interface Props {
 
       <div class="ms-3 sm:ms-4">
         <p class="font-bold text-neutral-800 dark:text-neutral-200 sm:mb-1">
-          {blogEntry.data.author}
+          {authorData.data.authorname ?? authorData.data.title}
         </p>
         <p class="text-xs text-neutral-500">
-          {blogEntry.data.role}
+          {authorData.data.description}
         </p>
       </div>
     </div>

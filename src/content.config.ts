@@ -1,6 +1,6 @@
 // https://docs.astro.build/en/guides/content-collections/#defining-collections
 
-import { z, defineCollection } from 'astro:content';
+import { z, defineCollection, reference } from 'astro:content';
 import { docsSchema } from '@astrojs/starlight/schema';
 import { glob } from 'astro/loaders';
 
@@ -66,10 +66,8 @@ const blogCollection = defineCollection({
   title: z.string(),
   description: z.string(),
   contents: z.array(z.string()),
-  author: z.string(),
   role: z.string().optional(),
-  authorImage: image(),
-  authorImageAlt: z.string(),
+  mainAuthor: reference("contributors"),
   pubDate: z.date(),
   cardImage: image(),
   cardImageAlt: z.string(),
@@ -89,16 +87,27 @@ const insightsCollection = defineCollection({
   }),
 });
 
+const contributors = defineCollection({
+  loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: './src/content/contributors' }),
+  schema: ({ image }) => z.object({
+    title: z.string(),
+    description: z.string(),
+    authorname: z.optional(z.string()),
+    authorImage: image(),
+    authorImageAlt: z.string(),
+    date: z.date(),
+    links: z.optional(z.record(z.string())),
+  })
+});
+
 const courseLangingPageCollection = defineCollection({
   loader: glob({ pattern: '**/_course-landing.{md,mdx}', base: "./src/content/docs" }),
   schema: ({ image }) => z.object ({
   title: z.string(),
   description: z.string(),
   contents: z.array(z.string()),
-  author: z.string(),
   role: z.string().optional(),
-  authorImage: image(),
-  authorImageAlt: z.string(),
+  mainAuthor: reference("contributors"),
   pubDate: z.date(),
   cardImage: image(),
   cardImageAlt: z.string(),
@@ -107,9 +116,23 @@ const courseLangingPageCollection = defineCollection({
   }),
 });
 
+const tipsCollection = defineCollection({
+  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: "./src/content/tips" }),
+  schema: docsSchema({ extend: z.object({
+    editUrl: z.union([z.string(), z.literal(false)]).optional(),
+    mainAuthor: reference("contributors"),
+    role: z.string().optional(),
+    tags: z.array(z.string()).optional(),
+    pubDate: z.date(),
+    readTime: z.number(),
+  }) })
+})
+
 export const collections = {
   docs: defineCollection({ schema: docsSchema() }),
+  'contributors': contributors,
   'courses': courseLangingPageCollection,
+  'tips': tipsCollection,
   'products': productsCollection,
   'blog': blogCollection,
   'insights': insightsCollection,

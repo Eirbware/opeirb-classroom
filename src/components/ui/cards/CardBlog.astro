@@ -4,6 +4,7 @@ import AvatarBlog from "@components/ui/avatars/AvatarBlog.astro";
 import { Image } from "astro:assets";
 import { formatDate } from "@utils/utils";
 import type { CollectionEntry } from "astro:content";
+import { getEntry } from "astro:content";
 
 const { blogEntry, blogLocale = "" } = Astro.props;
 
@@ -11,6 +12,7 @@ interface Props {
   blogEntry: CollectionEntry<"blog" | "courses">;
   blogLocale?: string;
 }
+const authorData = await getEntry(blogEntry.data.mainAuthor);
 ---
 
 <!-- The following anchor tag is the main container for the card.
@@ -45,7 +47,7 @@ interface Props {
 
         <div class="ms-2.5 sm:ms-4">
           <h4 class="font-bold text-neutral-50">
-            {blogEntry.data.author}
+            {authorData.data.authorname ?? authorData.data.title}
           </h4>
           <p class="text-xs text-neutral-50/[.8]">
             {formatDate(blogEntry.data.pubDate)}

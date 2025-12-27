@@ -1,5 +1,5 @@
 import { defineRouteMiddleware } from '@astrojs/starlight/route-data';
-import { addHomeToSidebar, cropPagination, getPostSidebarEntry } from './utils/starlight-sidebar';
+import { addHomeToSidebar, cropPagination, getPostSidebarEntry, returnToIndex } from './utils/starlight-sidebar';
 import { parseAstroCollectionPageId } from './utils/filter_language';
 import { defaultLanguage } from './utils/ui';
 
@@ -20,8 +20,11 @@ export const onRequest = defineRouteMiddleware((context) => {
       context.locals.starlightRoute.pagination = cropPagination(
         context.locals.starlightRoute.pagination, sectionId, lang === defaultLanguage ? undefined : lang, postId
       );
-    } 
-
+    }
+  }
+  else if (sectionId === "tips") {
+    context.locals.starlightRoute.hasSidebar = false;
+    context.locals.starlightRoute.pagination = returnToIndex(sectionId, lang === defaultLanguage ? undefined : lang);
   }
   // WARN: Here, we may have an issue
 });

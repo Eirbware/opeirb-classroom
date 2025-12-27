@@ -65,6 +65,13 @@ function generateHomeSidebarLink(courseSectionName: string, lang: string | undef
   };
 }
 
+export function returnToIndex(sectionName: string, lang: string | undefined): PaginationLinks {
+  return {
+    prev: generateHomeSidebarLink(sectionName, lang, ""),
+    next: undefined
+  };
+}
+
 /** Add home page at start
  */
 export function addHomeToSidebar(courseSectionName: string, lang: string | undefined, courseId: string, sidebar: SidebarEntry[]): SidebarEntry[] {

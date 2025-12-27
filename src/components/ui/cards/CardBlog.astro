@@ -9,7 +9,7 @@ import { getEntry } from "astro:content";
 const { blogEntry } = Astro.props;
 
 interface Props {
-  blogEntry: CollectionEntry<"blog" | "courses">;
+  blogEntry: CollectionEntry<"blog" | "courses" | "tips">;
 }
 const authorData = await getEntry(blogEntry.data.mainAuthor);
 ---

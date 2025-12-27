@@ -1,0 +1,17 @@
+---
+import { filterPerLanguage } from '@/utils/filter_language';
+import type { GetStaticPathsOptions } from 'astro';
+import { getCollection } from 'astro:content';
+import CourseCatalogue from '@/layouts/CourseCatalogue.astro';
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  // Load your data with fetch(), getCollection(), etc.
+  const tipsPages = await getCollection("tips", filterPerLanguage());
+
+  // Return a paginated collection of paths for all items
+  return paginate(tipsPages, { pageSize: 10 });
+}
+
+const { page } = Astro.props;
+---
+<CourseCatalogue posts={page.data} />

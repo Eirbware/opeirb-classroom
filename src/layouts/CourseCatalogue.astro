@@ -1,43 +1,19 @@
 ---
 // Import necessary components, modules and types
 import MainLayout from "@/layouts/MainLayout.astro";
-import CardBlog from "@components/ui/cards/CardBlog.astro";
-import CardBlogRecent from "@components/ui/cards/CardBlogRecent.astro";
 import CardInsight from "@components/ui/cards/CardInsight.astro";
-import { getCollection } from "astro:content";
-import { filterPerLanguage } from "@/utils/filter_language";
 import type { CollectionEntry } from "astro:content";
 import { SITE } from "@data/constants";
 
 // Get all blogs post in the given language and sort
 // them based on publish date
 
-const lang = Astro.currentLocale;
-
 type Props = {
-  ressourceType: "courses" | "tips"
+  posts: CollectionEntry<"courses">[] | CollectionEntry<"tips">[]
 }
-const { ressourceType } = Astro.props;
-const pages: CollectionEntry<"courses" | "tips">[] = (
-  await getCollection(ressourceType, filterPerLanguage(lang))
-);
-
-const insightsEntriesOfLang = await getCollection("insights", ({ id }) => {
-  return id.startsWith(`${lang}/`);
-});
-
-const blogPosts: CollectionEntry<"courses" | "tips">[] = pages.sort(
-  (
-    a: CollectionEntry<"courses" | "tips">,
-    b: CollectionEntry<"courses" | "tips">
-  ) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
+const { posts } = Astro.props;
 // Get all insights posts
-const insightPosts: CollectionEntry<"insights">[] = insightsEntriesOfLang;
-
-// Separate the most recent post from others
-const mostRecentPost: CollectionEntry<"courses" | "tips"> | null = blogPosts.length > 0 ? blogPosts[0] : null;
-const otherPosts: CollectionEntry<"courses" | "tips">[] = blogPosts.slice(1);
+const insightPosts = posts;
 
 // Define variables for page content
 const title: string = "Your Gateway to Construction Excellence";
@@ -94,20 +70,26 @@ const ogTitle = "Construction Industry Blog | ScrewFast";
     </div>
   </section>
 
+  {/* Insights section */}
   <section
     class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 2xl:max-w-full"
   >
-    {/* Blog posts grid */}
-    <div class="grid gap-6 lg:grid-cols-2">
-      {otherPosts.map((blogEntry) => <CardBlog blogEntry={blogEntry} />)}
+    <div class="mx-auto mb-10 max-w-2xl text-center lg:mb-14">
+      <h2
+        class="text-2xl font-bold text-neutral-800 md:text-4xl md:leading-tight dark:text-neutral-200"
+      >
+        {secondTitle}
+      </h2>
+      <p class="mt-1 text-pretty text-neutral-600 dark:text-neutral-400">
+        {secondSubTitle}
+      </p>
+    </div>
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        insightPosts.map((insightEntry) => (
+          <CardInsight insightEntry={insightEntry} />
+        ))
+      }
     </div>
   </section>
-  {/* Most recent blog post */}
-  { mostRecentPost !== null ? (
-  <section
-    class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 2xl:max-w-full"
-  >
-    <CardBlogRecent blogEntry={mostRecentPost} />
-  </section>
-  ) : null }
 </MainLayout>

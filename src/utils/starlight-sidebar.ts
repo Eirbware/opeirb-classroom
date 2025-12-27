@@ -54,25 +54,33 @@ export function getFirstDepthChapters(courseSectionName: string, courseId: strin
   return group.entries;
 }
 
+function generateHomeSidebarLink(courseSectionName: string, lang: string | undefined, courseId: string): SidebarLink{
+  return {
+    href: `${lang ? "/" + lang : ""}/${courseSectionName}/${courseId}`,
+    isCurrent: false,
+    badge: undefined,
+    label: "--- 🏠 ---",
+    attrs: {},
+    type: "link"
+  };
+}
+
+/** Add home page at start
+ */
+export function addHomeToSidebar(courseSectionName: string, lang: string | undefined, courseId: string, sidebar: SidebarEntry[]): SidebarEntry[] {
+  return [generateHomeSidebarLink(courseSectionName, lang, courseId), ...sidebar];
+}
+
 /** Remove prev or next page if the related post is not the same
   */
-export function cropPagination(pagination: PaginationLinks, currentSectionName: string, currentPostId: string, astroCollectionId: string): PaginationLinks {
+export function cropPagination(pagination: PaginationLinks, currentSectionName: string, lang: string | undefined, currentPostId: string): PaginationLinks {
   const { prev, next } = pagination
   const isHrefOnTheSamePost = (href: string) => {
     const { sectionId, postId } = parseHref(href);
     return sectionId === currentSectionName && postId === currentPostId;
   };
-  function sidebarLinkForHome(): SidebarLink {
-    return {
-      label: "Home Page", // TODO: internationalize that
-      href: "/" + astroCollectionId.split("/").slice(0, -1).join("/"),
-      type: "link",
-      isCurrent: false,
-      badge: undefined,
-    } as SidebarLink
-  }
   return {
-    prev: (prev && isHrefOnTheSamePost(prev.href)) ? prev : sidebarLinkForHome(),
+    prev: (prev && isHrefOnTheSamePost(prev.href)) ? prev : generateHomeSidebarLink(currentSectionName, lang, currentPostId),
     next: (next && isHrefOnTheSamePost(next.href)) ? next : undefined
   }
 }

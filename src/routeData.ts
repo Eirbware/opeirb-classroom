@@ -1,21 +1,27 @@
 import { defineRouteMiddleware } from '@astrojs/starlight/route-data';
-import { cropPagination, getPostSidebarEntry } from './utils/starlight-sidebar';
+import { addHomeToSidebar, cropPagination, getPostSidebarEntry } from './utils/starlight-sidebar';
 import { parseAstroCollectionPageId } from './utils/filter_language';
+import { defaultLanguage } from './utils/ui';
 
 export const onRequest = defineRouteMiddleware((context) => {
   const { sidebar, id } = context.locals.starlightRoute;
-  const { sectionId, postId }  = parseAstroCollectionPageId(id);
-  const currentFirstDepthSidebarEntry = getPostSidebarEntry(
-    sidebar, sectionId, postId
-  );
-  if (currentFirstDepthSidebarEntry !== null && currentFirstDepthSidebarEntry.type==="group") {
-    // change the sidebar
-    const newSidebar = currentFirstDepthSidebarEntry.entries;
-    context.locals.starlightRoute.sidebar = newSidebar;
-    // change the pagination (remove unliked prev / next pages)
-    context.locals.starlightRoute.pagination = cropPagination(
-      context.locals.starlightRoute.pagination, sectionId, postId, id
+  const { lang, sectionId, postId }  = parseAstroCollectionPageId(id);
+  if (sectionId === "courses") {
+    const currentFirstDepthSidebarEntry = getPostSidebarEntry(
+      sidebar, sectionId, postId
     );
-  } 
+    if (currentFirstDepthSidebarEntry !== null && currentFirstDepthSidebarEntry.type==="group") {
+      // change the sidebar
+      const newSidebar = currentFirstDepthSidebarEntry.entries;
+      context.locals.starlightRoute.sidebar = addHomeToSidebar(
+        sectionId, lang === defaultLanguage ? undefined : lang, postId, newSidebar
+      );
+      // change the pagination (remove unliked prev / next pages)
+      context.locals.starlightRoute.pagination = cropPagination(
+        context.locals.starlightRoute.pagination, sectionId, lang === defaultLanguage ? undefined : lang, postId
+      );
+    } 
+
+  }
   // WARN: Here, we may have an issue
 });

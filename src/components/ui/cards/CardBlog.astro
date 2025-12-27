@@ -6,11 +6,10 @@ import { formatDate } from "@utils/utils";
 import type { CollectionEntry } from "astro:content";
 import { getEntry } from "astro:content";
 
-const { blogEntry, blogLocale = "" } = Astro.props;
+const { blogEntry } = Astro.props;
 
 interface Props {
   blogEntry: CollectionEntry<"blog" | "courses">;
-  blogLocale?: string;
 }
 const authorData = await getEntry(blogEntry.data.mainAuthor);
 ---
@@ -21,9 +20,7 @@ const authorData = await getEntry(blogEntry.data.mainAuthor);
      which automatically prefetches the linked page to speed up navigation. -->
 <a
   class="group relative block rounded-xl outline-hidden ring-zinc-500 transition duration-500 focus-visible:ring-3 dark:ring-zinc-200 dark:focus:outline-hidden"
-  href={blogLocale && blogLocale !== "en"
-    ? `/${blogLocale}/blog/${blogEntry.id.replace(/^fr\//, "")}/`
-    : `/blog/${blogEntry.id.replace(/^en\//, "")}/`}
+  href={blogEntry.id}
   data-astro-prefetch
 >
   <!-- The container for the blog post's cover image. Uses astro:assets' Image for image source -->

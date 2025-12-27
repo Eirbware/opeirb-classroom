@@ -36,7 +36,8 @@ const otherCourses: CollectionEntry<"courses">[] = await getCollection(
 // See example: https://blog.codybrunner.com/2024/adding-related-articles-with-astro-content-collections/
 const relatedPosts: CollectionEntry<"courses">[] = otherCourses.filter(
   (blogEntry) => blogEntry.id !== post.id
-);
+).map((p) => { p.id = p.id.split("/").slice(0, -1).join("/"); return p });
+post.id = post.id.split("/").slice(0, -1).join("/");
 
 const pageTitle: string = `${post.data.title} | ${SITE.title}`;
 // For the meta description, use the first paragraph of content if available
@@ -70,7 +71,7 @@ const authorData = await getEntry(post.data.mainAuthor);
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://screwfast.uk/blog/${post.id.replace(/^en\//, "")}`,
+      "@id": `https://screwfast.uk/blog/${post.id}`,
     },
   }}
 >

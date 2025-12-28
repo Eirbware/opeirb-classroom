@@ -1,0 +1,19 @@
+---
+export type Props = {
+  url?: string;
+  label?: string;
+};
+
+const { url, label = "Next &raquo;" } = Astro.props;
+---
+
+{
+  url && (
+    <a class="min-h-11.5 min-w-11.5 py-3 px-4 inline-flex jusify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Next" href={url}>
+      <span class="sr-only">Next</span>
+      <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="--darkreader-inline-stroke: currentColor;" data-darkreader-inline-stroke="">
+        <path d="m9 18 6-6-6-6"></path>
+      </svg>
+    </a>
+  )
+}

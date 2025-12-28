@@ -2,16 +2,19 @@
 // Import necessary components, modules and types
 import MainLayout from "@/layouts/MainLayout.astro";
 import CardInsight from "@components/ui/cards/CardInsight.astro";
+import Pagination from "@/components/sections/navbar&footer/Pagination/Pagination.astro";
 import type { CollectionEntry } from "astro:content";
 import { SITE } from "@data/constants";
+import type { Page } from "astro";
 
 // Get all blogs post in the given language and sort
 // them based on publish date
 
 type Props = {
   posts: CollectionEntry<"courses">[] | CollectionEntry<"tips">[]
+  page: Page<CollectionEntry<"courses">> | Page<CollectionEntry<"tips">>
 }
-const { posts } = Astro.props;
+const { posts, page } = Astro.props;
 // Get all insights posts
 const insightPosts = posts;
 
@@ -92,4 +95,13 @@ const ogTitle = "Construction Industry Blog | ScrewFast";
       }
     </div>
   </section>
+
+  {/* Pagination */}
+  <Pagination page={page} urlPattern={
+  page.url.current.split("/").slice(0, -1).join("/") + "/{}"
+  } firstPageUrl={
+    // Start to the page 1 in the catalogue
+  page.url.current.split("/").slice(0, -1).join("/") + "/1"
+    }/>
+
 </MainLayout>

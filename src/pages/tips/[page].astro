@@ -9,4 +9,4 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
 
 const { page } = Astro.props;
 ---
-<CourseCatalogue posts={page.data} />
+<CourseCatalogue posts={page.data} {page}/>

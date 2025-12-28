@@ -1,0 +1,91 @@
+---
+import type { Page } from "astro";
+import Previous from "./Previous.astro";
+import Next from "./Next.astro";
+import Link from "./Link.astro";
+import Current from "./Current.astro";
+import Ellipsis from "./Ellipsis.astro";
+import { getPageNumbers } from "./pagination";
+
+type Props = {
+  page: Page<any>;
+  urlPattern: string;
+  firstPageUrl?: string;
+  windowSize?: number;
+  showPrevNext?: boolean;
+  showFirstLast?: boolean;
+  previousLabel?: string;
+  nextLabel?: string;
+};
+
+const {
+  page,
+  urlPattern,
+  firstPageUrl,
+  windowSize = 5,
+  showFirstLast = true,
+  showPrevNext = true,
+  previousLabel,
+  nextLabel,
+} = Astro.props;
+
+const pageNumbers = getPageNumbers(page, windowSize);
+const firstPageInRange = pageNumbers[0];
+const lastPageInRange = pageNumbers[pageNumbers.length - 1];
+const showFirst = showFirstLast && pageNumbers[0] !== 1;
+const showLast = showFirstLast && lastPageInRange !== page.lastPage;
+const previousUrl =
+  firstPageUrl && page.currentPage === 2 ? firstPageUrl : page.url.prev;
+---
+
+<nav class="flex justify-center items-center gap-x-1 p-4" aria-label="Pagination">
+    {showPrevNext && <Previous url={previousUrl} label={previousLabel} />}
+    <div class="flex items-center gap-x-1">
+    {
+      showFirst && (
+          <Link
+            pageNumber={1}
+            urlPattern={urlPattern}
+            firstPageUrl={firstPageUrl}
+          />
+      )
+    }
+    {
+      firstPageInRange > 2 && (
+          <Ellipsis next={false} pageNumber={firstPageInRange-1} urlPattern={urlPattern} firstPageUrl={firstPageUrl}/>
+      )
+    }
+    {
+      pageNumbers.map((pageNumber) => {
+        return (
+            pageNumber === page.currentPage ? (
+              <Current pageNumber={pageNumber} />
+            ) : (
+              <Link
+                pageNumber={pageNumber}
+                urlPattern={urlPattern}
+                firstPageUrl={firstPageUrl}
+              />
+            )
+        );
+      })
+    }
+    {
+      lastPageInRange < page.lastPage - 1 && (
+              <Ellipsis next={true} pageNumber={lastPageInRange+1} urlPattern={urlPattern} firstPageUrl={firstPageUrl}/>
+      )
+    }
+    {
+      showLast && (
+        <li>
+          <Link
+            pageNumber={page.lastPage}
+            urlPattern={urlPattern}
+            firstPageUrl={firstPageUrl}
+          />
+        </li>
+      )
+    }
+    </div>
+    {showPrevNext && <Next url={page.url.next} label={nextLabel} />}
+</nav>

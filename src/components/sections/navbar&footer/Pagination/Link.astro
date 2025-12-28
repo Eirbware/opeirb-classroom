@@ -1,0 +1,12 @@
+---
+import { urlPatternToUrl } from "./pagination";
+export type Props = {
+  urlPattern: string;
+  firstPageUrl?: string;
+  pageNumber: number;
+};
+
+const { urlPattern, firstPageUrl, pageNumber } = Astro.props;
+---
+
+<a class="min-h-11.5 min-w-11.5 flex justify-center items-center text-gray-800 hover:bg-gray-100 py-3 px-4 text-sm rounded-lg focus:outline-hidden focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label={`Go to page ${pageNumber}`} href={urlPatternToUrl(urlPattern, pageNumber, firstPageUrl)}>{pageNumber}</a>

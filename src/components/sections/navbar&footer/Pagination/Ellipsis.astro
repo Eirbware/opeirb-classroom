@@ -1,0 +1,23 @@
+---
+import { urlPatternToUrl } from './pagination';
+
+type Props = {
+  pageNumber: number,
+  next: boolean,
+  urlPattern: string,
+  firstPageUrl?: string
+}
+const { pageNumber, urlPattern, firstPageUrl, next } = Astro.props;
+---
+<div class="hs-tooltip inline-block">
+  <a class="hs-tooltip-toggle group min-h-11.5 min-w-11.5 flex justify-center items-center text-gray-400 hover:text-blue-600 p-2 text-sm rounded-lg focus:outline-hidden focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:bg-white/10" href={urlPatternToUrl(urlPattern, pageNumber, firstPageUrl)}>
+    <span class="group-hover:hidden text-xs">•••</span>
+    <svg class=`${(!next) ? "transform -scale-x-100" : ""} group-hover:block hidden shrink-0 size-5" xmlns="http://www.w3.org/2000/svg` width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="--darkreader-inline-stroke: currentColor;" data-darkreader-inline-stroke="">
+      <path d="m6 17 5-5-5-5"></path>
+      <path d="m13 17 5-5-5-5"></path>
+    </svg>
+    <span class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded-md shadow-2xs dark:bg-neutral-700" role="tooltip">
+      Page {pageNumber}
+    </span>
+  </a>
+</div>

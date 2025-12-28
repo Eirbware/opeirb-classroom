@@ -3,6 +3,7 @@ import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
 import compressor from "astro-compressor";
 import starlight from "@astrojs/starlight";
+import astroPortal from "astro-create-portal";
 
 import mdx from "@astrojs/mdx";
 
@@ -66,6 +67,7 @@ export default defineConfig({
       components: {
         SiteTitle: "./src/components/ui/starlight/SiteTitle.astro",
         Head: "./src/components/ui/starlight/Head.astro",
+        Header: "./src/components/sections/navbar&footer/StarlightNavbar.astro",
         MobileMenuFooter:
           "./src/components/ui/starlight/MobileMenuFooter.astro",
         ThemeSelect: "./src/components/ui/starlight/ThemeSelect.astro",
@@ -94,6 +96,7 @@ export default defineConfig({
       brotli: true,
     }),
     mdx(),
+    astroPortal(),
   ],
   experimental: {
     clientPrerender: true,

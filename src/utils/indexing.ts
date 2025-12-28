@@ -4,7 +4,7 @@ import type { PaginateFunction } from "astro";
 import { getCollection, type CollectionEntry, type ReferenceDataEntry } from "astro:content";
 import { filterPerLanguage } from "./filter_language";
 
-const DEFAULT_POSTS_PER_PAGE = 18;
+const DEFAULT_POSTS_PER_PAGE = 12;
 const DEFAULT_FIRST_POSTS_NB = 5;
 
 type Post = CollectionEntry<"courses" | "tips">

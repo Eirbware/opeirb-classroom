@@ -12,5 +12,5 @@ const postData = (post.data.mainAuthor && post.data.pubDate) ? {
 ---
 
 <Default></Default>
-{ postData !== null ? <PostMetadata {...postData} /> : null }
+{ postData && <PostMetadata {...postData} /> }
 

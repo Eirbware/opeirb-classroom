@@ -52,7 +52,7 @@ const postData = (data.mainAuthor && data.pubDate) ? {
 	<div class="sl-flex stack">
 		<div class="sl-flex copy">
       <h1 id={PAGE_TITLE_ID} data-page-title set:html={title} />
-      { postData !== null ? <PostMetadata {...postData} /> : null}
+      {postData && <PostMetadata {...postData} />}
 			{tagline && <div class="tagline" set:html={tagline} />}
 		</div>
 		{

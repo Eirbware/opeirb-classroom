@@ -27,4 +27,5 @@ reports/*
 
 # astro content
 # TODO: not only courses
-src/content/docs/courses
+src/content/docs/courses/*
+!src/content/docs/courses/.gitkeep

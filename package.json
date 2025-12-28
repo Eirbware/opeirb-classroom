@@ -16,6 +16,7 @@
     "@astrojs/mdx": "^4.3.13",
     "@astrojs/sitemap": "^3.6.0",
     "@astrojs/starlight": "^0.37.1",
+    "@astrojs/svelte": "^7.2.4",
     "@tailwindcss/vite": "^4.1.18",
     "astro": "^5.16.6",
     "astro-compressor": "^1.2.0",
@@ -28,6 +29,7 @@
     "rimraf": "^6.1.2",
     "sharp": "^0.34.5",
     "sharp-ico": "^0.1.5",
+    "svelte": "^5.46.1",
     "tailwindcss": "^4.1.17"
   },
   "devDependencies": {

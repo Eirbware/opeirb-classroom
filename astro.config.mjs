@@ -6,6 +6,8 @@ import starlight from "@astrojs/starlight";
 
 import mdx from "@astrojs/mdx";
 
+import svelte from "@astrojs/svelte";
+
 // https://astro.build/config
 export default defineConfig({
   // https://docs.astro.build/en/guides/images/#authorizing-remote-images
@@ -24,78 +26,73 @@ export default defineConfig({
   //   },
   // },
   prefetch: true,
-  integrations: [
-    sitemap({
-      i18n: {
-        defaultLocale: "en", // All urls that don't contain language prefix will be treated as default locale
-        locales: {
-          en: "en", // The `defaultLocale` value must present in `locales` keys
-          fr: "fr",
-        },
-      },
-    }),
-    starlight({
-      title: "ScrewFast Docs",
-      // https://github.com/withastro/starlight/blob/main/packages/starlight/CHANGELOG.md
-      // If no Astro and Starlight i18n configurations are provided, the built-in default locale is used in Starlight and a matching Astro i18n configuration is generated/used.
-      // If only a Starlight i18n configuration is provided, an equivalent Astro i18n configuration is generated/used.
-      // If only an Astro i18n configuration is provided, the Starlight i18n configuration is updated to match it.
-      // If both an Astro and Starlight i18n configurations are provided, an error is thrown.
+  integrations: [sitemap({
+    i18n: {
+      defaultLocale: "en", // All urls that don't contain language prefix will be treated as default locale
       locales: {
-        root: {
-          label: "English",
-          lang: "en",
-        },
-        fr: { label: "Français", lang: "fr" },
+        en: "en", // The `defaultLocale` value must present in `locales` keys
+        fr: "fr",
       },
-      // Automatically-generated sidebar
-      // customization with the routeMiddleware
-      // https://starlight.astro.build/guides/sidebar/
-      // sidebar: [],
-      routeMiddleware: './src/routeData.ts',
-      social: [
-        {
-          icon: "github",
-          label: "GitHub",
-          href: "https://github.com/mearashadowfax/ScrewFast",
-        },
-      ],
-      disable404Route: true,
-      customCss: ["./src/assets/styles/starlight.css"],
-      favicon: "/favicon.ico",
-      components: {
-        SiteTitle: "./src/components/ui/starlight/SiteTitle.astro",
-        Head: "./src/components/ui/starlight/Head.astro",
-        Header: "./src/components/sections/navbar&footer/StarlightNavbar.astro",
-        MobileMenuFooter:
-          "./src/components/ui/starlight/MobileMenuFooter.astro",
-        ThemeSelect: "./src/components/ui/starlight/ThemeSelect.astro",
-        PageTitle: "./src/components/ui/starlight/PageTitle.astro",
-        Hero: "./src/components/ui/starlight/Hero.astro",
+    },
+  }), starlight({
+    title: "ScrewFast Docs",
+    // https://github.com/withastro/starlight/blob/main/packages/starlight/CHANGELOG.md
+    // If no Astro and Starlight i18n configurations are provided, the built-in default locale is used in Starlight and a matching Astro i18n configuration is generated/used.
+    // If only a Starlight i18n configuration is provided, an equivalent Astro i18n configuration is generated/used.
+    // If only an Astro i18n configuration is provided, the Starlight i18n configuration is updated to match it.
+    // If both an Astro and Starlight i18n configurations are provided, an error is thrown.
+    locales: {
+      root: {
+        label: "English",
+        lang: "en",
       },
-      head: [
-        {
-          tag: "meta",
-          attrs: {
-            property: "og:image",
-            content: "https://screwfast.uk" + "/social.webp",
-          },
+      fr: { label: "Français", lang: "fr" },
+    },
+    // Automatically-generated sidebar
+    // customization with the routeMiddleware
+    // https://starlight.astro.build/guides/sidebar/
+    // sidebar: [],
+    routeMiddleware: './src/routeData.ts',
+    social: [
+      {
+        icon: "github",
+        label: "GitHub",
+        href: "https://github.com/mearashadowfax/ScrewFast",
+      },
+    ],
+    disable404Route: true,
+    customCss: ["./src/assets/styles/starlight.css"],
+    favicon: "/favicon.ico",
+    components: {
+      SiteTitle: "./src/components/ui/starlight/SiteTitle.astro",
+      Head: "./src/components/ui/starlight/Head.astro",
+      Header: "./src/components/sections/navbar&footer/StarlightNavbar.astro",
+      MobileMenuFooter:
+        "./src/components/ui/starlight/MobileMenuFooter.astro",
+      ThemeSelect: "./src/components/ui/starlight/ThemeSelect.astro",
+      PageTitle: "./src/components/ui/starlight/PageTitle.astro",
+      Hero: "./src/components/ui/starlight/Hero.astro",
+    },
+    head: [
+      {
+        tag: "meta",
+        attrs: {
+          property: "og:image",
+          content: "https://screwfast.uk" + "/social.webp",
         },
-        {
-          tag: "meta",
-          attrs: {
-            property: "twitter:image",
-            content: "https://screwfast.uk" + "/social.webp",
-          },
+      },
+      {
+        tag: "meta",
+        attrs: {
+          property: "twitter:image",
+          content: "https://screwfast.uk" + "/social.webp",
         },
-      ],
-    }),
-    compressor({
-      gzip: false,
-      brotli: true,
-    }),
-    mdx(),
-  ],
+      },
+    ],
+  }), compressor({
+    gzip: false,
+    brotli: true,
+  }), mdx(), svelte()],
   experimental: {
     clientPrerender: true,
   },

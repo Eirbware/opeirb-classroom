@@ -3,7 +3,6 @@ import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
 import compressor from "astro-compressor";
 import starlight from "@astrojs/starlight";
-import astroPortal from "astro-create-portal";
 
 import mdx from "@astrojs/mdx";
 
@@ -96,7 +95,6 @@ export default defineConfig({
       brotli: true,
     }),
     mdx(),
-    astroPortal(),
   ],
   experimental: {
     clientPrerender: true,

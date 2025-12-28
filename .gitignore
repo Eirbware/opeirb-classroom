@@ -24,3 +24,7 @@ pnpm-debug.log*
 # lighthouse reports
 reports/*
 !reports/.gitkeep
+
+# astro content
+# TODO: not only courses
+src/content/docs/courses

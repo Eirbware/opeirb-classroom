@@ -4,7 +4,7 @@ import CourseCatalogue from '@/layouts/CourseCatalogue.astro';
 import { getPaginatedPostCollection } from '@/utils/indexing';
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
-  return await getPaginatedPostCollection("tips", paginate);
+  return await getPaginatedPostCollection("courses", paginate);
 }
 
 const { page } = Astro.props;

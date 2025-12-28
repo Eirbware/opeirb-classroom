@@ -15,25 +15,9 @@ import { SITE } from "@data/constants";
 const lang = Astro.currentLocale;
 
 type Props = {
-  ressourceType: "courses" | "tips"
+  firstPosts: CollectionEntry<"courses">[] | CollectionEntry<"tips">[]
 }
-const { ressourceType } = Astro.props;
-const pages: CollectionEntry<"courses" | "tips">[] = (
-  await getCollection(ressourceType, filterPerLanguage(lang))
-);
-
-const insightsEntriesOfLang = await getCollection("insights", ({ id }) => {
-  return id.startsWith(`${lang}/`);
-});
-
-const blogPosts: CollectionEntry<"courses" | "tips">[] = pages.sort(
-  (
-    a: CollectionEntry<"courses" | "tips">,
-    b: CollectionEntry<"courses" | "tips">
-  ) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
-// Get all insights posts
-const insightPosts: CollectionEntry<"insights">[] = insightsEntriesOfLang;
+const { firstPosts: blogPosts } = Astro.props;
 
 // Separate the most recent post from others
 const mostRecentPost: CollectionEntry<"courses" | "tips"> | null = blogPosts.length > 0 ? blogPosts[0] : null;

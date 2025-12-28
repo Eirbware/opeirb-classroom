@@ -4,7 +4,8 @@ import type { PaginateFunction } from "astro";
 import { getCollection, type CollectionEntry, type ReferenceDataEntry } from "astro:content";
 import { filterPerLanguage } from "./filter_language";
 
-const DEFAULT_POSTS_PER_PAGE = 18
+const DEFAULT_POSTS_PER_PAGE = 18;
+const DEFAULT_FIRST_POSTS_NB = 5;
 
 type Post = CollectionEntry<"courses" | "tips">
 type PostFilter = (post: Post) => boolean;
@@ -35,27 +36,46 @@ const mostRecentSort: PostSortCompareFn = (postA, postB) => (
   postB.data.pubDate.valueOf() - postA.data.pubDate.valueOf()
 );
 
-export async function getPaginatedPostCollection(
-  ressourceType: "courses" | "tips",
+async function getSortedAndFilteredCollection<RessourceType extends "courses" | "tips">(
+  ressourceType: RessourceType,
+  lang?: string,
+  filter?: PostFilter,
+  sortCompareFn?: PostSortCompareFn,
+) {
+  return (await getCollection(
+    ressourceType,
+    composeFilters(filter, filterPerLanguage(lang) as PostFilter)
+  )).sort(composeCompareFns(sortCompareFn, mostRecentSort));
+}
+
+export async function getPaginatedPostCollection<RessourceType extends "courses" | "tips">(
+  ressourceType: RessourceType,
   paginate: PaginateFunction,
-  lang: string | undefined,
+  lang?: string,
   filter?: PostFilter,
   sortCompareFn?: PostSortCompareFn,
   postsPerPage?: number,
 ) {
-  const posts = (await getCollection(
-    ressourceType,
-    composeFilters(filter, filterPerLanguage(lang) as PostFilter)
-  )).sort(composeCompareFns(sortCompareFn, mostRecentSort));
-
+  const posts = await getSortedAndFilteredCollection(ressourceType, lang, filter, sortCompareFn);
   return paginate(posts, { pageSize: postsPerPage ?? DEFAULT_POSTS_PER_PAGE });
+}
+
+export async function getFirstPostsInCollection<RessourceType extends "courses" | "tips">(
+  ressourceType: RessourceType,
+  lang?: string,
+  filter?: PostFilter,
+  sortCompareFn?: PostSortCompareFn,
+  postNumber?: number,
+) {
+  const posts = await getSortedAndFilteredCollection(ressourceType, lang, filter, sortCompareFn);
+  return posts.slice(0, postNumber ?? DEFAULT_FIRST_POSTS_NB);
 }
 
 export function getPaginatedPostCollectionWithTag(tag: string) {
   return (
     ressourceType: "courses" | "tips",
     paginate: PaginateFunction,
-    lang: string | undefined,
+    lang?: string,
     filter?: PostFilter,
     sortCompareFn?: PostSortCompareFn,
     postsPerPage?: number,
@@ -71,7 +91,7 @@ export function getPaginatedPostCollectionOfAuthor(author_id: ReferenceDataEntry
   return (
     ressourceType: "courses" | "tips",
     paginate: PaginateFunction,
-    lang: string | undefined,
+    lang?: string,
     filter?: PostFilter,
     sortCompareFn?: PostSortCompareFn,
     postsPerPage?: number,

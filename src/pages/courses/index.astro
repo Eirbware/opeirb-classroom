@@ -1,5 +1,8 @@
 ---
 import CourseIndex from "@/layouts/CourseIndex.astro";
+import { getFirstPostsInCollection } from "@/utils/indexing";
+
+const firstCourses = await getFirstPostsInCollection("courses");
 ---
 
-<CourseIndex ressourceType="courses"/>
+<CourseIndex firstPosts={firstCourses} />

@@ -4,11 +4,9 @@ import LoginBtn from "../ui/buttons/LoginBtn.svelte";
 import NavLink from "@components/ui/links/NavLink.astro";
 import enStrings from "@utils/navigation.ts";
 import frStrings from "@utils/fr/navigation.ts";
-import homeButton from "@images/starlight/home-button.svg?raw"
 
 // Select the correct translation based on the page's lang prop:
 const strings = Astro.currentLocale === "fr" ? frStrings : enStrings;
-const homeUrl = Astro.currentLocale === "fr" ? "/fr" : "/";
 ---
 <div class="relative">
   <button
@@ -35,7 +33,7 @@ const homeUrl = Astro.currentLocale === "fr" ? "/fr" : "/";
   >
     <!-- Navigation links and Authentication component -->
     {
-    /* TODO: these components are not hoverable in cause of the hidden class*/
+    /* The components will not be hovered as it is on mobile */
     }
     {strings.navBarLinks.map(link => (
     <li class="block px-4 py-2">

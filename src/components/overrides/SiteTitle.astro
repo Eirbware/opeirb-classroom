@@ -6,7 +6,7 @@
 //   https://github.com/withastro/starlight/blob/main/packages/starlight/components/LanguageSelect.astro
 
 import Default from '../ui/starlight/SiteTitle.astro';
-import TestMenu from './TestMenu.astro';
+import MobileHomeMenu from './MobileHomeMenu.astro';
 
 const curLocale = Astro.props.locale;
 ---
@@ -17,7 +17,7 @@ const curLocale = Astro.props.locale;
 
   <starlight-select class="mobile">
     <label>
-      <TestMenu />
+      <MobileHomeMenu />
     </label>
   </starlight-select>
 </>

@@ -10,13 +10,16 @@ import LoginBtn from '../ui/buttons/LoginBtn.svelte';
 import NavLink from "@components/ui/links/NavLink.astro";
 import enStrings from "@utils/navigation.ts";
 import frStrings from "@utils/fr/navigation.ts";
+import { parseHref } from '@/utils/filter_language';
+import { defaultLanguage } from '@/utils/ui';
 
 // Select the correct translation based on the page's lang prop:
 const strings = Astro.currentLocale === "fr" ? frStrings : enStrings;
-console.log(Astro.currentLocale);
 
-const curLocale = Astro.locals.starlightRoute.locale;
-const slug = Astro.locals.starlightRoute.entry.slug;
+const pageHref = Astro.url.pathname;
+const slug = pageHref.slice(1);
+const lang = parseHref(pageHref).lang ;
+const curLocale = lang === defaultLanguage ? undefined : lang;
 
 ---
 

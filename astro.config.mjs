@@ -65,7 +65,7 @@ export default defineConfig({
     favicon: "/favicon.ico",
     components: {
       SiteTitle: "./src/components/ui/starlight/SiteTitle.astro",
-      Head: "./src/components/ui/starlight/Head.astro",
+      Head: "./src/components/overrides/Head.astro",
       Header: "./src/components/overrides/Header.astro",
       MobileMenuFooter: "./src/components/ui/starlight/MobileMenuFooter.astro",
       ThemeSelect: 'src/components/overrides/ThemeSelect.astro',

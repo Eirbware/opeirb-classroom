@@ -8,7 +8,7 @@ import SocialIcons from 'virtual:starlight/components/SocialIcons';
 import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
 
 
-import Authentication from "../misc/Authentication.astro";
+import Authentication from '@components/sections/misc/Authentication.svelte';
 import NavLink from "@components/ui/links/NavLink.astro";
 import enStrings from "@utils/navigation.ts";
 import frStrings from "@utils/fr/navigation.ts";
@@ -39,7 +39,7 @@ const shouldRenderSearch =
 		<div class="sl-flex social-icons">
 		</div>
 		<SocialIcons />
-    <Authentication />
+    <Authentication client:load />
 		<ThemeSelect />
 		<LanguageSelect />
 	</div>

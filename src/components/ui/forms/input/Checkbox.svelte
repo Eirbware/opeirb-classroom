@@ -1,0 +1,23 @@
+<script lang="ts">
+export let label: string | undefined = "Remember me";
+export let id: string | undefined;
+</script>
+
+<!-- Container for the checkbox and its label -->
+<div class="flex items-center">
+  <!-- Checkbox input -->
+  <div class="flex">
+    <input
+      id={id}
+      name="remember-me"
+      type="checkbox"
+      class="pointer-events-none mt-0.5 shrink-0 rounded-sm border-neutral-200 text-neutral-600 focus:ring-yellow-400 dark:border-neutral-700 dark:bg-neutral-800 dark:checked:border-yellow-400 dark:checked:bg-yellow-400 dark:focus:ring-offset-neutral-800"
+    />
+  </div>
+  <!-- Label for the checkbox -->
+  <div class="ms-3">
+    <label for={id} class="text-sm text-neutral-800 dark:text-neutral-200"
+      >{label} <slot />
+    </label>
+  </div>
+</div>

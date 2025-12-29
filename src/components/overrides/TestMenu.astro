@@ -33,8 +33,10 @@ const homeUrl = Astro.currentLocale === "fr" ? "/fr" : "/";
     id="menu"
     class="absolute mt-2 hidden w-48 rounded bg-white shadow-lg"
   >
-
     <!-- Navigation links and Authentication component -->
+    {
+    /* TODO: these components are not hoverable in cause of the hidden class*/
+    }
     {strings.navBarLinks.map(link => (
     <li class="block px-4 py-2">
       <NavLink url={link.url} name={link.name} />

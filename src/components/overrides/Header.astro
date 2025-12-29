@@ -13,7 +13,7 @@ import frStrings from "@utils/fr/navigation.ts";
 
 // Select the correct translation based on the page's lang prop:
 const strings = Astro.currentLocale === "fr" ? frStrings : enStrings;
-const homeUrl = Astro.currentLocale === "fr" ? "/fr" : "/";
+console.log(Astro.currentLocale);
 
 const curLocale = Astro.locals.starlightRoute.locale;
 const slug = Astro.locals.starlightRoute.entry.slug;

@@ -5,7 +5,6 @@ import PasswordInput from "./input/PasswordInput.svelte";
 import Checkbox from "./input/Checkbox.svelte";
 import AuthBtn from "@components/ui/buttons/AuthBtn.svelte";
 import GoogleBtn from "@components/ui/buttons/GoogleBtn.svelte";
-import Modal from "@components/sections/features/Modal.svelte";
 import { useLoginModal } from "@/app/stores/loginModal.svelte";
 
 // Variables for customization of the LoginModal Component
@@ -27,9 +26,9 @@ $effect(() => {
 
 <dialog
   class="bg-transparent p-0"
-	bind:this={dialog}
-onclose={() => (loginModal.hide())}
-	onclick={(e) => { if (e.target === dialog) dialog.close(); }}
+  bind:this={dialog}
+  onclose={() => (loginModal.hide())}
+  onclick={(e) => { if (e.target === dialog) dialog.close(); }}
 >
   <div
     class="transition-all ease-out mt-7 duration-500 sm:mx-auto sm:w-full sm:max-w-lg"
@@ -97,6 +96,11 @@ onclose={() => (loginModal.hide())}
     align-items: center;
     justify-content: center;
     background: rgba(0, 0, 0, 0.3); /* semi-transparent backdrop */
+  }
+
+  /* With that the dialog center automatically according to the backdrop */
+  dialog {
+    margin: auto;
   }
 
 	dialog[open] {

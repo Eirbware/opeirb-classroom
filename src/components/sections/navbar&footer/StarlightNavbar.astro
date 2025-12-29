@@ -31,18 +31,32 @@ const shouldRenderSearch =
 	<div class="sl-flex print:hidden">
 		{shouldRenderSearch && <Search />}
 	</div>
-	<div class="sl-hidden md:sl-flex print:hidden right-group">
-    <!-- Navigation links and Authentication component -->
-    {strings.navBarLinks.map(link => (
-      <NavLink url={link.url} name={link.name} />
-    ))}
-		<div class="sl-flex social-icons">
-		</div>
-		<SocialIcons />
-    <Authentication client:load />
-		<ThemeSelect />
-		<LanguageSelect />
-	</div>
+
+  <!-- Contains navigation links -->
+  <div
+    id="navbar-collapse-with-animation"
+    class="hs-collapse hidden grow basis-full overflow-hidden transition-all duration-300 md:block"
+  >
+    <!-- Navigation links container -->
+    <div
+      class="mt-5 flex flex-col gap-x-0 gap-y-4 md:mt-0 md:flex-row md:items-center md:justify-end md:gap-x-4 lg:gap-x-7 md:gap-y-0 md:ps-7"
+    >
+      <!-- Navigation links and Authentication component -->
+      {strings.navBarLinks.map(link => (
+        <NavLink url={link.url} name={link.name} />
+      ))}
+
+      <div class="sl-flex social-icons">
+      </div>
+      <SocialIcons />
+      <Authentication client:load />
+      <LanguageSelect />
+      <!-- ThemeIcon component specifically for larger screens -->
+      <span class="hidden md:inline-block">
+        <ThemeSelect />
+      </span>
+    </div>
+  </div>
 </div>
 
 <style>

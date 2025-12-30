@@ -189,3 +189,7 @@ article.card {
     padding-inline: 1.5rem !important;
   }
 }
+
+.full-width-starlight {
+  --sl-content-width: 100%;
+}

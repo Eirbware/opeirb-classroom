@@ -33,6 +33,7 @@ const authorData = await getEntry(blogEntry.data.mainAuthor);
   <!-- Container for the blog post's heading, author avatar, author's role, and read more button -->
   <div class="sm:order-1">
     <!-- Blog title which is also a hyperlink to the blog detail page  -->
+    {/* TODO: fix the color */}
     <h2
       class="text-balance text-2xl font-bold tracking-tight text-neutral-800 dark:text-neutral-200 md:text-3xl lg:text-4xl lg:leading-tight xl:text-5xl xl:leading-tight"
     >
@@ -44,11 +45,11 @@ const authorData = await getEntry(blogEntry.data.mainAuthor);
       </a>
     </h2>
     <!-- Container for the author's avatar and metadata -->
-    <div class="mt-6 flex items-center sm:mt-10">
+    <div class="pt-6 flex items-center sm:pt-10">
       <AvatarBlogLarge author={authorData} />
 
-      <div class="ms-3 sm:ms-4">
-        <p class="font-bold text-neutral-800 dark:text-neutral-200 sm:mb-1">
+      <div class="pl-3 sm:pl-4">
+        <p class="font-bold text-current dark:text-shadow-current sm:pb-1">
           {authorData.data.authorname ?? authorData.data.title}
         </p>
         <p class="text-xs text-neutral-500">
@@ -57,7 +58,7 @@ const authorData = await getEntry(blogEntry.data.mainAuthor);
       </div>
     </div>
     <!-- Read More button which is a link to the blog post detailed page -->
-    <div class="mt-5">
+    <div class="pt-5">
       <PrimaryCTA
         url={"/"+blogEntry.id}
         title="Read More"

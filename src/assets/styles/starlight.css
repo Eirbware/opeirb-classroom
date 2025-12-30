@@ -190,6 +190,49 @@ article.card {
   }
 }
 
+/* If a StarlightPage is wrapped by this class, then no cropped content frame  */
 .full-width-starlight {
   --sl-content-width: 100%;
+}
+
+/* Disable a maximum of Starlight overrides in custom components */
+.custom-components-in-starlight {
+  /** Key layout values */
+  --sl-nav-height: reverse;
+  --sl-nav-pad-x: reverse;
+  --sl-nav-pad-y: reverse;
+  --sl-mobile-toc-height: reverse;
+  --sl-sidebar-width: reverse;
+  --sl-sidebar-pad-x: reverse;
+  --sl-content-pad-x: reverse;
+  --sl-content-gap-y: reverse;
+  --sl-main-pad: reverse;
+  --sl-menu-button-size: reverse;
+  --sl-nav-gap: reverse;
+  /* Offset required to show outline inside an element instead of round the outside */
+  --sl-outline-offset-inside: reverse;
+
+  /* Global z-index values */
+  --sl-z-index-toc: reverse;
+  --sl-z-index-menu: reverse;
+  --sl-z-index-navbar: reverse;
+  --sl-z-index-skiplink: reverse;
+}
+
+@media (min-width: 50em) {
+  .custom-components-in-starlight {
+    --sl-nav-height: reverse;
+    --sl-nav-pad-x: reverse;
+    --sl-text-h1: reverse;
+    --sl-text-h2: reverse;
+    --sl-text-h3: reverse;
+    --sl-text-h4: reverse;
+  }
+}
+
+@media (min-width: 72rem) {
+  .custom-components-in-starlight {
+    --sl-content-pad-x: reverse;
+    --sl-mobile-toc-height: reverse;
+  }
 }

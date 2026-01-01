@@ -5,6 +5,7 @@ import StarlightScrewfastLayout from "./StarlightScrewfastLayout.astro";
 import CardBlog from "@components/ui/cards/CardBlog.astro";
 import CardBlogRecent from "@components/ui/cards/CardBlogRecent.astro";
 import type { CollectionEntry } from "astro:content";
+import path from "node:path";
 
 // Get all blogs post in the given language and sort
 // them based on publish date
@@ -68,7 +69,7 @@ const metaDescription =
   >
     {/* TODO: put a custom title in function of the props */}
     <div class="mx-auto max-w-3xl text-left sm:text-center">
-      <PrimaryCTA url={Astro.url + "/1"} title="See more Courses" />
+      <PrimaryCTA url={path.join(Astro.url.pathname, "1")} title="See more Courses" />
     </div>
   </section>
   ) }

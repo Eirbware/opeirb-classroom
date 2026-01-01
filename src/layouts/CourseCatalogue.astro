@@ -4,7 +4,6 @@ import StarlightScrewfastLayout from "./StarlightScrewfastLayout.astro";
 import CardInsight from "@components/ui/cards/CardInsight.astro";
 import Pagination from "@/components/sections/navbar&footer/Pagination/Pagination.astro";
 import type { CollectionEntry } from "astro:content";
-import { SITE } from "@data/constants";
 import type { Page } from "astro";
 
 // Get all blogs post in the given language and sort
@@ -55,20 +54,10 @@ const metaDescription =
     </div>
   </section>
 
-  {/* Insights section */}
+  {/* Post grid */}
   <section
     class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 2xl:max-w-full"
   >
-    <div class="mx-auto mb-10 max-w-2xl text-center lg:mb-14">
-      <h2
-        class="text-2xl font-bold text-neutral-800 md:text-4xl md:leading-tight dark:text-neutral-200"
-      >
-        {secondTitle}
-      </h2>
-      <p class="mt-1 text-pretty text-neutral-600 dark:text-neutral-400">
-        {secondSubTitle}
-      </p>
-    </div>
     <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {
         insightPosts.map((insightEntry) => (

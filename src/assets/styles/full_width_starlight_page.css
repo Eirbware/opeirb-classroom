@@ -1,0 +1,9 @@
+/* If a StarlightPage has this stylesheet, then the page is almost on its
+* full width and the title is removed */
+main {
+  --sl-content-width: var(--breakpoint-2xl);
+}
+
+.hero {
+  display: none;
+}

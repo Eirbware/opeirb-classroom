@@ -1,18 +1,13 @@
 ---
 // Import necessary components, modules and types
-import MainLayout from "@/layouts/MainLayout.astro";
+import PrimaryCTA from "@/components/ui/buttons/PrimaryCTA.astro";
+import StarlightScrewfastLayout from "./StarlightScrewfastLayout.astro";
 import CardBlog from "@components/ui/cards/CardBlog.astro";
 import CardBlogRecent from "@components/ui/cards/CardBlogRecent.astro";
-import CardInsight from "@components/ui/cards/CardInsight.astro";
-import { getCollection } from "astro:content";
-import { filterPerLanguage } from "@/utils/filter_language";
 import type { CollectionEntry } from "astro:content";
-import { SITE } from "@data/constants";
 
 // Get all blogs post in the given language and sort
 // them based on publish date
-
-const lang = Astro.currentLocale;
 
 type Props = {
   firstPosts: CollectionEntry<"courses">[] | CollectionEntry<"tips">[]
@@ -27,38 +22,14 @@ const otherPosts: CollectionEntry<"courses" | "tips">[] = blogPosts.slice(1);
 const title: string = "Your Gateway to Construction Excellence";
 const subTitle: string =
   "Explore the latest news, tips, and insights from ScrewFast to enhance your construction projects. From product spotlights to project management strategies, our blog is your go-to resource for all things hardware and construction.";
-const secondTitle: string = "Insights";
-const secondSubTitle: string =
-  "Stay up-to-date with the latest trends and developments in the construction industry with insights from ScrewFast's team of industry experts. ";
 
-const pageTitle: string = `Blog | ${SITE.title}`;
+// TODO: pass it as prop
+const pageTitle: string = `Index | Courses`;
 const metaDescription =
   "Stay up-to-date with the latest trends and developments in the construction industry with insights from ScrewFast's team of industry experts.";
-const ogTitle = "Construction Industry Blog | ScrewFast";
 ---
 
-<MainLayout
-  title={pageTitle}
-  customDescription={metaDescription}
-  customOgTitle={ogTitle}
-  structuredData={{
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "@id": "https://screwfast.uk/blog",
-    url: "https://screwfast.uk/blog",
-    name: "Blog | ScrewFast",
-    description:
-      "Stay up-to-date with the latest trends and developments in the construction industry with insights from ScrewFast's team of industry experts.",
-    isPartOf: {
-      "@type": "WebSite",
-      url: "https://screwfast.uk",
-      name: "ScrewFast",
-      description:
-        "ScrewFast offers top-tier hardware tools and expert construction services to meet all your project needs.",
-    },
-    inLanguage: "en-US",
-  }}
->
+<StarlightScrewfastLayout title={pageTitle} metaDescription={metaDescription}>
   <section
     class="mx-auto max-w-[85rem] space-y-8 px-4 pt-16 sm:px-6 lg:px-8 2xl:max-w-full"
   >
@@ -77,7 +48,6 @@ const ogTitle = "Construction Industry Blog | ScrewFast";
       </p>
     </div>
   </section>
-
   <section
     class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 2xl:max-w-full"
   >
@@ -87,11 +57,19 @@ const ogTitle = "Construction Industry Blog | ScrewFast";
     </div>
   </section>
   {/* Most recent blog post */}
-  { mostRecentPost !== null ? (
+  { mostRecentPost && (
   <section
     class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 2xl:max-w-full"
   >
     <CardBlogRecent blogEntry={mostRecentPost} />
   </section>
-  ) : null }
-</MainLayout>
+  <section
+    class="mx-auto max-w-[85rem] space-y-8 px-4 pt-16 sm:px-6 lg:px-8 2xl:max-w-full"
+  >
+    {/* TODO: put a custom title in function of the props */}
+    <div class="mx-auto max-w-3xl text-left sm:text-center">
+      <PrimaryCTA url={Astro.url + "/1"} title="See more Courses" />
+    </div>
+  </section>
+  ) }
+</StarlightScrewfastLayout>

@@ -1,0 +1,30 @@
+---
+// Import necessary components, modules and types
+import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
+import { SITE } from "@data/constants";
+import "@styles/full_width_starlight_page.css";
+
+// Setting expected props
+const {
+  title = SITE.title,
+  metaDescription = null,
+} = Astro.props;
+
+// Interface to type-check the properties
+interface Props {
+  title?: string;
+  metaDescription?: string | null;
+}
+---
+
+<StarlightPage frontmatter={{
+  title: title, description: metaDescription ?? undefined, template: "splash",
+}} >
+  <div class="not-content">
+    <div class="selection:bg-yellow-400 selection:text-neutral-700 flex flex-col min-h-screen">
+      <div class="w-full mx-auto max-w-(--breakpoint-2xl) px-4 sm:px-6 lg:px-8 grow">
+        <slot />
+      </div>
+    </div>
+  </div>
+</StarlightPage>

@@ -4,6 +4,6 @@ main {
   --sl-content-width: var(--breakpoint-2xl);
 }
 
-.hero {
+main > div:first-of-type {
   display: none;
 }

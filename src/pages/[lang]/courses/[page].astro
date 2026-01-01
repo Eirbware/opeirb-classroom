@@ -1,0 +1,20 @@
+---
+import type { GetStaticPathsOptions } from 'astro';
+import CourseCatalogue from '@/layouts/CourseCatalogue.astro';
+import { getPaginatedPostCollection } from '@/utils/indexing';
+import { getSupportedLanguages } from '@/utils/ui';
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  const locales = getSupportedLanguages();
+  // TODO: rename and type it more strongly
+  const a = locales.map(async lang => (await getPaginatedPostCollection("courses", paginate, lang)).map(
+    p => { p.params.lang = lang; return p; }
+  ))
+  const flatten: <T>(iter: T[][]) => T[] = (iter) => iter.reduce((acc, lst) => [...acc, ...lst]);
+  const b = flatten(await Promise.all(a));
+  return b;
+}
+
+const { page } = Astro.props;
+---
+<CourseCatalogue posts={page.data} page={page} />

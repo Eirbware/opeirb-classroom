@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 import { PAGE_TITLE_ID } from 'node_modules/@astrojs/starlight/constants';
 import LinkButton from 'node_modules/@astrojs/starlight/user-components/LinkButton.astro';
-import PostMetadata from '../blocks/PostMetadata.astro';
+import PostMetadata from '@components/ui/blocks/PostMetadata.astro';
 
 import { getEntry } from 'astro:content';
 const { data } = Astro.locals.starlightRoute.entry;

@@ -1,4 +1,4 @@
-import { getEntry } from "astro:content";
+import { getCollection, getEntry } from "astro:content";
 import { defaultLanguage, getSupportedLanguages } from "./ui";
 import path from "node:path";
 
@@ -29,16 +29,18 @@ export const filterPerLanguage =
     if (lang === pageLang)
       // the page is in the given language
       return true;
-    if (defaultLanguage === pageLang) {
+    if (defaultLanguage === pageLang)
       // posts in default language are kept if the page does not exist in the
       // given language
-      try {
-        const post = await getEntry(postType, translateStarlightRouteId(id, lang));
-        return post === undefined;
-      } catch {
-        return true;
-      }
-    }
+      return (
+        // true if the array is empty
+        !(
+          await getCollection(
+            postType,
+            ({ id }) => id === translateStarlightRouteId(id, lang),
+          )
+        ).length
+      );
     return false;
   };
 

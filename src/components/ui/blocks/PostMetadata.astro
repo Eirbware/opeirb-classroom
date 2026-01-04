@@ -20,7 +20,7 @@ const { authorData, pubDate, readTime } = Astro.props;
             <li
               class="relative inline-block pe-6 before:absolute before:end-2 before:top-1/2 before:size-1 before:-translate-y-1/2 before:rounded-full before:bg-neutral-300 last:pe-0 last-of-type:before:hidden dark:text-neutral-400 dark:before:bg-neutral-600"
             >
-              {formatDate(pubDate)}
+              {formatDate(pubDate, Astro.currentLocale)}
             </li>
             { readTime ? (
             <li

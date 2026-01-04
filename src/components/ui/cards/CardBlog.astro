@@ -47,7 +47,7 @@ const authorData = await getEntry(blogEntry.data.mainAuthor);
             {authorData.data.authorname ?? authorData.data.title}
           </h4>
           <p class="text-xs text-neutral-50/[.8]">
-            {formatDate(blogEntry.data.pubDate)}
+            {formatDate(blogEntry.data.pubDate, Astro.currentLocale)}
           </p>
         </div>
       </div>

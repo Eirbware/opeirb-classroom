@@ -67,10 +67,10 @@ export default defineConfig({
       SiteTitle: "./src/components/ui/starlight/SiteTitle.astro",
       Head: "./src/components/overrides/Head.astro",
       Header: "./src/components/overrides/Header.astro",
-      MobileMenuFooter: "./src/components/ui/starlight/MobileMenuFooter.astro",
+      MobileMenuFooter: "./src/components/overrides/MobileMenuFooter.astro",
       ThemeSelect: 'src/components/overrides/ThemeSelect.astro',
-      PageTitle: "./src/components/ui/starlight/PageTitle.astro",
-      Hero: "./src/components/ui/starlight/Hero.astro",
+      PageTitle: "./src/components/overrides/PageTitle.astro",
+      Hero: "./src/components/overrides/Hero.astro",
     },
     head: [
       {

@@ -8,14 +8,12 @@ import GoogleBtn from "@components/ui/buttons/GoogleBtn.svelte";
 import { useLoginModal } from "@/app/stores/loginModal.svelte";
 
 // Variables for customization of the LoginModal Component
+let {
+  btnTitle = "Sign in", // Main HEADING
+  subTitle = "Don't have an account yet?", // Sub-Heading TEXT
+  registerBtn = "Sign up here", // Text for REGISTRATION BUTTON
+} = $props();
 
-const config = {
-  id: "hs-toggle-between-modals-login-modal", // Modal IDENTIFIER
-  title: "Sign in", // Main HEADING
-  subTitle: "Don't have an account yet?", // Sub-Heading TEXT
-  registerBtn: "Sign up here", // Text for REGISTRATION BUTTON
-  registerBtnDataHS: "#hs-toggle-between-modals-register-modal", // TARGET LINK for registration button
-};
 const loginModal = useLoginModal();
 let dialog: HTMLDialogElement | undefined = $state();
 $effect(() => {
@@ -43,16 +41,16 @@ $effect(() => {
               class="block text-2xl font-bold text-neutral-800 dark:text-neutral-200"
               role="heading"
               aria-level="1"
-              aria-label={config.title}
+              aria-label={btnTitle}
             >
-              {config.title}
+              {btnTitle}
             </div>
             <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
-              {config.subTitle}
+              {subTitle}
               <button
                 class="rounded-lg p-1 font-medium text-orange-400 decoration-2 outline-hidden ring-zinc-500 hover:underline focus-visible:ring-3 dark:text-orange-400 dark:ring-zinc-200 dark:focus:outline-hidden"
               >
-                {config.registerBtn}
+                {registerBtn}
               </button>
             </p>
           </div>
@@ -80,7 +78,7 @@ $effect(() => {
                 <!-- The remember-me checkbox -->
                 <Checkbox id="remember-me" />
                 <!-- The sign-in button -->
-                <AuthBtn title="Sign in" />
+                <AuthBtn title={btnTitle} />
               </div>
             </form>
           </div>

@@ -18,5 +18,11 @@
       "courses": "Catalogue complet des formations longues.",
       "tips": "Catalogue complet des tutoriels d'une page."
     }
+  },
+  "navbar.login": {
+    "button": "Connexion",
+    "title": "Se connecter",
+    "subTitle": "Pas encore de compte?",
+    "registerBtn": "Inscrivez-vous ici"
   }
 }

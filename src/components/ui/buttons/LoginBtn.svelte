@@ -2,7 +2,7 @@
 import { useLoginModal } from "@/app/stores/loginModal.svelte";
 const loginModal = useLoginModal();
 
-const title = "Log in";
+let { btnTitle = "Log in" } = $props();
 
 const baseClasses =
   "flex items-center gap-x-2 text-base md:text-sm font-medium text-neutral-600 ring-zinc-500 transition duration-300 focus-visible:ring-3 outline-hidden";
@@ -34,5 +34,5 @@ const userSVG = `<svg
   onclick={loginModal.show}
 >
   {@html userSVG}
-  {title}
+  {btnTitle}
 </button>

@@ -24,7 +24,7 @@ const curLocale = lang === defaultLanguage ? undefined : lang;
 ---
 
 <div class="header sl-flex">
-  <LoginModal client:load />
+  <LoginModal client:load btnTitle={Astro.locals.t("navbar.login.title")} subTitle={Astro.locals.t("navbar.login.subTitle")} registerBtn={Astro.locals.t("navbar.login.registerBtn")} />
 	<div class="full-width sl-flex">
 		<SiteTitle />
 	</div>
@@ -41,7 +41,7 @@ const curLocale = lang === defaultLanguage ? undefined : lang;
 		<div class="sl-flex social-icons">
 			<SocialIcons />
 		</div>
-    <LoginBtn client:load />
+    <LoginBtn btnTitle={Astro.locals.t("navbar.login.button")} client:load />
 		<LanguageSelect />
 		<ThemeSelect />
 	</div>

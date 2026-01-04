@@ -41,7 +41,7 @@ const strings = Astro.currentLocale === "fr" ? frStrings : enStrings;
     </li>
     ))}
     <li class="block px-4 py-2 border-t border-gray-200">
-      <LoginBtn client:load />
+      <LoginBtn btnTitle={Astro.locals.t("navbar.login.button")} client:load />
     </li>
   </ul>
 </div>

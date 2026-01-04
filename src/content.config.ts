@@ -60,6 +60,11 @@ const i18n = defineCollection({
         'description.index.tips': z.string().optional(),
         'description.catalogue.courses': z.string().optional(),
         'description.catalogue.tips': z.string().optional(),
+
+        'navbar.login.button': z.string().optional(),
+        'navbar.login.title': z.string().optional(),
+        'navbar.login.subTitle': z.string().optional(),
+        'navbar.login.registerBtn': z.string().optional(),
       }),
     }),
   });

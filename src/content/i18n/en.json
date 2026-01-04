@@ -18,5 +18,11 @@
       "courses": "Full index of the courses.",
       "tips": "Full index of the one-shot tutorials."
     }
+  },
+  "navbar.login": {
+    "button": "Log in",
+    "title": "Sign in",
+    "subTitle": "Don't have an account yet?",
+    "registerBtn": "Sign up here"
   }
 }

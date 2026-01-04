@@ -9,7 +9,10 @@
     "preview": "astro preview",
     "check": "astro check",
     "astro": "astro",
-    "monitor": "cd reports && lighthouse http://localhost:4321"
+    "monitor": "cd reports && lighthouse http://localhost:4321",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.6",
@@ -40,6 +43,7 @@
     "prettier": "^3.7.4",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.16"
   }
 }

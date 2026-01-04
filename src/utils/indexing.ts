@@ -8,7 +8,8 @@ const DEFAULT_POSTS_PER_PAGE = 12;
 const DEFAULT_FIRST_POSTS_NB = 5;
 
 type Post = CollectionEntry<"courses" | "tips">
-type PostFilter = (post: Post) => boolean;
+type MayBePromise<T> = T | Promise<T>;
+type PostFilter = (post: Post) => MayBePromise<boolean>;
 type PostSortCompareFn = (postA: Post, postB: Post) => number
 
 function composeCompareFns<T extends PostSortCompareFn | null>(
@@ -25,11 +26,13 @@ function composeCompareFns<T extends PostSortCompareFn | null>(
 
 function composeFilters<T extends PostFilter | null>(
   filterToBeAdded: PostFilter | undefined,
-  baseFilter: T
+  baseFilter: T,
 ): T {
   if (!filterToBeAdded) return baseFilter;
   if (baseFilter === null) return baseFilter;
-  return ((post) => baseFilter(post) && filterToBeAdded(post)) as typeof baseFilter;
+  return (async (post) =>
+    (await baseFilter(post)) &&
+    (await filterToBeAdded(post))) as typeof baseFilter;
 }
 
 const mostRecentSort: PostSortCompareFn = (postA, postB) => (
@@ -44,7 +47,7 @@ async function getSortedAndFilteredCollection<RessourceType extends "courses" | 
 ) {
   return (await getCollection(
     ressourceType,
-    composeFilters(filter, filterPerLanguage(lang) as PostFilter)
+    composeFilters(filter, filterPerLanguage(ressourceType, lang) as PostFilter)
   )).sort(composeCompareFns(sortCompareFn, mostRecentSort));
 }
 

@@ -1,4 +1,11 @@
+import { getEntry } from "astro:content";
 import { defaultLanguage, getSupportedLanguages } from "./ui";
+import path from "node:path";
+
+export function translateStarlightRouteId(id: string, lang: string): string {
+  const { sectionId, postId = "", remainingSlug = "" } = parseAstroCollectionPageId(id);
+  return path.join(lang, sectionId, postId, remainingSlug);
+}
 
 /** Given the language, filter an entry according to its id, if it match with
  * the current language.
@@ -9,15 +16,33 @@ import { defaultLanguage, getSupportedLanguages } from "./ui";
  *  - en/courses/postId/*
  *  - en/courses/postId
  */
-export const filterPerLanguage = (lang?: string) => ({id}: {id: string}) => {
-  return parseAstroCollectionPageId(id).lang === (lang ?? defaultLanguage)
-};
+export const filterPerLanguage =
+  <RessourceType extends "courses" | "tips">(
+    postType: RessourceType,
+    lang?: string,
+  ) =>
+  async ({ id }: { id: string }) => {
+    const pageLang = parseAstroCollectionPageId(id).lang;
+    if (lang === undefined)
+      // the given language is the default language
+      return defaultLanguage === pageLang;
+    if (lang === pageLang)
+      // the page is in the given language
+      return true;
+    if (defaultLanguage === pageLang) {
+      // posts in default language are kept if the page does not exist in the
+      // given language
+      const post = await getEntry(postType, translateStarlightRouteId(id, lang));
+      return post === undefined;
+    }
+    return false;
+  };
 
 export type ParsedPage = {
   lang: string,
   sectionId: string,
-  postId: string,
-  remainingSlug: string
+  postId?: string,
+  remainingSlug?: string
 };
 
 /** The id must be like that :

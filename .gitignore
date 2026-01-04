@@ -26,12 +26,5 @@ reports/*
 !reports/.gitkeep
 
 # astro content
-# TODO: not only courses and tips
-src/content/docs/courses/*
-!src/content/docs/courses/.gitkeep
-src/content/docs/tips/*
-!src/content/docs/tips/.gitkeep
-src/content/docs/fr/courses/*
-!src/content/docs/fr/courses/.gitkeep
-src/content/docs/fr/tips/*
-!src/content/docs/fr/tips/.gitkeep
+src/content/docs/*
+!src/content/docs/.gitkeep

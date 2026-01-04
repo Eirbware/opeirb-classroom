@@ -1,0 +1,18 @@
+---
+import CourseIndex from "@/layouts/CourseIndex.astro";
+import { getFirstPostsInCollection } from "@/utils/indexing";
+import { defaultLanguage, getSupportedLanguages } from "@/utils/ui";
+
+export async function getStaticPaths() {
+  const locales = getSupportedLanguages().map(
+    lang => lang === defaultLanguage ? undefined : lang
+  );
+
+  return locales.map(lang => ({
+    params: { lang },
+  }))
+}
+const firstCourses = await getFirstPostsInCollection("courses", Astro.params.lang);
+---
+
+<CourseIndex firstPosts={firstCourses}/>

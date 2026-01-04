@@ -5,7 +5,9 @@ import { getPaginatedPostCollection } from '@/utils/indexing';
 import { defaultLanguage, getSupportedLanguages } from '@/utils/ui';
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
-  const locales = getSupportedLanguages().filter((lang) => lang !== defaultLanguage);
+  const locales = getSupportedLanguages().map(
+    lang => lang === defaultLanguage ? undefined : lang
+  );
   const perLangIndexPages = locales.map(async lang => (await getPaginatedPostCollection(
     "courses",
     paginate,

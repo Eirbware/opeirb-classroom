@@ -60,7 +60,8 @@ export async function getPaginatedPostCollection<RessourceType extends "courses"
   postsPerPage?: number,
 ) {
   const posts = await getSortedAndFilteredCollection(ressourceType, lang, filter, sortCompareFn);
-  return paginate(posts, { pageSize: postsPerPage ?? DEFAULT_POSTS_PER_PAGE });
+  const p = paginate(posts, { pageSize: postsPerPage ?? DEFAULT_POSTS_PER_PAGE, params: { lang: lang } });
+  return p;
 }
 
 export async function getFirstPostsInCollection<RessourceType extends "courses" | "tips">(

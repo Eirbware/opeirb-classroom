@@ -32,8 +32,12 @@ export const filterPerLanguage =
     if (defaultLanguage === pageLang) {
       // posts in default language are kept if the page does not exist in the
       // given language
-      const post = await getEntry(postType, translateStarlightRouteId(id, lang));
-      return post === undefined;
+      try {
+        const post = await getEntry(postType, translateStarlightRouteId(id, lang));
+        return post === undefined;
+      } catch {
+        return true;
+      }
     }
     return false;
   };

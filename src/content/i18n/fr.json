@@ -1,0 +1,22 @@
+{
+  "title": {
+    "index": {
+      "courses": "Formations",
+      "tips": "Tutos Courts"
+    },
+    "catalogue": {
+      "courses": "Formations",
+      "tips": "Tutos Courts"
+    }
+  },
+  "description": {
+    "index": {
+      "courses": "Consultez les dernières formations longues publiées par les clubs et la communauté.",
+      "tips": "Découvrez les dernières pages publiées par la communauté."
+    },
+    "catalogue": {
+      "courses": "Catalogue complet des formations longues.",
+      "tips": "Catalogue complet des tutoriels d'une page."
+    }
+  }
+}

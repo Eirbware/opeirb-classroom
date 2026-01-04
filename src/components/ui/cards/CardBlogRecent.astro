@@ -6,11 +6,10 @@ import AvatarBlogLarge from "@components/ui/avatars/AvatarBlogLarge.astro";
 import PrimaryCTA from "@components/ui/buttons/PrimaryCTA.astro";
 import { getEntry } from "astro:content";
 
-const { blogEntry, recentBlogLocale = "" } = Astro.props;
+const { blogEntry } = Astro.props;
 
 interface Props {
-  blogEntry: CollectionEntry<"blog" | "courses" | "tips">;
-  recentBlogLocale?: string;
+  blogEntry: CollectionEntry<"courses" | "tips">;
 }
 const authorData = await getEntry(blogEntry.data.mainAuthor);
 ---

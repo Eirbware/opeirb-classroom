@@ -15,4 +15,4 @@ export async function getStaticPaths() {
 const firstCourses = await getFirstPostsInCollection("courses", Astro.params.lang);
 ---
 
-<CourseIndex firstPosts={firstCourses}/>
+<CourseIndex firstPosts={firstCourses} postType="courses"/>

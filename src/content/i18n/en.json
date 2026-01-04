@@ -1,0 +1,22 @@
+{
+  "title": {
+    "index": {
+      "courses": "Courses",
+      "tips": "One-shot Tutorials"
+    },
+    "catalogue": {
+      "courses": "Courses",
+      "tips": "One-shot Tutorials"
+    }
+  },
+  "description": {
+    "index": {
+      "courses": "Here are the last published courses. They are several-pages tutorials written by organizations and the community.",
+      "tips": "Here are the last published tutorials of one-page."
+    },
+    "catalogue": {
+      "courses": "Full index of the courses.",
+      "tips": "Full index of the one-shot tutorials."
+    }
+  }
+}

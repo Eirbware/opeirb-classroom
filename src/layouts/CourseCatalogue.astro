@@ -10,25 +10,21 @@ import type { Page } from "astro";
 // them based on publish date
 
 type Props = {
+  postType: "courses" | "tips",
   posts: CollectionEntry<"courses">[] | CollectionEntry<"tips">[]
   page: Page<CollectionEntry<"courses">> | Page<CollectionEntry<"tips">>
 }
-const { posts, page } = Astro.props;
+const { postType, posts, page } = Astro.props;
 // Get all insights posts
 const insightPosts = posts;
 
 // Define variables for page content
-const title: string = "Your Gateway to Construction Excellence";
-const subTitle: string =
-  "Explore the latest news, tips, and insights from ScrewFast to enhance your construction projects. From product spotlights to project management strategies, our blog is your go-to resource for all things hardware and construction.";
-const secondTitle: string = "Insights";
-const secondSubTitle: string =
-  "Stay up-to-date with the latest trends and developments in the construction industry with insights from ScrewFast's team of industry experts. ";
+const title: string = Astro.locals.t(`title.catalogue.${postType}`);
+const subTitle: string = Astro.locals.t(`description.catalogue.${postType}`);
 
 // TODO: pass it as prop
-const pageTitle: string = `Catalogue | Course`;
-const metaDescription =
-  "Stay up-to-date with the latest trends and developments in the construction industry with insights from ScrewFast's team of industry experts.";
+const pageTitle: string = title;
+const metaDescription = subTitle;
 ---
 
 <StarlightScrewfastLayout

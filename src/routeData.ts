@@ -10,7 +10,7 @@ import { defaultLanguage } from "./utils/ui";
 export const onRequest = defineRouteMiddleware((context) => {
   const { sidebar, id } = context.locals.starlightRoute;
   const { lang, sectionId, postId } = parseAstroCollectionPageId(id);
-  if (sectionId === "courses") {
+  if (sectionId === "courses" && postId) {
     const currentFirstDepthSidebarEntry = getPostSidebarEntry(
       sidebar,
       sectionId,
@@ -31,7 +31,7 @@ export const onRequest = defineRouteMiddleware((context) => {
         postId,
       );
     }
-  } else if (sectionId === "tips") {
+  } else if (sectionId === "tips" && postId) {
     context.locals.starlightRoute.hasSidebar = false;
     context.locals.starlightRoute.pagination =
       !postId || !isNaN(Number(postId))

@@ -21,7 +21,7 @@ export function getPostSidebarEntry(
   function getSidebarEntryFirstSlug(sidebarEntry: SidebarEntry): string {
     return parseHref(getFirstLinkEntry(sidebarEntry).href).sectionId;
   }
-  function getSidebarEntrySecondSlug(sidebarEntry: SidebarEntry): string {
+  function getSidebarEntrySecondSlug(sidebarEntry: SidebarEntry): string | undefined {
     return parseHref(getFirstLinkEntry(sidebarEntry).href).postId;
   }
   function findEntry(sidebar: SidebarEntry[], condition: (se: SidebarEntry) => boolean): SidebarEntry | null {

@@ -1,16 +1,16 @@
-test-content-dir := content/test-content
+mock-content-dir := content/mock
 docs-content-dir := src/content/docs
 
-test-content-slugs := $(notdir $(patsubst %/,%, $(wildcard $(test-content-dir)/*/)))
+mock-content-slugs := $(notdir $(patsubst %/,%, $(wildcard $(mock-content-dir)/*/)))
 
 
-.PHONY: enable-test-content disable-test-content echo
+.PHONY: enable-mock-content disable-mock-content echo
 
 echo:
-	@echo $(test-content-slugs)
+	@echo $(mock-content-slugs)
 
-enable-test-content:
-	stow --dir $(test-content-dir) --target $(docs-content-dir) $(test-content-slugs)
+enable-mock-content:
+	stow --dir $(mock-content-dir) --target $(docs-content-dir) $(mock-content-slugs)
 
-disable-test-content:
-	stow -D --dir $(test-content-dir) --target $(docs-content-dir) $(test-content-slugs)
+disable-mock-content:
+	stow -D --dir $(mock-content-dir) --target $(docs-content-dir) $(mock-content-slugs)

@@ -1,18 +1,16 @@
 # FormaTux (ScrewFast-based version)
 
-This project is powered by the [ScrewFast template](https://github.com/mearashadowfax/ScrewFast).
+This project started from the [ScrewFast
+template](https://github.com/mearashadowfax/ScrewFast). It is powered by [Astro
+Starlight](https://starlight.astro.build/) (see also
+[Astro](https://docs.astro.build/)), [Tailwind
+CSS](https://tailwindcss.com/docs) and
+[Svelte](https://svelte.dev/docs/svelte/overview).
 
-See the following documentation pages for all information about the base
-framework of this repository:
+Please read the documentation pages for details about :
 
-- [ScrewFast README](https://github.com/mearashadowfax/ScrewFast) *(the most
-important page)*
-- [Astro Starlight documentation](https://starlight.astro.build/)
-- [Astro documentation](https://docs.astro.build/)
-- [Preline UI Documentation](https://preline.co/docs)
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
-- [Vercel Documentation](https://vercel.com/docs)
-- [html-minifier-terser Documentation](https://github.com/terser/html-minifier-terser)
+- [contributing on FormaTux's content]("./CONTRIBUTING.md")
+- [contributing on FormaTux's engine]("./DEV.md")
 
 ## Install
 

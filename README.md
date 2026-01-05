@@ -14,7 +14,7 @@ Please read the documentation pages for details about :
 
 ## Install
 
-Works for NodeJS >= 24.4.1
+Works for NodeJS >= 24.4.1. Also requires `justfile` and GNU `stow`.
 
 ```sh
 # install both deps and dev deps

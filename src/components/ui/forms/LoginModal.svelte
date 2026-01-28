@@ -1,10 +1,6 @@
 <script lang="ts">
 // Import necessary components from their individual files
-import EmailInput from "./input/EmailInput.svelte";
-import PasswordInput from "./input/PasswordInput.svelte";
-import Checkbox from "./input/Checkbox.svelte";
-import AuthBtn from "@components/ui/buttons/AuthBtn.svelte";
-import GoogleBtn from "@components/ui/buttons/GoogleBtn.svelte";
+import EirbConnectBtn from "@/components/ui/buttons/EirbConnectBtn.svelte";
 import { useLoginModal } from "@/app/stores/loginModal.svelte";
 
 // Variables for customization of the LoginModal Component
@@ -47,40 +43,11 @@ $effect(() => {
             </div>
             <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
               {subTitle}
-              <button
-                class="rounded-lg p-1 font-medium text-orange-400 decoration-2 outline-hidden ring-zinc-500 hover:underline focus-visible:ring-3 dark:text-orange-400 dark:ring-zinc-200 dark:focus:outline-hidden"
-              >
-                {registerBtn}
-              </button>
             </p>
           </div>
           <div class="mt-5">
-            <GoogleBtn title="Sign in with Google" />
-
-            <div
-              class="flex items-center py-3 text-xs uppercase text-neutral-400 before:me-6 before:flex-[1_1_0%] before:border-t before:border-neutral-200 after:ms-6 after:flex-[1_1_0%] after:border-t after:border-neutral-200 dark:text-neutral-500 dark:before:border-neutral-600 dark:after:border-neutral-600"
-            >
-              Or
-            </div>
-            <!-- The container for the form -->
-            <form>
-              <!-- A grid layout for the form fields -->
-              <div class="grid gap-y-4">
-                <!-- The email input field -->
-                <EmailInput id="login-email" errorId="login-email-error" />
-                <!-- The password input field -->
-                <PasswordInput
-                  forgot={true}
-                  id="password"
-                  errorId="login-password-error"
-                  content="8+ characters required"
-                />
-                <!-- The remember-me checkbox -->
-                <Checkbox id="remember-me" />
-                <!-- The sign-in button -->
-                <AuthBtn title={btnTitle} />
-              </div>
-            </form>
+            <!-- TODO: i18n -->
+            <EirbConnectBtn title="Sign in with EirbConnect" />
           </div>
         </div>
       </div>

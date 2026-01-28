@@ -316,5 +316,20 @@ article.card {
   [role="button"]:not(:disabled) {
     cursor: pointer;
   }
+
+  /* NavLink global style */
+  /* default */
+  .nav-link {
+    @apply text-neutral-600 dark:text-neutral-400;
+  }
+
+  .nav-link:hover {
+    @apply text-neutral-500 dark:text-neutral-500;
+  }
+
+  /* active */
+  .nav-link[aria-current="page"] {
+    @apply text-orange-400 dark:text-orange-300;
+  }
 }
 /* --- SCREWFAST THEMING --- */

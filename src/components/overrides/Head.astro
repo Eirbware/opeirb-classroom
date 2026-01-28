@@ -26,10 +26,35 @@ import VtbotStarlight from "astro-vtbot/components/starlight/Base.astro";
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const siteSearch = document.querySelector(
-      "site-search"
+      "site-search",
     ) as HTMLElement | null;
     if (siteSearch) {
       siteSearch.setAttribute("data-lenis-prevent", "");
     }
   });
+</script>
+
+<script>
+  // Navbar refreshing
+  function parseURI(uri: string) {
+    return {
+      sectionId: uri.split("/")[1]
+    };
+  }
+
+  function updateNav() {
+    const pathname = window.location.pathname;
+    const current = parseURI(pathname).sectionId;
+
+    document.querySelectorAll("a.nav-link").forEach((link) => {
+      const target = parseURI(
+        (new URL((link as HTMLLinkElement).href)).pathname,
+      ).sectionId;
+      const isCurrent = current === target;
+
+      link.setAttribute("aria-current", isCurrent ? "page" : "");
+    });
+  }
+
+  document.addEventListener("astro:page-load", updateNav);
 </script>

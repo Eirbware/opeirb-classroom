@@ -9,20 +9,9 @@ interface Props {
   url: string;
   name: string;
 }
-const { pathname } = Astro.url;
-const isCurrent = parseHref(pathname).sectionId === parseHref(url).sectionId;
-
-const notCurrentClasses = [
-  "text-neutral-600",
-  "dark:text-neutral-400",
-  "hover:text-neutral-500",
-  "dark:hover:text-neutral-500"
-].join(" ");
-const currentClasses = [
-  "text-orange-400", "dark:text-orange-300"
-].join(" ");
-
-const colorClasses = isCurrent ? currentClasses : notCurrentClasses;
+function isCurrent(pathname: string) {
+    return parseHref(pathname).sectionId === parseHref(url).sectionId;
+}
 ---
 
 <!--
@@ -35,8 +24,8 @@ If URL is '/' (home page), assign ID as 'home'
   id={url === "/" ? "home" : url.replace("/", "")}
   href={url}
   data-astro-prefetch
-  class=`rounded-lg text-base font-medium outline-hidden ring-zinc-500 focus-visible:ring-3 dark:ring-zinc-200 dark:focus:outline-hidden md:py-3 md:text-sm 2xl:text-base ${colorClasses}`
-  aria-current={ isCurrent ? "page" : undefined }
+  class=`nav-link rounded-lg text-base font-medium outline-hidden ring-zinc-500 focus-visible:ring-3 dark:ring-zinc-200 dark:focus:outline-hidden md:py-3 md:text-sm 2xl:text-base`
+  aria-current={ isCurrent(Astro.url.pathname) ? "page" : undefined }
 >
   {name}
 </a>

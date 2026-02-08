@@ -33,7 +33,7 @@
     "rimraf": "^6.1.2",
     "sharp": "^0.34.5",
     "sharp-ico": "^0.1.5",
-    "svelte": "^5.46.1",
+    "svelte": "^5.50.0",
     "tailwindcss": "^4.1.17"
   },
   "devDependencies": {

@@ -5,6 +5,7 @@ import type { CollectionEntry } from "astro:content";
 import AvatarBlogLarge from "@components/ui/avatars/AvatarBlogLarge.astro";
 import PrimaryCTA from "@components/ui/buttons/PrimaryCTA.astro";
 import { getEntry } from "astro:content";
+import { getArtificialPostIdInCurrentLocale } from "@/utils/filter_language";
 
 const { blogEntry } = Astro.props;
 
@@ -12,6 +13,7 @@ interface Props {
   blogEntry: CollectionEntry<"courses" | "tips">;
 }
 const authorData = await getEntry(blogEntry.data.mainAuthor);
+const href = getArtificialPostIdInCurrentLocale(blogEntry.id, Astro.currentLocale);
 ---
 
 <!-- Root container, which is divided into 2 grid column layout for larger screens -->
@@ -37,7 +39,7 @@ const authorData = await getEntry(blogEntry.data.mainAuthor);
     >
       <a
         class="outline-hidden ring-zinc-500 transition duration-300 hover:text-orange-400 focus-visible:ring-3 dark:text-neutral-300 dark:ring-zinc-200 dark:hover:text-neutral-50 dark:focus:outline-hidden"
-        href={blogEntry.id}
+        href={href}
       >
         {blogEntry.data.description}
       </a>
@@ -58,7 +60,7 @@ const authorData = await getEntry(blogEntry.data.mainAuthor);
     <!-- Read More button which is a link to the blog post detailed page -->
     <div class="mt-5">
       <PrimaryCTA
-        url={"/"+blogEntry.id}
+        url={href}
         title="Read More"
         data-astro-prefetch
       />

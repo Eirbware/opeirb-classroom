@@ -5,6 +5,7 @@ import { Image } from "astro:assets";
 import { formatDate } from "@utils/utils";
 import type { CollectionEntry } from "astro:content";
 import { getEntry } from "astro:content";
+import { getArtificialPostIdInCurrentLocale } from "@/utils/filter_language";
 
 const { blogEntry } = Astro.props;
 
@@ -19,8 +20,8 @@ const authorData = await getEntry(blogEntry.data.mainAuthor);
      The data-astro-prefetch is an Astro specific Dynamic HTML feature,
      which automatically prefetches the linked page to speed up navigation. -->
 <a
-  class="group relative block rounded-xl outline-hidden ring-zinc-500 transition duration-500 focus-visible:ring-3 dark:ring-zinc-200 dark:focus:outline-hidden"
-  href={blogEntry.id}
+  class="group relative block rounded-xl ring-zinc-500 outline-hidden transition duration-500 focus-visible:ring-3 dark:ring-zinc-200 dark:focus:outline-hidden"
+  href={getArtificialPostIdInCurrentLocale(blogEntry.id, Astro.currentLocale)}
   data-astro-prefetch
 >
   <!-- The container for the blog post's cover image. Uses astro:assets' Image for image source -->
@@ -57,7 +58,7 @@ const authorData = await getEntry(blogEntry.data.mainAuthor);
   <div class="absolute inset-x-0 bottom-0 z-10">
     <div class="flex h-full flex-col p-4 sm:p-6">
       <h3
-        class="text-balance text-lg font-bold text-neutral-50 group-hover:text-neutral-50/[.8] sm:text-3xl"
+        class="text-lg font-bold text-balance text-neutral-50 group-hover:text-neutral-50/[.8] sm:text-3xl"
       >
         {blogEntry.data.title}
       </h3>

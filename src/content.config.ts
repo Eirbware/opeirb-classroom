@@ -5,6 +5,7 @@ import { i18nLoader } from "@astrojs/starlight/loaders";
 import { docsSchema, i18nSchema } from '@astrojs/starlight/schema';
 import { glob } from 'astro/loaders';
 import type { ImageFunction } from 'astro/content/config';
+import { getSupportedLanguages } from './utils/ui';
 
 const contributors = defineCollection({
   loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: './src/content/contributors' }),
@@ -43,8 +44,10 @@ const courseLangingPageCollection = defineCollection({
   schema: docsSchema({ extend: ({image}) => postObjectSchema(image) }),
 });
 
+const langs = `{${getSupportedLanguages().join(",")}}`;
+
 const tipsCollection = defineCollection({
-  loader: glob({ pattern: '{*/,}tips/[^_]*.{md,mdx}', base: "./src/content/docs/" }),
+  loader: glob({ pattern: `{tips,${langs}/tips}/[^_]*.{md,mdx}`, base: "./src/content/docs/" }),
   schema: docsSchema({ extend: ({image}) => postObjectSchema(image) }),
 });
 

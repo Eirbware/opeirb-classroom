@@ -1,4 +1,4 @@
-import { getCollection, getEntry } from "astro:content";
+import { getCollection } from "astro:content";
 import { defaultLanguage, getSupportedLanguages } from "./ui";
 import path from "node:path";
 
@@ -43,6 +43,25 @@ export const filterPerLanguage =
       );
     return false;
   };
+
+
+/* Return if the content with the given id is a fallback content */
+export function isFallbackContent(id: string, currentLanguage?: string): boolean {
+  const pageLang = parseAstroCollectionPageId(id).lang;
+  if (defaultLanguage === pageLang)
+    return currentLanguage !== undefined && currentLanguage !== defaultLanguage;
+  return false;
+}
+
+export function getArtificialPostIdInCurrentLocale(
+  id: string,
+  currentLanguage?: string,
+) {
+  return path.join(
+    isFallbackContent(id, currentLanguage) ? `/${currentLanguage}` : "/",
+    id,
+  );
+}
 
 export type ParsedPage = {
   lang: string,

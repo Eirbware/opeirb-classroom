@@ -35,10 +35,14 @@ import VtbotStarlight from "astro-vtbot/components/starlight/Base.astro";
 </script>
 
 <script>
+import { getSupportedLanguages } from "@/utils/ui";
+
   // Navbar refreshing
   function parseURI(uri: string) {
+    const [_, first, second, ...remaining] = uri.split("/");
+    remaining; // unused
     return {
-      sectionId: uri.split("/")[1]
+    sectionId: getSupportedLanguages().includes(first) ? second: first
     };
   }
 

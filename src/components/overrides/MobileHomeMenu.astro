@@ -1,5 +1,5 @@
 ---
-import LoginBtn from "../ui/buttons/LoginBtn.svelte";
+import UserProfileBtn from "../ui/buttons/UserProfileBtn.svelte";
 
 import NavLink from "@components/ui/links/NavLink.astro";
 import enStrings from "@utils/navigation.ts";
@@ -31,7 +31,7 @@ const strings = Astro.currentLocale === "fr" ? frStrings : enStrings;
     id="menu"
     class="absolute mt-2 hidden w-48 rounded bg-white shadow-lg"
   >
-    <!-- Navigation links and Authentication component -->
+    <!-- Navigation links and UserProfile Button -->
     {
     /* The components will not be hovered as it is on mobile */
     }
@@ -41,7 +41,7 @@ const strings = Astro.currentLocale === "fr" ? frStrings : enStrings;
     </li>
     ))}
     <li class="block px-4 py-2 border-t border-gray-200">
-      <LoginBtn btnTitle={Astro.locals.t("navbar.login.button")} client:load />
+      <UserProfileBtn btnTitle={Astro.locals.t("navbar.login.button")} client:load />
     </li>
   </ul>
 </div>

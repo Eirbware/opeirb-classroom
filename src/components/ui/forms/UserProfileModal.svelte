@@ -2,19 +2,28 @@
 // Import necessary components from their individual files
 import EirbConnectBtn from "@/components/ui/buttons/EirbConnectBtn.svelte";
 import { useLoginModal } from "@/app/stores/loginModal.svelte";
+    import { useUserData } from "@/app/stores/userData.svelte";
+    import LogoutButton from "../buttons/LogoutButton.svelte";
 
 // Variables for customization of the LoginModal Component
 let {
   btnTitle = "Sign in", // Main HEADING
   subTitle = "Don't have an account yet?", // Sub-Heading TEXT
-  registerBtn = "Sign up here", // Text for REGISTRATION BUTTON
 } = $props();
 
 const loginModal = useLoginModal();
+const userData = useUserData();
 let dialog: HTMLDialogElement | undefined = $state();
+
+function actualBtnTitle() {
+  return userData.data?.name ?? btnTitle;
+}
+
+function actualSubtitle() {
+  return userData.data !== null ? "Here is your profile data." : subTitle;
+}
 $effect(() => {
   if (loginModal.open) dialog?.showModal();
-
 });
 </script>
 
@@ -37,17 +46,21 @@ $effect(() => {
               class="block text-2xl font-bold text-neutral-800 dark:text-neutral-200"
               role="heading"
               aria-level="1"
-              aria-label={btnTitle}
+              aria-label={actualBtnTitle()}
             >
-              {btnTitle}
+              {actualBtnTitle()}
             </div>
             <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
-              {subTitle}
+              {actualSubtitle()}
             </p>
           </div>
           <div class="mt-5">
+            {#if userData.data === null}
             <!-- TODO: i18n -->
             <EirbConnectBtn title="Sign in with EirbConnect" />
+            {:else}
+            <LogoutButton title="Log out" />
+            {/if}
           </div>
         </div>
       </div>

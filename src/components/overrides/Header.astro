@@ -4,8 +4,8 @@ import Search from '@astrojs/starlight/components/Search.astro';
 import SiteTitle from './SiteTitle.astro';
 import SocialIcons from '@astrojs/starlight/components/SocialIcons.astro';
 import ThemeSelect from './ThemeSelect.astro';
-import LoginModal from '../ui/forms/LoginModal.svelte';
-import LoginBtn from '../ui/buttons/LoginBtn.svelte';
+import UserProfileModal from '../ui/forms/UserProfileModal.svelte';
+import UserProfileBtn from '../ui/buttons/UserProfileBtn.svelte';
 
 import NavLink from "@components/ui/links/NavLink.astro";
 import enStrings from "@utils/navigation.ts";
@@ -24,7 +24,7 @@ const curLocale = lang === defaultLanguage ? undefined : lang;
 ---
 
 <div class="header sl-flex">
-  <LoginModal client:load btnTitle={Astro.locals.t("navbar.login.title")} subTitle={Astro.locals.t("navbar.login.subTitle")} registerBtn={Astro.locals.t("navbar.login.registerBtn")} />
+  <UserProfileModal client:load btnTitle={Astro.locals.t("navbar.login.title")} subTitle={Astro.locals.t("navbar.login.subTitle")} registerBtn={Astro.locals.t("navbar.login.registerBtn")} />
 	<div class="full-width sl-flex">
 		<SiteTitle />
 	</div>
@@ -33,7 +33,7 @@ const curLocale = lang === defaultLanguage ? undefined : lang;
 	</div>
 	<div class="sl-hidden md:sl-flex right-group">
 		<div class="desktop">
-      <!-- Navigation links and Authentication component -->
+      <!-- Navigation links and UserProfile Button -->
       {strings.navBarLinks.map(link => (
         <NavLink url={link.url} name={link.name} />
       ))}
@@ -41,7 +41,7 @@ const curLocale = lang === defaultLanguage ? undefined : lang;
 		<div class="sl-flex social-icons">
 			<SocialIcons />
 		</div>
-    <LoginBtn btnTitle={Astro.locals.t("navbar.login.button")} client:load />
+    <UserProfileBtn btnTitle={Astro.locals.t("navbar.login.button")} client:load />
 		<LanguageSelect />
 		<ThemeSelect />
 	</div>

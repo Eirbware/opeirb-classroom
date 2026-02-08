@@ -1,0 +1,17 @@
+set dotenv-load
+
+default:
+  @just --list
+
+init-db:
+  ./pocketbase migrate up
+
+set-superuser: 
+  ./pocketbase superuser create $SUPERUSER_EMAIL $SUPERUSER_PASSWORD
+
+[group("main")]
+init-back: init-db set-superuser
+
+[group("main")]
+serve:
+  ./pocketbase serve --http localhost:8080

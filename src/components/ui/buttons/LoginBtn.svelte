@@ -1,5 +1,8 @@
 <script lang="ts">
 import { useLoginModal } from "@/app/stores/loginModal.svelte";
+import { useUserData } from "@/app/stores/userData.svelte";
+
+const userData = useUserData();
 const loginModal = useLoginModal();
 
 let { btnTitle = "Log in" } = $props();
@@ -34,5 +37,5 @@ const userSVG = `<svg
   onclick={loginModal.show}
 >
   {@html userSVG}
-  {btnTitle}
+  {userData.data === null ? btnTitle : userData.data.name}
 </button>
